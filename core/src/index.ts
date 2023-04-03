@@ -1,5 +1,5 @@
 // create live event
-enum StreamStatus {
+export enum StreamStatus {
     NotStarted = "not-started",
     Started = "started",
     Finished = "finished"
@@ -31,8 +31,17 @@ export const getLiveEvent = (id: string): LiveEvent | null => {
     }
 
 }
-// get live event
+
+export const updateLiveEventStatus = (id: string, streamStatus: StreamStatus): LiveEvent | null => {
+    const event = events.find((event) => event.id === id);
+    console.log('event log', event);
+    if (event) {
+        event.status = streamStatus;
+        return event;
+    } else {
+        return null;
+    } 
+}
 
 // add scene to live event
 
-// update live event state
