@@ -13,5 +13,9 @@
     "jest": "^29.5.0",
     "ts-jest": "^29.0.5",
     "typescript": "4.9.5"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "hls-server": "^1.5.0"
   }
 }
