@@ -9,6 +9,8 @@ const updateLivePlaylist = (vidLocation) => {
     return new Promise((resolve, reject) => {
         console.log('vidLocation', vidLocation)
         console.log(new Date().toUTCString());
+
+
         ffmpeg()
             .addInput(vidLocation)
             .addOptions([

@@ -4,18 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "npx tsc",
+    "start": " node dist/main.js",
     "test": "jest --watch"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^4.17.17",
     "@types/jest": "^29.5.0",
+    "@types/supertest": "^2.0.12",
     "jest": "^29.5.0",
+    "supertest": "^6.3.3",
     "ts-jest": "^29.0.5",
     "typescript": "4.9.5"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "fluent-ffmpeg": "^2.1.2",
     "hls-server": "^1.5.0"
