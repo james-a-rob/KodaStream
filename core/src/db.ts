@@ -1,10 +1,24 @@
 import { type LiveEvent, LiveEventInput } from "./types";
-import { StreamStatus } from './enums';
+import AppDataSource from './data-source';
+import { User } from "./entity/User"
+
+import "reflect-metadata"
 
 const events: LiveEvent[] = [];
 
 
-export const createLiveEvent = (liveEvent: LiveEventInput): LiveEvent => {
+export const createLiveEvent = async (liveEvent: LiveEventInput): Promise<LiveEvent> => {
+
+    const userRepository = AppDataSource.getRepository(User)
+
+    const user = new User()
+    user.firstName = "Timber"
+    user.lastName = "Saw"
+    user.age = 25
+    await userRepository.save(user)
+
+    const allUsers = await userRepository.find()
+
     const newLiveEvent = {
         id: '1234',
         ...liveEvent
@@ -13,9 +27,18 @@ export const createLiveEvent = (liveEvent: LiveEventInput): LiveEvent => {
     return newLiveEvent;
 }
 
-export const getLiveEvent = (id: string): LiveEvent | null => {
+export const getLiveEvent = async (id: string): Promise<LiveEvent> => {
+    const userRepository = AppDataSource.getRepository(User)
+
+    const user = new User()
+    user.firstName = "Timber"
+    user.lastName = "Saw"
+    user.age = 25
+    await userRepository.save(user)
+
+    const allUsers = await userRepository.find()
+
     const event = events.find((event) => event.id === id);
-    console.log('event log', event);
     if (event) {
         return event;
     } else {

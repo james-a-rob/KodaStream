@@ -1,6 +1,8 @@
+import "reflect-metadata";
 import request from 'supertest';
-import { StreamStatus } from "../src/enums";
+import AppDataSource from '../src/data-source';
 
+import { StreamStatus } from "../src/enums";
 import app from '../src/api';
 
 const inputEvent = {
@@ -12,6 +14,15 @@ const inputEvent = {
         }
     ]
 }
+
+beforeEach(async () => {
+    await AppDataSource.initialize();
+});
+
+afterEach(async () => {
+    await AppDataSource.destroy();
+});
+
 
 describe("live streaming", () => {
     test("can create a live stream", async () => {

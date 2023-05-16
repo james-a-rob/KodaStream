@@ -1,9 +1,11 @@
-module.exports = {
+export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
   globals: {
-    'ts-jest': {
-      isolatedModules: true
+    transform: {
+      '^.+\\.tsx?$': ['ts-jest', {
+        isolatedModules: true
+      }],
     }
   },
   modulePathIgnorePatterns: ['<rootDir>/dist/']

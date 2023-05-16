@@ -1,3 +1,5 @@
+import AppDataSource from './data-source';
+
 import { createLiveEvent, getLiveEvent } from './db';
 import { StreamStatus } from "./enums";
 
@@ -11,10 +13,19 @@ const inputEvent = {
   ]
 }
 
-test('create live event', () => {
+beforeEach(async () => {
+  await AppDataSource.initialize();
+});
+
+afterEach(async () => {
+  await AppDataSource.destroy();
+});
 
 
-  expect(createLiveEvent(inputEvent)).toEqual({
+test('create live event', async () => {
+
+
+  expect(await createLiveEvent(inputEvent)).toEqual({
     id: '1234',
     url: 'https://streamer.com/output-1234.m3u8',
     status: 'started',
@@ -26,9 +37,9 @@ test('create live event', () => {
   });
 });
 
-test('get live event by id', () => {
-  const liveEvent = createLiveEvent(inputEvent);
-  expect(getLiveEvent(liveEvent.id)).toEqual({
+test('get live event by id', async () => {
+  const liveEvent = await createLiveEvent(inputEvent);
+  expect(await getLiveEvent(liveEvent.id)).toEqual({
     id: '1234',
     url: 'https://streamer.com/output-1234.m3u8',
     status: 'started',
