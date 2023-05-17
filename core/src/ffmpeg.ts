@@ -1,5 +1,5 @@
-import { type LiveEvent } from "./types";
+import { Event } from "./entity/Event";
 
-export const startStreaming = (liveEvent: LiveEvent) => {
+export const startStreaming = (liveEvent: Event) => {
     console.log('do ffmpeg stuff');
 }

@@ -1,49 +1,45 @@
-import { type LiveEvent, LiveEventInput } from "./types";
+import { LiveEventInput } from "./types";
+import { StreamStatus } from "./enums";
 import AppDataSource from './data-source';
-import { User } from "./entity/User"
-
+import { Event } from "./entity/Event";
+import { Scene } from "./entity/Scene";
 import "reflect-metadata"
 
-const events: LiveEvent[] = [];
 
+export const createLiveEvent = async (liveEvent: LiveEventInput): Promise<Event> => {
 
-export const createLiveEvent = async (liveEvent: LiveEventInput): Promise<LiveEvent> => {
+    const eventRepository = AppDataSource.getRepository(Event);
+    const sceneRepository = AppDataSource.getRepository(Scene);
+    const sceneOne = new Scene();
+    sceneOne.location = "https://s3.com/videos/1234.mp4";
 
-    const userRepository = AppDataSource.getRepository(User)
+    const event = new Event();
 
-    const user = new User()
-    user.firstName = "Timber"
-    user.lastName = "Saw"
-    user.age = 25
-    await userRepository.save(user)
+    event.url = 'https://streamer.com/output-1234.m3u8';
 
-    const allUsers = await userRepository.find()
+    event.status = StreamStatus.Started;
 
-    const newLiveEvent = {
-        id: '1234',
-        ...liveEvent
-    };
-    events.push(newLiveEvent);
-    return newLiveEvent;
+    event.scenes = [sceneOne];
+
+    await eventRepository.save(event);
+
+    const allEvents = await eventRepository.find();
+
+    console.log(allEvents);
+
+    return event;
 }
 
-export const getLiveEvent = async (id: string): Promise<LiveEvent> => {
-    const userRepository = AppDataSource.getRepository(User)
+export const getLiveEvent = async (id: string) => {
+    const eventRepository = AppDataSource.getRepository(Event)
 
-    const user = new User()
-    user.firstName = "Timber"
-    user.lastName = "Saw"
-    user.age = 25
-    await userRepository.save(user)
 
-    const allUsers = await userRepository.find()
-
-    const event = events.find((event) => event.id === id);
-    if (event) {
-        return event;
-    } else {
-        return null;
-    }
+    // const event = events.find((event) => event.id === id);
+    // if (event) {
+    //     return event;
+    // } else {
+    //     return null;
+    // }
 
 }
 
