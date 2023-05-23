@@ -14,6 +14,9 @@ export class Event {
     @Column()
     url: string
 
+    @Column({ type: 'boolean', default: false })
+    loop: boolean
+
     @OneToMany(() => Scene, (scene) => scene.event, { cascade: true })
     scenes: Scene[]
 

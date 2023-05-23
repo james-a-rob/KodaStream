@@ -1,7 +1,7 @@
-# Awesome Project Build with TypeORM
+### Warning this project is very much still in development
 
-Steps to run this project:
+# Description
 
-1. Run `npm i` command
-2. Setup database settings inside `data-source.ts` file
-3. Run `npm start` command
+Air is a headless live streaming solution with a focus on pre-recorded content and interactivity. 
+
+Take existing video content and repurpose as engaging live streams.

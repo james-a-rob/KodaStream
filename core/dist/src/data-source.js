@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppDataSource = void 0;
 require("reflect-metadata");
 var typeorm_1 = require("typeorm");
-var User_1 = require("./entity/User");
-exports.AppDataSource = new typeorm_1.DataSource({
+var Event_1 = require("./entity/Event");
+var Scene_1 = require("./entity/Scene");
+var AppDataSource = new typeorm_1.DataSource({
     type: "sqlite",
-    database: ":memory",
+    database: ":memory:",
+    dropSchema: true,
+    entities: [Event_1.Event, Scene_1.Scene],
     synchronize: true,
-    logging: false,
-    entities: [User_1.User],
-    migrations: [],
-    subscribers: [],
+    logging: false
 });
+exports.default = AppDataSource;
 //# sourceMappingURL=data-source.js.map

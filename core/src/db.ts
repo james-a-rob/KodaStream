@@ -1,47 +1,67 @@
-import { LiveEventInput } from "./types";
-import { StreamStatus } from "./enums";
+import "reflect-metadata";
+
 import AppDataSource from './data-source';
 import { Event } from "./entity/Event";
 import { Scene } from "./entity/Scene";
-import "reflect-metadata"
 
 
-export const createLiveEvent = async (liveEvent: LiveEventInput): Promise<Event> => {
+export const createLiveEvent = async (liveEvent): Promise<Event> => {
 
     const eventRepository = AppDataSource.getRepository(Event);
-    const sceneRepository = AppDataSource.getRepository(Scene);
-    const sceneOne = new Scene();
-    sceneOne.location = "https://s3.com/videos/1234.mp4";
+    const scenes = liveEvent.scenes.map((scene) => {
+        const currentScene = new Scene();
+        currentScene.location = scene.location;
+        currentScene.metadata = scene.metadata;
+
+        return currentScene;
+    })
 
     const event = new Event();
 
-    event.url = 'https://streamer.com/output-1234.m3u8';
-
-    event.status = StreamStatus.Started;
-
-    event.scenes = [sceneOne];
+    event.url = liveEvent.url;
+    event.loop = liveEvent.loop;
+    event.status = liveEvent.status;
+    event.scenes = scenes;
 
     await eventRepository.save(event);
-
-    const allEvents = await eventRepository.find();
-
-    console.log(allEvents);
 
     return event;
 }
 
-export const getLiveEvent = async (id: string) => {
+export const getLiveEvent = async (id: string): Promise<Event> => {
     const eventRepository = AppDataSource.getRepository(Event)
 
-
-    // const event = events.find((event) => event.id === id);
-    // if (event) {
-    //     return event;
-    // } else {
-    //     return null;
-    // }
-
+    const event = await eventRepository.findOne({
+        where: {
+            id: parseInt(id)
+        },
+        relations: {
+            scenes: true
+        },
+    });
+    return event;
 }
 
+export const updateLiveEvent = async (id: string, liveEvent): Promise<Event> => {
+    const eventRepository = AppDataSource.getRepository(Event)
+
+    const event = await eventRepository.findOne({
+        where: {
+            id: parseInt(id)
+        },
+        relations: {
+            scenes: true
+        },
+    });
+
+
+    const updatedScenes = [...event.scenes, ...liveEvent.scenes];
+
+    event.scenes = updatedScenes;
+
+    await eventRepository.save(event);
+
+    return event;
+}
 
 

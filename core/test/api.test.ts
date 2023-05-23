@@ -1,16 +1,55 @@
 import "reflect-metadata";
 import request from 'supertest';
 import AppDataSource from '../src/data-source';
-
+import { Event } from "../src/entity/Event";
+import { Scene } from "../src/entity/Scene";
 import { StreamStatus } from "../src/enums";
 import app from '../src/api';
 
-const inputEvent = {
+jest.mock('../src/video-processor', () => ({
+    start: () => { }
+}));
+
+const simpleEvent = {
     url: 'https://streamer.com/output-1234.m3u8',
     status: StreamStatus.Started,
     scenes: [
         {
-            url: 'https://s3.com/videos/1234.mp4'
+            location: 'https://s3.com/videos/1234.mp4'
+        }
+    ]
+}
+
+const eventWithTwoScenesAndMetadata = {
+    url: 'https://streamer.com/output-1234.m3u8',
+    status: StreamStatus.Started,
+    scenes: [
+        {
+            location: 'https://s3.com/videos/1234.mp4',
+            metadata: 'Nike'
+        },
+        {
+            location: 'https://s3.com/videos/5678.mp4',
+            metadata: 'Asics'
+        }
+    ]
+}
+
+const addAdditionalScene = {
+    scenes: [
+        {
+            location: 'https://s3.com/videos/5678.mp4'
+        }
+    ]
+}
+
+const simpleLoopedEvent = {
+    url: 'https://streamer.com/output-1234.m3u8',
+    loop: true,
+    status: StreamStatus.Started,
+    scenes: [
+        {
+            location: 'https://s3.com/videos/1234.mp4'
         }
     ]
 }
@@ -25,43 +64,146 @@ afterEach(async () => {
 
 
 describe("live streaming", () => {
-    test("can create a live stream", async () => {
-        const response = await request(app)
-            .post('/1234')
-            .send(inputEvent)
-            .set('Content-Type', 'application/json')
-            .set('Accept', 'application/json');
+    describe('create', () => {
+        test("can create a simple live event that starts imediatly", async () => {
+            const response = await request(app)
+                .post('/event')
+                .send(simpleEvent)
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
 
-        expect(response.headers["content-type"]).toMatch(/json/);
+            expect(response.headers["content-type"]).toMatch(/json/);
 
-        expect(response.status).toEqual(200);
-        expect(response.body.url).toEqual('https://streamer.com/output-1234.m3u8');
+            expect(response.status).toEqual(200);
+            expect(response.body.url).toEqual('https://streamer.com/output-1234.m3u8');
 
-        expect(response.body.scenes).toEqual([
-            {
-                id: 1,
-                location: 'https://s3.com/videos/1234.mp4'
-            }
-        ])
+            expect(response.body.scenes).toEqual([
+                {
+                    id: 1,
+                    location: 'https://s3.com/videos/1234.mp4',
+                    metadata: ''
+                }
+            ]);
+        });
+
+        test("create stream with loop enabled", async () => {
+            const response = await request(app)
+                .post('/event')
+                .send(simpleLoopedEvent)
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
+
+            expect(response.headers["content-type"]).toMatch(/json/);
+
+            expect(response.status).toEqual(200);
+            expect(response.body.url).toEqual('https://streamer.com/output-1234.m3u8');
+            expect(response.body.loop).toBe(true);
+            expect(response.body.scenes).toEqual([
+                {
+                    id: 1,
+                    location: 'https://s3.com/videos/1234.mp4',
+                    metadata: ''
+                }
+            ]);
+        });
+
+        test('create a stream with multiple scenes with their own metadata', async () => {
+            const response = await request(app)
+                .post('/event')
+                .send(eventWithTwoScenesAndMetadata)
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
+
+            expect(response.headers["content-type"]).toMatch(/json/);
+            expect(response.body.scenes).toEqual([
+                {
+                    id: 1,
+                    location: 'https://s3.com/videos/1234.mp4',
+                    metadata: 'Nike'
+                },
+                {
+                    id: 2,
+                    location: 'https://s3.com/videos/5678.mp4',
+                    metadata: 'Asics'
+                }
+            ]);
+        });
+
     });
 
-    // test("can retreive an already created live stream", async () => {
-    //     await request(app)
-    //         .post('/1234')
-    //         .send(inputEvent)
-    //         .set('Content-Type', 'application/json')
+    describe('update', () => {
+        test("add additional scene to already streaming event", async () => {
+            const response = await request(app)
+                .post('/event')
+                .send(simpleEvent)
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
 
-    //         .set('Accept', 'application/json');
+            const response2 = await request(app)
+                .put('/event/1')
+                .send(addAdditionalScene)
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
 
-    //     const response = await request(app)
-    //         .get('/1234')
-    //         .set('Accept', 'application/json');
+            expect(response.body.scenes).toEqual([
+                {
+                    id: 1,
+                    location: 'https://s3.com/videos/1234.mp4',
+                    metadata: ''
+                }
+            ]);
+            expect(response2.body.scenes).toEqual([
+                {
+                    id: 1,
+                    location: 'https://s3.com/videos/1234.mp4',
+                    metadata: ''
+                },
+                {
+                    id: 2,
+                    location: 'https://s3.com/videos/5678.mp4',
+                    metadata: ''
+                }
+            ]);
+        });
 
-    //     expect(response.headers["content-type"]).toMatch(/json/);
+    })
 
-    //     expect(response.status).toEqual(200);
-    //     expect(response.body.url).toEqual('https://streamer.com/output-1234.m3u8');
-    // });
+    describe('get', () => {
+        test("can retreive an already created live stream", async () => {
+            const eventRepository = AppDataSource.getRepository(Event);
+            const sceneOne = new Scene();
+            sceneOne.location = "https://s3.com/videos/1234.mp4";
+
+            const event = new Event();
+
+            event.url = 'https://streamer.com/output-1234.m3u8';
+
+            event.status = StreamStatus.Started;
+
+            event.scenes = [sceneOne];
+
+            await eventRepository.save(event);
+
+            const response = await request(app)
+                .get('/event/1')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
+
+            expect(response.headers["content-type"]).toMatch(/json/);
+
+            expect(response.status).toEqual(200);
+            expect(response.body.url).toEqual('https://streamer.com/output-1234.m3u8');
+
+            expect(response.body.scenes).toEqual([
+                {
+                    id: 1,
+                    location: 'https://s3.com/videos/1234.mp4',
+                    metadata: ''
+                }
+            ]);
+        });
+    });
+
 
 });
 

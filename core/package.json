@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "npx tsc --build --verbose",
-    "start": "ts-node src/index.ts",
+    "start": "ts-node  src/main.ts",
     "test": "jest --watch",
     "typeorm": "typeorm-ts-node-commonjs"
   },

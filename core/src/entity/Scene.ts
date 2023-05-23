@@ -10,6 +10,9 @@ export class Scene {
     @Column()
     location: string
 
+    @Column({ default: '' })
+    metadata: string
+
     @ManyToOne(() => Event, (event) => event.scenes)
     event: Event
 }
