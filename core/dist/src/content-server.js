@@ -54,43 +54,36 @@ var hlsServerConfig = {
     provider: {
         exists: function (req, cb) {
             var ext = req.url.split('.').pop();
+            // console.log('ext', ext);
             if (ext !== 'm3u8' && ext !== 'ts') {
                 return cb(null, true);
             }
-            fs_1.default.access(__dirname + req.url, fs_1.default.constants.F_OK, function (err) {
+            // console.log('__dirname + req.url', __dirname + req.url.replace("output", "output-initial"));
+            fs_1.default.access(__dirname + req.url.replace("output", "output-initial"), fs_1.default.constants.F_OK, function (err) {
                 if (err) {
-                    console.log('File not exist');
                     return cb(null, false);
                 }
                 cb(null, true);
             });
         },
         getManifestStream: function (req, cb) { return __awaiter(void 0, void 0, void 0, function () {
-            var m3u8Data, eventId, event, playlist, stream;
+            var m3u8Data, eventId, event, playlist, outputPath, stream;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         //update daterangefirst
-                        console.log('getManifestStream', req.url.split("/"));
-                        m3u8Data = fs_1.default.readFileSync(path_1.default.join(__dirname, req.url));
+                        console.log('get manifest');
+                        m3u8Data = fs_1.default.readFileSync(__dirname + req.url.replace("output", "output-initial"));
                         eventId = req.url.split("/")[2];
                         return [4 /*yield*/, (0, db_1.getLiveEvent)(eventId)];
                     case 1:
                         event = _a.sent();
                         playlist = hls_parser_1.default.parse(m3u8Data.toString());
                         playlist.segments.forEach(function (segment) {
-                            console.log(segment.uri);
                             var idFromSegmentFile = segment.uri.split("-")[1];
-                            // console.log(segment.discontinuity);
-                            // console.log(segment.programDateTime);
-                            // console.log(segment.duration);
-                            console.log('- - - event', event);
                             var scene = event.scenes.filter(function (dbValue) {
-                                console.log('idFromSegmentFile', idFromSegmentFile);
-                                console.log('dbValue.id', dbValue.id);
                                 return dbValue.id.toString() === idFromSegmentFile;
                             });
-                            console.log(scene);
                             var dateRange = {
                                 id: "video-".concat(scene[0].id),
                                 start: new Date(segment.programDateTime),
@@ -98,11 +91,10 @@ var hlsServerConfig = {
                                 attributes: { 'X-CUSTOM-KEY': scene[0].metadata }
                             };
                             segment.dateRange = dateRange;
-                            console.log('- - - -');
                         });
-                        console.log(hls_parser_1.default.stringify(playlist));
-                        fs_1.default.writeFileSync(__dirname + "/events/".concat(eventId, "/final-output.m3u8"), hls_parser_1.default.stringify(playlist));
-                        stream = fs_1.default.createReadStream(__dirname + req.url);
+                        outputPath = path_1.default.join(__dirname, "/events/".concat(eventId, "/output.m3u8"));
+                        fs_1.default.writeFileSync(outputPath, hls_parser_1.default.stringify(playlist));
+                        stream = fs_1.default.createReadStream(outputPath);
                         cb(null, stream);
                         return [2 /*return*/];
                 }

@@ -45,7 +45,10 @@ describe('video processor', () => {
         fs.rmSync(eventsLocation, { recursive: true, force: true });
         start(1);
         // look for file
-        await waitForFileExists('../dummy.m3u8')
+        // get has correct file name corosponding to video
+        // m3u8 called correct no-metadata
+        const exists = await waitForFileExists(`${eventsLocation}/output-initial.m3u8`);
+        expect(exists).toBe(true);
 
     }, 10000);
 })

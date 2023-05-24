@@ -45,7 +45,7 @@ describe('content server config', () => {
         } as Request;
         const cb = (error, stream) => {
             // check arguments
-            const outputPath = path.join(__dirname, `../src/events/${event.id}/final-output.m3u8`);
+            const outputPath = path.join(__dirname, `../src/events/${event.id}/output.m3u8`);
 
             expect(error).toBe(null);
             expect(stream.path).toBe(outputPath);

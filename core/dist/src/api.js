@@ -49,12 +49,15 @@ app.post("/event", function (req, res) { return __awaiter(void 0, void 0, void 0
     var event;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, db_1.createLiveEvent)(req.body)];
+            case 0:
+                if (!req.body.url || !req.body.status || !req.body.scenes) {
+                    return [2 /*return*/, res.status(400).json({})];
+                }
+                return [4 /*yield*/, (0, db_1.createLiveEvent)(req.body)];
             case 1:
                 event = _a.sent();
                 (0, video_processor_1.start)(event.id);
-                res.setHeader('Content-Type', 'application/json');
-                res.send(event);
+                res.json(event);
                 return [2 /*return*/];
         }
     });

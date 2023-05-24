@@ -3,6 +3,7 @@
     "node_modules",
     "ffmpeg-experiments",
     "src/events",
+    "test/mock-video-content",
     "dist"
   ],
   "compilerOptions": {

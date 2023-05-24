@@ -40,6 +40,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
+var fs_extra_1 = __importDefault(require("fs-extra"));
+var path_1 = __importDefault(require("path"));
 var content_server_1 = require("../src/content-server");
 var data_source_1 = __importDefault(require("../src/data-source"));
 var db_1 = require("../src/db");
@@ -77,22 +79,35 @@ var eventWithScenesAndMetadata = {
 };
 describe('content server config', function () {
     test('it adds metadata to m3u8 file', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var event, fakeRequest, cb;
+        var event, locationOfMockVideoContent, locationOfVideoContent, fakeRequest, cb;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, (0, db_1.createLiveEvent)(eventWithScenesAndMetadata)];
                 case 1:
                     event = _a.sent();
-                    fakeRequest = {
-                        url: '/events/1/output.m3u8'
-                    };
-                    cb = function () {
-                        expect(1).toBe(2);
-                    };
-                    return [4 /*yield*/, content_server_1.hlsServerConfig.provider.getManifestStream(fakeRequest, cb)];
+                    locationOfMockVideoContent = path_1.default.join(__dirname, "./mock-video-content/short");
+                    locationOfVideoContent = path_1.default.join(__dirname, "../src/events/".concat(event.id));
+                    return [4 /*yield*/, fs_extra_1.default.remove(locationOfVideoContent)];
                 case 2:
                     _a.sent();
-                    console.log('done');
+                    return [4 /*yield*/, fs_extra_1.default.ensureDir(locationOfVideoContent)];
+                case 3:
+                    _a.sent();
+                    return [4 /*yield*/, fs_extra_1.default.copy(locationOfMockVideoContent, locationOfVideoContent)];
+                case 4:
+                    _a.sent();
+                    fakeRequest = {
+                        url: '/events/1/output-initial.m3u8'
+                    };
+                    cb = function (error, stream) {
+                        // check arguments
+                        var outputPath = path_1.default.join(__dirname, "../src/events/".concat(event.id, "/output.m3u8"));
+                        expect(error).toBe(null);
+                        expect(stream.path).toBe(outputPath);
+                    };
+                    return [4 /*yield*/, content_server_1.hlsServerConfig.provider.getManifestStream(fakeRequest, cb)];
+                case 5:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });

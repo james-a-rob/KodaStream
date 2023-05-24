@@ -14,12 +14,12 @@ const hlsServerConfig = {
     provider: {
         exists: (req: Request, cb) => {
             const ext = req.url.split('.').pop();
-
+            // console.log('ext', ext);
             if (ext !== 'm3u8' && ext !== 'ts') {
                 return cb(null, true);
             }
-
-            fs.access(__dirname + req.url, fs.constants.F_OK, function (err) {
+            // console.log('__dirname + req.url', __dirname + req.url.replace("output", "output-initial"));
+            fs.access(__dirname + req.url.replace("output", "output-initial"), fs.constants.F_OK, function (err) {
                 if (err) {
                     return cb(null, false);
                 }
@@ -28,7 +28,7 @@ const hlsServerConfig = {
         },
         getManifestStream: async (req: Request, cb) => {
             //update daterangefirst
-            const m3u8Data = fs.readFileSync(path.join(__dirname, req.url));
+            const m3u8Data = fs.readFileSync(__dirname + req.url.replace("output", "output-initial"));
             const eventId = req.url.split("/")[2];
             const event = await getLiveEvent(eventId);
 
@@ -48,7 +48,7 @@ const hlsServerConfig = {
                 }
                 segment.dateRange = dateRange;
             });
-            const outputPath = path.join(__dirname, `/events/${eventId}/final-output.m3u8`);
+            const outputPath = path.join(__dirname, `/events/${eventId}/output.m3u8`);
             fs.writeFileSync(outputPath, HLS.stringify(playlist));
             const stream = fs.createReadStream(outputPath);
 

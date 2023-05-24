@@ -101,21 +101,19 @@ afterEach(function () { return __awaiter(void 0, void 0, void 0, function () {
 }); });
 describe('video processor', function () {
     test("starts", function () { return __awaiter(void 0, void 0, void 0, function () {
-        var event, eventsLocation;
+        var event, eventsLocation, exists;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, (0, db_1.createLiveEvent)(eventWithScenesAndMetadata)];
                 case 1:
                     event = _a.sent();
                     eventsLocation = path_1.default.join(__dirname, "../src/events/".concat(event.id));
-                    console.log('eventsLocation', eventsLocation);
                     fs_1.default.rmSync(eventsLocation, { recursive: true, force: true });
                     (0, video_processor_1.start)(1);
-                    // look for file
-                    return [4 /*yield*/, waitForFileExists('../dummy.m3u8')];
+                    return [4 /*yield*/, waitForFileExists("".concat(eventsLocation, "/output-initial.m3u8"))];
                 case 2:
-                    // look for file
-                    _a.sent();
+                    exists = _a.sent();
+                    expect(exists).toBe(true);
                     return [2 /*return*/];
             }
         });

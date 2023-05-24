@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.start = void 0;
-var fs_1 = __importDefault(require("fs"));
+var fs_extra_1 = __importDefault(require("fs-extra"));
 var path_1 = __importDefault(require("path"));
 var fluent_ffmpeg_1 = __importDefault(require("fluent-ffmpeg"));
 var ffmpeg_static_1 = __importDefault(require("ffmpeg-static"));
@@ -50,9 +50,9 @@ var process = function (scene, event) {
     return new Promise(function (resolve, reject) {
         var sceneLocation = path_1.default.join(__dirname, scene.location);
         var newEventDirLocation = path_1.default.join(__dirname, "events/".concat(event.id));
-        var segmentLocation = path_1.default.join(__dirname, "events/".concat(event.id, "/file-").concat(scene.id, "-%03d.ts"));
-        var outputLocation = path_1.default.join(__dirname, "events/".concat(event.id, "/output.m3u8"));
-        fs_1.default.mkdirSync(newEventDirLocation);
+        var segmentLocation = path_1.default.join(__dirname, "events/".concat(scene.id, "/file-").concat(scene.id, "-%03d.ts"));
+        var outputLocation = path_1.default.join(__dirname, "events/".concat(event.id, "/output-initial.m3u8"));
+        fs_extra_1.default.ensureDir(newEventDirLocation);
         (0, fluent_ffmpeg_1.default)()
             .addInput(sceneLocation)
             .addOptions([
@@ -67,13 +67,12 @@ var process = function (scene, event) {
             '-hls_flags program_date_time+append_list+omit_endlist+independent_segments+discont_start',
             '-f hls'
         ]).output(outputLocation).on('end', function () {
-            console.log('ended');
             resolve(true);
         }).on('start', function (data) {
-            console.log(data);
+            // console.log(data);
         })
             .on('progress', function (data) {
-            console.log(data);
+            // console.log(data);
         }).on('error', function (err, stdout, stderr) {
             console.log('error---', err, stdout, stderr);
         }).run();

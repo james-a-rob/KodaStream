@@ -190,6 +190,22 @@ describe("live streaming", function () {
                 }
             });
         }); });
+        test("create handle no data sent", function () { return __awaiter(void 0, void 0, void 0, function () {
+            var response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, (0, supertest_1.default)(api_1.default)
+                            .post('/event')
+                            .set('Content-Type', 'application/json')
+                            .set('Accept', 'application/json')];
+                    case 1:
+                        response = _a.sent();
+                        expect(response.headers["content-type"]).toMatch(/json/);
+                        expect(response.status).toEqual(400);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
     });
     describe('update', function () {
         test("add additional scene to already streaming event", function () { return __awaiter(void 0, void 0, void 0, function () {

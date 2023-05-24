@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs-extra';
 import path from 'path';
 import ffmpeg from 'fluent-ffmpeg';
 import pathToFfmpeg from 'ffmpeg-static';
@@ -13,10 +13,10 @@ const process = (scene: Scene, event: Event) => {
     return new Promise((resolve, reject) => {
         const sceneLocation = path.join(__dirname, scene.location);
         const newEventDirLocation = path.join(__dirname, `events/${event.id}`);
-        const segmentLocation = path.join(__dirname, `events/${event.id}/file-${scene.id}-%03d.ts`);
-        const outputLocation = path.join(__dirname, `events/${event.id}/output.m3u8`);
+        const segmentLocation = path.join(__dirname, `events/${scene.id}/file-${scene.id}-%03d.ts`);
+        const outputLocation = path.join(__dirname, `events/${event.id}/output-initial.m3u8`);
 
-        fs.mkdirSync(newEventDirLocation)
+        fs.ensureDir(newEventDirLocation)
 
         ffmpeg()
             .addInput(sceneLocation)
