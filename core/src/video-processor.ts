@@ -33,14 +33,12 @@ const process = (scene: Scene, event: Event) => {
                 '-f hls'
 
             ]).output(outputLocation).on('end', () => {
-                console.log('ended');
                 resolve(true);
             }).on('start', (data) => {
-                console.log(data);
+                // console.log(data);
             })
             .on('progress', (data) => {
-
-                console.log(data);
+                // console.log(data);
 
             }).on('error', (err, stdout, stderr) => {
                 console.log('error---', err, stdout, stderr)

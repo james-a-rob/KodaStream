@@ -41,14 +41,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var hls_server_1 = __importDefault(require("hls-server"));
 var api_1 = __importDefault(require("./api"));
+var data_source_1 = __importDefault(require("./data-source"));
 var content_server_1 = require("./content-server");
 var start = function () { return __awaiter(void 0, void 0, void 0, function () {
     var contentServer;
     return __generator(this, function (_a) {
-        api_1.default.listen(4000);
-        contentServer = content_server_1.app.listen(3000);
-        new hls_server_1.default(contentServer, content_server_1.hlsServerConfig);
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, data_source_1.default.initialize()];
+            case 1:
+                _a.sent();
+                api_1.default.listen(4000);
+                contentServer = content_server_1.app.listen(3000);
+                new hls_server_1.default(contentServer, content_server_1.hlsServerConfig);
+                return [2 /*return*/];
+        }
     });
 }); };
 start();

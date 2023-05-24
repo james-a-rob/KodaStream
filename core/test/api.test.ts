@@ -129,6 +129,17 @@ describe("live streaming", () => {
             ]);
         });
 
+        test("create handle no data sent", async () => {
+            const response = await request(app)
+                .post('/event')
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
+
+            expect(response.headers["content-type"]).toMatch(/json/);
+
+            expect(response.status).toEqual(400);
+        });
+
     });
 
     describe('update', () => {

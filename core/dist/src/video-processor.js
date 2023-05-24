@@ -48,7 +48,6 @@ var db_1 = require("./db");
 fluent_ffmpeg_1.default.setFfmpegPath(ffmpeg_static_1.default);
 var process = function (scene, event) {
     return new Promise(function (resolve, reject) {
-        console.log('__dirname', __dirname);
         var sceneLocation = path_1.default.join(__dirname, scene.location);
         var newEventDirLocation = path_1.default.join(__dirname, "events/".concat(event.id));
         var segmentLocation = path_1.default.join(__dirname, "events/".concat(event.id, "/file-").concat(scene.id, "-%03d.ts"));
@@ -81,13 +80,11 @@ var process = function (scene, event) {
     });
 };
 var start = function (eventId) {
-    console.log('inside start');
     var run = function () { return __awaiter(void 0, void 0, void 0, function () {
         var nextSceneExists, sceneIteration, liveEvent, firstScene, uptoDateLiveStream, sceneToStream, nextScene;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    console.log('inside run');
                     sceneIteration = 0;
                     return [4 /*yield*/, (0, db_1.getLiveEvent)(eventId.toString())];
                 case 1:
@@ -103,11 +100,8 @@ var start = function (eventId) {
                 case 3:
                     uptoDateLiveStream = _a.sent();
                     sceneToStream = uptoDateLiveStream.scenes.find(function (scene) { return scene.id === firstScene.id + sceneIteration; });
-                    console.log('-sceneToStream', sceneToStream);
-                    console.log('ffmpeg scene to stream', sceneToStream);
                     process(sceneToStream, liveEvent);
                     nextScene = uptoDateLiveStream.scenes.find(function (scene) { return scene.id === firstScene.id + sceneIteration + 1; });
-                    console.log('ffmpeg next scene', nextScene);
                     if (nextScene) {
                         nextSceneExists = true;
                     }

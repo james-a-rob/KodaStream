@@ -68,3 +68,5 @@ new hls(server, {
         }
     }
 });
+
+// export app and hls server config

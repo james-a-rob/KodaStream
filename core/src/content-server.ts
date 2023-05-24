@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import fs from 'fs';
+import path from 'path';
 import HLS from 'hls-parser';
 import { getLiveEvent } from './db';
 
@@ -20,7 +21,6 @@ const hlsServerConfig = {
 
             fs.access(__dirname + req.url, fs.constants.F_OK, function (err) {
                 if (err) {
-                    console.log('File not exist');
                     return cb(null, false);
                 }
                 cb(null, true);
@@ -28,35 +28,29 @@ const hlsServerConfig = {
         },
         getManifestStream: async (req: Request, cb) => {
             //update daterangefirst
-            console.log('getManifestStream', __dirname + req.url)
-            const m3u8Data = fs.readFileSync(__dirname + req.url);
-            const event = await getLiveEvent("1");
+            const m3u8Data = fs.readFileSync(path.join(__dirname, req.url));
+            const eventId = req.url.split("/")[2];
+            const event = await getLiveEvent(eventId);
 
             const playlist = HLS.parse(m3u8Data.toString());
             playlist.segments.forEach((segment) => {
-                console.log(segment.uri);
                 const idFromSegmentFile = segment.uri.split("-")[1]
-                // console.log(segment.discontinuity);
-                // console.log(segment.programDateTime);
-                // console.log(segment.duration);
+
                 const scene = event.scenes.filter((dbValue) => {
-                    console.log(idFromSegmentFile);
-                    console.log(dbValue.id);
-                    return dbValue.id === idFromSegmentFile
+
+                    return dbValue.id.toString() === idFromSegmentFile
                 });
-                console.log(scene);
                 const dateRange = {
-                    id: 'video2',
+                    id: `video-${scene[0].id}`,
                     start: new Date(segment.programDateTime),
                     duration: segment.duration,
                     attributes: { 'X-CUSTOM-KEY': scene[0].metadata }
                 }
                 segment.dateRange = dateRange;
-                console.log('- - - -');
             });
-            console.log(HLS.stringify(playlist))
-            fs.writeFileSync(__dirname + '/videos/final-output.m3u8', HLS.stringify(playlist));
-            const stream = fs.createReadStream(__dirname + req.url);
+            const outputPath = path.join(__dirname, `/events/${eventId}/final-output.m3u8`);
+            fs.writeFileSync(outputPath, HLS.stringify(playlist));
+            const stream = fs.createReadStream(outputPath);
 
             cb(null, stream);
         },

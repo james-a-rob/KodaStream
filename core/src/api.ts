@@ -7,10 +7,12 @@ const app = express();
 app.use(bodyParser.json())
 
 app.post("/event", async (req: Request, res: Response) => {
+    if (!req.body.url || !req.body.status || !req.body.scenes) {
+        return res.status(400).json({})
+    }
     const event = await createLiveEvent(req.body);
     start(event.id);
-    res.setHeader('Content-Type', 'application/json');
-    res.send(event);
+    res.json(event);
 
 });
 

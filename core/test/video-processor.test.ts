@@ -3,8 +3,6 @@ import fs from 'fs';
 import path from 'path';
 import { createLiveEvent } from '../src/db';
 import AppDataSource from '../src/data-source';
-
-import { Event } from '../src/entity/Event';
 import { start } from "../src/video-processor";
 import { StreamStatus } from "../src/enums";
 
@@ -17,7 +15,7 @@ async function waitForFileExists(filePath, currentTime = 0, timeout = 5000) {
     return waitForFileExists(filePath, currentTime + 1000, timeout);
 }
 
-const eventWithTwoScenesAndMetadata = {
+const eventWithScenesAndMetadata = {
     url: 'https://streamer.com/output-1234.m3u8',
     loop: true,
     status: StreamStatus.Started,
@@ -41,9 +39,8 @@ afterEach(async () => {
 describe('video processor', () => {
     test("starts", async () => {
 
-        const event = await createLiveEvent(eventWithTwoScenesAndMetadata);
+        const event = await createLiveEvent(eventWithScenesAndMetadata);
         const eventsLocation = path.join(__dirname, `../src/events/${event.id}`);
-        console.log('eventsLocation', eventsLocation);
 
         fs.rmSync(eventsLocation, { recursive: true, force: true });
         start(1);

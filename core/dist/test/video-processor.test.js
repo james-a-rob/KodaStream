@@ -68,7 +68,7 @@ function waitForFileExists(filePath, currentTime, timeout) {
         });
     });
 }
-var eventWithTwoScenesAndMetadata = {
+var eventWithScenesAndMetadata = {
     url: 'https://streamer.com/output-1234.m3u8',
     loop: true,
     status: enums_1.StreamStatus.Started,
@@ -104,7 +104,7 @@ describe('video processor', function () {
         var event, eventsLocation;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, db_1.createLiveEvent)(eventWithTwoScenesAndMetadata)];
+                case 0: return [4 /*yield*/, (0, db_1.createLiveEvent)(eventWithScenesAndMetadata)];
                 case 1:
                     event = _a.sent();
                     eventsLocation = path_1.default.join(__dirname, "../src/events/".concat(event.id));

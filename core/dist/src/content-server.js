@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.hlsServerConfig = exports.app = void 0;
 var express_1 = __importDefault(require("express"));
 var fs_1 = __importDefault(require("fs"));
+var path_1 = __importDefault(require("path"));
 var hls_parser_1 = __importDefault(require("hls-parser"));
 var db_1 = require("./db");
 var app = (0, express_1.default)();
@@ -65,14 +66,15 @@ var hlsServerConfig = {
             });
         },
         getManifestStream: function (req, cb) { return __awaiter(void 0, void 0, void 0, function () {
-            var m3u8Data, event, playlist, stream;
+            var m3u8Data, eventId, event, playlist, stream;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         //update daterangefirst
-                        console.log('getManifestStream', __dirname + req.url);
-                        m3u8Data = fs_1.default.readFileSync(__dirname + req.url);
-                        return [4 /*yield*/, (0, db_1.getLiveEvent)("1")];
+                        console.log('getManifestStream', req.url.split("/"));
+                        m3u8Data = fs_1.default.readFileSync(path_1.default.join(__dirname, req.url));
+                        eventId = req.url.split("/")[2];
+                        return [4 /*yield*/, (0, db_1.getLiveEvent)(eventId)];
                     case 1:
                         event = _a.sent();
                         playlist = hls_parser_1.default.parse(m3u8Data.toString());
@@ -82,14 +84,15 @@ var hlsServerConfig = {
                             // console.log(segment.discontinuity);
                             // console.log(segment.programDateTime);
                             // console.log(segment.duration);
+                            console.log('- - - event', event);
                             var scene = event.scenes.filter(function (dbValue) {
-                                console.log(idFromSegmentFile);
-                                console.log(dbValue.id);
-                                return dbValue.id === idFromSegmentFile;
+                                console.log('idFromSegmentFile', idFromSegmentFile);
+                                console.log('dbValue.id', dbValue.id);
+                                return dbValue.id.toString() === idFromSegmentFile;
                             });
                             console.log(scene);
                             var dateRange = {
-                                id: 'video2',
+                                id: "video-".concat(scene[0].id),
                                 start: new Date(segment.programDateTime),
                                 duration: segment.duration,
                                 attributes: { 'X-CUSTOM-KEY': scene[0].metadata }
@@ -98,7 +101,7 @@ var hlsServerConfig = {
                             console.log('- - - -');
                         });
                         console.log(hls_parser_1.default.stringify(playlist));
-                        fs_1.default.writeFileSync(__dirname + '/videos/final-output.m3u8', hls_parser_1.default.stringify(playlist));
+                        fs_1.default.writeFileSync(__dirname + "/events/".concat(eventId, "/final-output.m3u8"), hls_parser_1.default.stringify(playlist));
                         stream = fs_1.default.createReadStream(__dirname + req.url);
                         cb(null, stream);
                         return [2 /*return*/];
