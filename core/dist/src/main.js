@@ -50,8 +50,12 @@ var start = function () { return __awaiter(void 0, void 0, void 0, function () {
             case 0: return [4 /*yield*/, data_source_1.default.initialize()];
             case 1:
                 _a.sent();
-                api_1.default.listen(4000);
-                contentServer = content_server_1.app.listen(3000);
+                api_1.default.listen(4000, function () {
+                    console.log('api listening on port 4000');
+                });
+                contentServer = content_server_1.app.listen(3000, function () {
+                    console.log('content server listening on port 3000');
+                });
                 new hls_server_1.default(contentServer, content_server_1.hlsServerConfig);
                 return [2 /*return*/];
         }

@@ -7,12 +7,13 @@
 </head>
 
 <body>
-    <video preload="true" id="video" width="500" height="500" controls></video>
+    <video preload="true" id="video" height="auto" controls></video>
+    <div id="metadata"></div>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
         const video = document.getElementById('video');
         const videoSrc = '/events/1/output.m3u8';
-
+        const metadataContainer = document.getElementById('metadata');
         if (Hls.isSupported()) {
             const hls = new Hls({ renderTextTracksNatively: false });
 
@@ -31,7 +32,9 @@
                 console.log('date range date', dateRangeDate);
                 console.log('frag start date', rawProgramDateTime);
                 if (new Date(dateRangeDate) >= new Date(rawProgramDateTime)) {
-                    console.log('RENDER TO SCREEN', dateRangeValue)
+                    console.log('RENDER TO SCREEN', dateRangeValue);
+                    metadataContainer.innerHTML = `Metadata from video content: ${dateRangeValue}`;
+
                 }
 
             });

@@ -6,7 +6,7 @@ import AppDataSource from '../src/data-source';
 import { start } from "../src/video-processor";
 import { StreamStatus } from "../src/enums";
 
-async function waitForFileExists(filePath, currentTime = 0, timeout = 5000) {
+async function waitForFileExists(filePath, currentTime = 0, timeout = 20000) {
     if (fs.existsSync(filePath)) return true;
     if (currentTime === timeout) return false;
     // wait for 1 second
@@ -17,12 +17,28 @@ async function waitForFileExists(filePath, currentTime = 0, timeout = 5000) {
 
 const eventWithScenesAndMetadata = {
     url: 'https://streamer.com/output-1234.m3u8',
-    loop: true,
+    loop: false,
     status: StreamStatus.Started,
     scenes: [
         {
             location: 'videos/final_sebastien_stylist_intro.mp4',
             metadata: 'Nike',
+        }
+    ]
+}
+
+const eventWithScenesAndMetadataAndLoop = {
+    url: 'https://streamer.com/output-1234.m3u8',
+    loop: true,
+    status: StreamStatus.Started,
+    scenes: [
+        {
+            location: 'videos/final_sebastien_stylist_intro.mp4',
+            metadata: 'data1',
+        },
+        {
+            location: 'videos/final_sebastien_stylist_intro.mp4',
+            metadata: 'data2',
         }
     ]
 }
@@ -43,12 +59,37 @@ describe('video processor', () => {
         const eventsLocation = path.join(__dirname, `../src/events/${event.id}`);
 
         fs.rmSync(eventsLocation, { recursive: true, force: true });
-        start(1);
+        start(event.id);
         // look for file
         // get has correct file name corosponding to video
         // m3u8 called correct no-metadata
+        console.log(`${eventsLocation}/output-initial.m3u8`);
         const exists = await waitForFileExists(`${eventsLocation}/output-initial.m3u8`);
         expect(exists).toBe(true);
 
-    }, 10000);
+    }, 20000);
+
+    xtest("loops", async () => {
+
+        const event = await createLiveEvent(eventWithScenesAndMetadataAndLoop);
+        const eventsLocation = path.join(__dirname, `../src/events/${event.id}`);
+
+        fs.rmSync(eventsLocation, { recursive: true, force: true });
+        start(event.id);
+        // look for file
+        // get has correct file name corosponding to video
+        // m3u8 called correct no-metadata
+        const videoFileOneExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
+        const videoFileTwoExists = await waitForFileExists(`${eventsLocation}/file-2-000.ts`);
+        const videoFileThreeExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
+
+
+        expect(videoFileOneExists).toBe(true);
+        expect(videoFileTwoExists).toBe(true);
+        expect(videoFileThreeExists).toBe(true);
+
+
+        // 
+
+    }, 20000);
 })

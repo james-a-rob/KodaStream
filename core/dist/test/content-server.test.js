@@ -68,7 +68,7 @@ afterEach(function () { return __awaiter(void 0, void 0, void 0, function () {
 }); });
 var eventWithScenesAndMetadata = {
     url: 'https://streamer.com/output-1234.m3u8',
-    loop: true,
+    loop: false,
     status: enums_1.StreamStatus.Started,
     scenes: [
         {
@@ -97,7 +97,7 @@ describe('content server config', function () {
                 case 4:
                     _a.sent();
                     fakeRequest = {
-                        url: '/events/1/output-initial.m3u8'
+                        url: '/events/1/output.m3u8'
                     };
                     cb = function (error, stream) {
                         // check arguments

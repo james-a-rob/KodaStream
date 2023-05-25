@@ -71,8 +71,6 @@ var hlsServerConfig = {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        //update daterangefirst
-                        console.log('get manifest');
                         m3u8Data = fs_1.default.readFileSync(__dirname + req.url.replace("output", "output-initial"));
                         eventId = req.url.split("/")[2];
                         return [4 /*yield*/, (0, db_1.getLiveEvent)(eventId)];

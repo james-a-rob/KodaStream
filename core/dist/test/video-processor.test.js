@@ -48,7 +48,7 @@ var video_processor_1 = require("../src/video-processor");
 var enums_1 = require("../src/enums");
 function waitForFileExists(filePath, currentTime, timeout) {
     if (currentTime === void 0) { currentTime = 0; }
-    if (timeout === void 0) { timeout = 5000; }
+    if (timeout === void 0) { timeout = 20000; }
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -70,12 +70,27 @@ function waitForFileExists(filePath, currentTime, timeout) {
 }
 var eventWithScenesAndMetadata = {
     url: 'https://streamer.com/output-1234.m3u8',
-    loop: true,
+    loop: false,
     status: enums_1.StreamStatus.Started,
     scenes: [
         {
             location: 'videos/final_sebastien_stylist_intro.mp4',
             metadata: 'Nike',
+        }
+    ]
+};
+var eventWithScenesAndMetadataAndLoop = {
+    url: 'https://streamer.com/output-1234.m3u8',
+    loop: true,
+    status: enums_1.StreamStatus.Started,
+    scenes: [
+        {
+            location: 'videos/final_sebastien_stylist_intro.mp4',
+            metadata: 'data1',
+        },
+        {
+            location: 'videos/final_sebastien_stylist_intro.mp4',
+            metadata: 'data2',
         }
     ]
 };
@@ -109,7 +124,11 @@ describe('video processor', function () {
                     event = _a.sent();
                     eventsLocation = path_1.default.join(__dirname, "../src/events/".concat(event.id));
                     fs_1.default.rmSync(eventsLocation, { recursive: true, force: true });
-                    (0, video_processor_1.start)(1);
+                    (0, video_processor_1.start)(event.id);
+                    // look for file
+                    // get has correct file name corosponding to video
+                    // m3u8 called correct no-metadata
+                    console.log("".concat(eventsLocation, "/output-initial.m3u8"));
                     return [4 /*yield*/, waitForFileExists("".concat(eventsLocation, "/output-initial.m3u8"))];
                 case 2:
                     exists = _a.sent();
@@ -117,6 +136,32 @@ describe('video processor', function () {
                     return [2 /*return*/];
             }
         });
-    }); }, 10000);
+    }); }, 20000);
+    xtest("loops", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var event, eventsLocation, videoFileOneExists, videoFileTwoExists, videoFileThreeExists;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, db_1.createLiveEvent)(eventWithScenesAndMetadataAndLoop)];
+                case 1:
+                    event = _a.sent();
+                    eventsLocation = path_1.default.join(__dirname, "../src/events/".concat(event.id));
+                    fs_1.default.rmSync(eventsLocation, { recursive: true, force: true });
+                    (0, video_processor_1.start)(event.id);
+                    return [4 /*yield*/, waitForFileExists("".concat(eventsLocation, "/file-1-000.ts"))];
+                case 2:
+                    videoFileOneExists = _a.sent();
+                    return [4 /*yield*/, waitForFileExists("".concat(eventsLocation, "/file-2-000.ts"))];
+                case 3:
+                    videoFileTwoExists = _a.sent();
+                    return [4 /*yield*/, waitForFileExists("".concat(eventsLocation, "/file-1-000.ts"))];
+                case 4:
+                    videoFileThreeExists = _a.sent();
+                    expect(videoFileOneExists).toBe(true);
+                    expect(videoFileTwoExists).toBe(true);
+                    expect(videoFileThreeExists).toBe(true);
+                    return [2 /*return*/];
+            }
+        });
+    }); }, 20000);
 });
 //# sourceMappingURL=video-processor.test.js.map

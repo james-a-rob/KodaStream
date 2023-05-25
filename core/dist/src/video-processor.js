@@ -50,21 +50,22 @@ var process = function (scene, event) {
     return new Promise(function (resolve, reject) {
         var sceneLocation = path_1.default.join(__dirname, scene.location);
         var newEventDirLocation = path_1.default.join(__dirname, "events/".concat(event.id));
-        var segmentLocation = path_1.default.join(__dirname, "events/".concat(scene.id, "/file-").concat(scene.id, "-%03d.ts"));
+        var segmentLocation = path_1.default.join(__dirname, "events/".concat(event.id, "/file-").concat(scene.id, "-%03d.ts"));
         var outputLocation = path_1.default.join(__dirname, "events/".concat(event.id, "/output-initial.m3u8"));
         fs_extra_1.default.ensureDir(newEventDirLocation);
-        (0, fluent_ffmpeg_1.default)()
-            .addInput(sceneLocation)
+        var ff = (0, fluent_ffmpeg_1.default)();
+        console.log('ffmpeg', ff.kill);
+        ff.addInput(sceneLocation)
+            .inputOptions('-re')
             .addOptions([
             '-profile:v baseline',
             '-level 3.0',
             '-start_number 0',
             '-hls_time 6',
-            '-g 30',
             '-sc_threshold 0',
             "-hls_segment_filename ".concat(segmentLocation),
             '-hls_playlist_type event',
-            '-hls_flags program_date_time+append_list+omit_endlist+independent_segments+discont_start',
+            '-hls_flags delete_segments+program_date_time+append_list+omit_endlist+independent_segments+discont_start',
             '-f hls'
         ]).output(outputLocation).on('end', function () {
             resolve(true);
@@ -80,7 +81,7 @@ var process = function (scene, event) {
 };
 var start = function (eventId) {
     var run = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var nextSceneExists, sceneIteration, liveEvent, firstScene, uptoDateLiveStream, sceneToStream, nextScene;
+        var nextSceneExists, sceneIteration, liveEvent, firstScene, uptoDateLiveEvent, sceneToStream, nextScene;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -94,22 +95,28 @@ var start = function (eventId) {
                     }
                     _a.label = 2;
                 case 2:
-                    if (!nextSceneExists) return [3 /*break*/, 4];
+                    if (!nextSceneExists) return [3 /*break*/, 5];
                     return [4 /*yield*/, (0, db_1.getLiveEvent)(eventId.toString())];
                 case 3:
-                    uptoDateLiveStream = _a.sent();
-                    sceneToStream = uptoDateLiveStream.scenes.find(function (scene) { return scene.id === firstScene.id + sceneIteration; });
-                    process(sceneToStream, liveEvent);
-                    nextScene = uptoDateLiveStream.scenes.find(function (scene) { return scene.id === firstScene.id + sceneIteration + 1; });
+                    uptoDateLiveEvent = _a.sent();
+                    sceneToStream = uptoDateLiveEvent.scenes.find(function (scene) { return scene.id === firstScene.id + sceneIteration; });
+                    return [4 /*yield*/, process(sceneToStream, liveEvent)];
+                case 4:
+                    _a.sent();
+                    nextScene = uptoDateLiveEvent.scenes.find(function (scene) { return scene.id === firstScene.id + sceneIteration + 1; });
                     if (nextScene) {
                         nextSceneExists = true;
+                        sceneIteration++;
+                    }
+                    else if (!nextScene && uptoDateLiveEvent.loop) {
+                        nextSceneExists = true;
+                        sceneIteration = 0;
                     }
                     else {
                         nextSceneExists = false;
                     }
-                    sceneIteration++;
                     return [3 /*break*/, 2];
-                case 4: return [2 /*return*/];
+                case 5: return [2 /*return*/];
             }
         });
     }); };

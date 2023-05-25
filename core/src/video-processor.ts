@@ -13,23 +13,25 @@ const process = (scene: Scene, event: Event) => {
     return new Promise((resolve, reject) => {
         const sceneLocation = path.join(__dirname, scene.location);
         const newEventDirLocation = path.join(__dirname, `events/${event.id}`);
-        const segmentLocation = path.join(__dirname, `events/${scene.id}/file-${scene.id}-%03d.ts`);
+        const segmentLocation = path.join(__dirname, `events/${event.id}/file-${scene.id}-%03d.ts`);
         const outputLocation = path.join(__dirname, `events/${event.id}/output-initial.m3u8`);
 
         fs.ensureDir(newEventDirLocation)
-
-        ffmpeg()
-            .addInput(sceneLocation)
+        const ff = ffmpeg()
+        console.log('ffmpeg', ff.kill);
+        ff.addInput(sceneLocation)
+            .inputOptions(
+                '-re'
+            )
             .addOptions([
                 '-profile:v baseline',
                 '-level 3.0',
                 '-start_number 0',
                 '-hls_time 6',
-                '-g 30',
                 '-sc_threshold 0',
                 `-hls_segment_filename ${segmentLocation}`,
                 '-hls_playlist_type event',
-                '-hls_flags program_date_time+append_list+omit_endlist+independent_segments+discont_start',
+                '-hls_flags delete_segments+program_date_time+append_list+omit_endlist+independent_segments+discont_start',
                 '-f hls'
 
             ]).output(outputLocation).on('end', () => {
@@ -58,19 +60,24 @@ export const start = (eventId: number) => {
         }
         while (nextSceneExists) {
 
-            const uptoDateLiveStream = await getLiveEvent(eventId.toString());
+            const uptoDateLiveEvent = await getLiveEvent(eventId.toString());
 
-            const sceneToStream = uptoDateLiveStream.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration });
+            const sceneToStream = uptoDateLiveEvent.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration });
 
-            process(sceneToStream, liveEvent);
-            const nextScene = uptoDateLiveStream.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration + 1 });
+            await process(sceneToStream, liveEvent);
+            const nextScene = uptoDateLiveEvent.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration + 1 });
 
             if (nextScene) {
                 nextSceneExists = true;
-            } else {
+                sceneIteration++;
+
+            } else if (!nextScene && uptoDateLiveEvent.loop) {
+                nextSceneExists = true;
+                sceneIteration = 0;
+            }
+            else {
                 nextSceneExists = false;
             }
-            sceneIteration++;
 
         }
     }

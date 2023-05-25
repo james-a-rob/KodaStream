@@ -17,7 +17,7 @@ afterEach(async () => {
 
 const eventWithScenesAndMetadata = {
     url: 'https://streamer.com/output-1234.m3u8',
-    loop: true,
+    loop: false,
     status: StreamStatus.Started,
     scenes: [
         {
