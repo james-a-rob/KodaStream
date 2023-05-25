@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc --build --verbose",
-    "start": "ts-node  src/main.ts",
+    "start": "ts-node  src/main.ts --verbose",
     "test": "jest --watch",
     "typeorm": "typeorm-ts-node-commonjs"
   },
@@ -20,7 +20,8 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.0.5",
     "ts-node": "10.7.0",
-    "typescript": "4.5.2"
+    "typescript": "4.5.2",
+    "@mapbox/node-pre-gyp": "0.17.0"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
