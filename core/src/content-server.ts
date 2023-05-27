@@ -10,6 +10,10 @@ app.get('/', (req: Request, res: Response) => {
     return res.status(200).sendFile(`${__dirname}/client.html`);
 });
 
+app.get('/ios-demo', (req: Request, res: Response) => {
+    return res.status(200).sendFile(`${__dirname}/client-ios.html`);
+});
+
 const hlsServerConfig = {
     provider: {
         exists: (req: Request, cb) => {
