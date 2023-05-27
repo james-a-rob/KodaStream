@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc --build --verbose",
-    "start": "ts-node  src/main.ts --verbose",
+    "start:dev": "ts-node  src/main.ts",
+    "start": "pm2 start node dist/main.js",
     "test": "jest --watch",
     "typeorm": "typeorm-ts-node-commonjs"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@mapbox/node-pre-gyp": "1.0.10",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.1",
     "@types/node": "^16.11.10",
@@ -20,8 +22,7 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.0.5",
     "ts-node": "10.7.0",
-    "typescript": "4.5.2",
-    "@mapbox/node-pre-gyp": "1.0.10"
+    "typescript": "4.5.2"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
@@ -31,6 +32,7 @@
     "fs-extra": "^11.1.1",
     "hls-parser": "^0.10.6",
     "hls-server": "^1.5.0",
+    "pm2": "^5.3.0",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.2",
     "typeorm": "0.3.16"

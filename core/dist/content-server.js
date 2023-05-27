@@ -48,7 +48,10 @@ var db_1 = require("./db");
 var app = (0, express_1.default)();
 exports.app = app;
 app.get('/', function (req, res) {
-    return res.status(200).sendFile("".concat(__dirname, "/client.html"));
+    return res.status(200).sendFile(path_1.default.join(__dirname, '../public/client.html'));
+});
+app.get('/ios-demo', function (req, res) {
+    return res.status(200).sendFile(path_1.default.join(__dirname, '../public/client-ios.html'));
 });
 var hlsServerConfig = {
     provider: {
@@ -59,7 +62,7 @@ var hlsServerConfig = {
                 return cb(null, true);
             }
             // console.log('__dirname + req.url', __dirname + req.url.replace("output", "output-initial"));
-            fs_1.default.access(__dirname + req.url.replace("output", "output-initial"), fs_1.default.constants.F_OK, function (err) {
+            fs_1.default.access(path_1.default.join(__dirname, "../".concat(req.url.replace("output", "output-initial"))), fs_1.default.constants.F_OK, function (err) {
                 if (err) {
                     return cb(null, false);
                 }
@@ -71,7 +74,7 @@ var hlsServerConfig = {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        m3u8Data = fs_1.default.readFileSync(__dirname + req.url.replace("output", "output-initial"));
+                        m3u8Data = fs_1.default.readFileSync(path_1.default.join(__dirname, "../".concat(req.url.replace("output", "output-initial"))));
                         eventId = req.url.split("/")[2];
                         return [4 /*yield*/, (0, db_1.getLiveEvent)(eventId)];
                     case 1:
@@ -90,7 +93,7 @@ var hlsServerConfig = {
                             };
                             segment.dateRange = dateRange;
                         });
-                        outputPath = path_1.default.join(__dirname, "/events/".concat(eventId, "/output.m3u8"));
+                        outputPath = path_1.default.join(__dirname, "../events/".concat(eventId, "/output.m3u8"));
                         fs_1.default.writeFileSync(outputPath, hls_parser_1.default.stringify(playlist));
                         stream = fs_1.default.createReadStream(outputPath);
                         cb(null, stream);
@@ -99,7 +102,7 @@ var hlsServerConfig = {
             });
         }); },
         getSegmentStream: function (req, cb) {
-            var stream = fs_1.default.createReadStream(__dirname + req.url);
+            var stream = fs_1.default.createReadStream(path_1.default.join(__dirname, "../".concat(req.url)));
             cb(null, stream);
         }
     }

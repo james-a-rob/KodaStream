@@ -33,7 +33,7 @@ describe('content server config', () => {
 
         const event = await createLiveEvent(eventWithScenesAndMetadata);
         const locationOfMockVideoContent = path.join(__dirname, `./mock-video-content/short`);
-        const locationOfVideoContent = path.join(__dirname, `../src/events/${event.id}`);
+        const locationOfVideoContent = path.join(__dirname, `../events/${event.id}`);
         await fs.remove(locationOfVideoContent);
         await fs.ensureDir(locationOfVideoContent);
         await fs.copy(locationOfMockVideoContent, locationOfVideoContent);
@@ -45,7 +45,7 @@ describe('content server config', () => {
         } as Request;
         const cb = (error, stream) => {
             // check arguments
-            const outputPath = path.join(__dirname, `../src/events/${event.id}/output.m3u8`);
+            const outputPath = path.join(__dirname, `../events/${event.id}/output.m3u8`);
 
             expect(error).toBe(null);
             expect(stream.path).toBe(outputPath);

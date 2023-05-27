@@ -56,7 +56,7 @@ describe('video processor', () => {
     test("starts", async () => {
 
         const event = await createLiveEvent(eventWithScenesAndMetadata);
-        const eventsLocation = path.join(__dirname, `../src/events/${event.id}`);
+        const eventsLocation = path.join(__dirname, `../events/${event.id}`);
 
         fs.rmSync(eventsLocation, { recursive: true, force: true });
         start(event.id);
@@ -65,14 +65,17 @@ describe('video processor', () => {
         // m3u8 called correct no-metadata
         console.log(`${eventsLocation}/output-initial.m3u8`);
         const exists = await waitForFileExists(`${eventsLocation}/output-initial.m3u8`);
+        const tsExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
+
         expect(exists).toBe(true);
+        expect(tsExists).toBe(true);
 
     }, 20000);
 
     xtest("loops", async () => {
 
         const event = await createLiveEvent(eventWithScenesAndMetadataAndLoop);
-        const eventsLocation = path.join(__dirname, `../src/events/${event.id}`);
+        const eventsLocation = path.join(__dirname, `../../events/${event.id}`);
 
         fs.rmSync(eventsLocation, { recursive: true, force: true });
         start(event.id);

@@ -7,11 +7,11 @@ import { getLiveEvent } from './db';
 const app = express();
 
 app.get('/', (req: Request, res: Response) => {
-    return res.status(200).sendFile(`${__dirname}/client.html`);
+    return res.status(200).sendFile(path.join(__dirname, '../public/client.html'));
 });
 
 app.get('/ios-demo', (req: Request, res: Response) => {
-    return res.status(200).sendFile(`${__dirname}/client-ios.html`);
+    return res.status(200).sendFile(path.join(__dirname, '../public/client-ios.html'));
 });
 
 const hlsServerConfig = {
@@ -23,7 +23,7 @@ const hlsServerConfig = {
                 return cb(null, true);
             }
             // console.log('__dirname + req.url', __dirname + req.url.replace("output", "output-initial"));
-            fs.access(__dirname + req.url.replace("output", "output-initial"), fs.constants.F_OK, function (err) {
+            fs.access(path.join(__dirname, `../${req.url.replace("output", "output-initial")}`), fs.constants.F_OK, function (err) {
                 if (err) {
                     return cb(null, false);
                 }
@@ -31,8 +31,8 @@ const hlsServerConfig = {
             });
         },
         getManifestStream: async (req: Request, cb) => {
-            //update daterangefirst
-            const m3u8Data = fs.readFileSync(__dirname + req.url.replace("output", "output-initial"));
+            //remove sync calls
+            const m3u8Data = fs.readFileSync(path.join(__dirname, `../${req.url.replace("output", "output-initial")}`));
             const eventId = req.url.split("/")[2];
             const event = await getLiveEvent(eventId);
 
@@ -52,7 +52,7 @@ const hlsServerConfig = {
                 }
                 segment.dateRange = dateRange;
             });
-            const outputPath = path.join(__dirname, `/events/${eventId}/output.m3u8`);
+            const outputPath = path.join(__dirname, `../events/${eventId}/output.m3u8`);
             fs.writeFileSync(outputPath, HLS.stringify(playlist));
             const stream = fs.createReadStream(outputPath);
 
@@ -60,7 +60,7 @@ const hlsServerConfig = {
         },
         getSegmentStream: (req: Request, cb) => {
 
-            const stream = fs.createReadStream(__dirname + req.url);
+            const stream = fs.createReadStream(path.join(__dirname, `../${req.url}`));
             cb(null, stream);
         }
     }

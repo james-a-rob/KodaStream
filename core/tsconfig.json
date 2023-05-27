@@ -2,8 +2,8 @@
   "exclude": [
     "node_modules",
     "ffmpeg-experiments",
-    "src/events",
-    "test/mock-video-content",
+    "events",
+    "test",
     "dist"
   ],
   "compilerOptions": {

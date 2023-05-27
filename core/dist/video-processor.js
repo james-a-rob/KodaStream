@@ -48,10 +48,10 @@ var db_1 = require("./db");
 fluent_ffmpeg_1.default.setFfmpegPath(ffmpeg_static_1.default);
 var process = function (scene, event) {
     return new Promise(function (resolve, reject) {
-        var sceneLocation = path_1.default.join(__dirname, scene.location);
-        var newEventDirLocation = path_1.default.join(__dirname, "events/".concat(event.id));
-        var segmentLocation = path_1.default.join(__dirname, "events/".concat(event.id, "/file-").concat(scene.id, "-%03d.ts"));
-        var outputLocation = path_1.default.join(__dirname, "events/".concat(event.id, "/output-initial.m3u8"));
+        var sceneLocation = path_1.default.join(__dirname, "../".concat(scene.location));
+        var newEventDirLocation = path_1.default.join(__dirname, "../events/".concat(event.id));
+        var segmentLocation = path_1.default.join(__dirname, "../events/".concat(event.id, "/file-").concat(scene.id, "-%03d.ts"));
+        var outputLocation = path_1.default.join(__dirname, "../events/".concat(event.id, "/output-initial.m3u8"));
         fs_extra_1.default.ensureDir(newEventDirLocation);
         var ff = (0, fluent_ffmpeg_1.default)();
         console.log('ffmpeg', ff.kill);

@@ -11,10 +11,10 @@ ffmpeg.setFfmpegPath(pathToFfmpeg);
 
 const process = (scene: Scene, event: Event) => {
     return new Promise((resolve, reject) => {
-        const sceneLocation = path.join(__dirname, scene.location);
-        const newEventDirLocation = path.join(__dirname, `events/${event.id}`);
-        const segmentLocation = path.join(__dirname, `events/${event.id}/file-${scene.id}-%03d.ts`);
-        const outputLocation = path.join(__dirname, `events/${event.id}/output-initial.m3u8`);
+        const sceneLocation = path.join(__dirname, `../${scene.location}`);
+        const newEventDirLocation = path.join(__dirname, `../events/${event.id}`);
+        const segmentLocation = path.join(__dirname, `../events/${event.id}/file-${scene.id}-%03d.ts`);
+        const outputLocation = path.join(__dirname, `../events/${event.id}/output-initial.m3u8`);
 
         fs.ensureDir(newEventDirLocation)
         const ff = ffmpeg()
