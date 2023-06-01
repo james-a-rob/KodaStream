@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import fs from 'fs';
 import path from 'path';
-import { createLiveEvent } from '../src/db';
+import { createLiveEvent, updateLiveEvent } from '../src/db';
 import AppDataSource from '../src/data-source';
 import { start } from "../src/video-processor";
 import { StreamStatus } from "../src/enums";
@@ -23,6 +23,19 @@ const eventWithScenesAndMetadata = {
         {
             location: 'videos/final_sebastien_stylist_intro.mp4',
             metadata: 'Nike',
+        },
+        {
+            location: 'videos/final_sebastien_stylist_intro.mp4',
+            metadata: 'Nike2',
+        }
+    ]
+}
+
+const updatedEventWithScenesAndMetadata = {
+    scenes: [
+        {
+            location: 'videos/final_sebastien_stylist_intro.mp4',
+            metadata: 'Nike3',
         }
     ]
 }
@@ -35,10 +48,6 @@ const eventWithScenesAndMetadataAndLoop = {
         {
             location: 'videos/final_sebastien_stylist_intro.mp4',
             metadata: 'data1',
-        },
-        {
-            location: 'videos/final_sebastien_stylist_intro.mp4',
-            metadata: 'data2',
         }
     ]
 }
@@ -60,15 +69,40 @@ describe('video processor', () => {
 
         fs.rmSync(eventsLocation, { recursive: true, force: true });
         start(event.id);
-        // look for file
-        // get has correct file name corosponding to video
-        // m3u8 called correct no-metadata
+
         console.log(`${eventsLocation}/output-initial.m3u8`);
         const exists = await waitForFileExists(`${eventsLocation}/output-initial.m3u8`);
         const tsExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
 
         expect(exists).toBe(true);
         expect(tsExists).toBe(true);
+
+    }, 20000);
+
+    test("updates", async () => {
+
+        const event = await createLiveEvent(eventWithScenesAndMetadata);
+        const eventsLocation = path.join(__dirname, `../events/${event.id}`);
+
+        fs.rmSync(eventsLocation, { recursive: true, force: true });
+
+        start(event.id);
+        await updateLiveEvent(event.id.toString(), updatedEventWithScenesAndMetadata);
+
+
+        console.log(`${eventsLocation}/output-initial.m3u8`);
+        const exists = await waitForFileExists(`${eventsLocation}/output-initial.m3u8`);
+        console.log('set updated')
+
+        const tsExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
+        const tsExists2 = await waitForFileExists(`${eventsLocation}/file-2-001.ts`);
+        const tsExists3 = await waitForFileExists(`${eventsLocation}/file-3-002.ts`);
+
+        expect(exists).toBe(true);
+        expect(tsExists).toBe(true);
+        expect(tsExists2).toBe(true);
+        expect(tsExists3).toBe(true);
+
 
     }, 20000);
 
