@@ -1,10 +1,13 @@
 import express, { Request, Response } from 'express';
+import cors from 'cors';
+
 import fs from 'fs';
 import path from 'path';
 import HLS from 'hls-parser';
 import { getLiveEvent } from './db';
 
 const app = express();
+app.use(cors());
 
 app.get('/', (req: Request, res: Response) => {
     return res.status(200).sendFile(path.join(__dirname, '../public/client.html'));

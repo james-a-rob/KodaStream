@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "ffmpeg-static": "^5.1.0",
     "fluent-ffmpeg": "^2.1.2",
