@@ -15,7 +15,13 @@
         const videoSrc = '/events/1/output.m3u8';
         const metadataContainer = document.getElementById('metadata');
         if (Hls.isSupported()) {
-            const hls = new Hls({ renderTextTracksNatively: false });
+            const hls = new Hls({
+                renderTextTracksNatively: false,
+                xhrSetup: function (xhr, url) {
+                    xhr.withCredentials = true; // do send cookies
+                    xhr.setRequestHeader('Access-Control-Allow-Headers', '*')
+                }
+            });
 
             hls.loadSource(videoSrc);
             hls.attachMedia(video);

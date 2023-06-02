@@ -41,12 +41,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hlsServerConfig = exports.app = void 0;
 var express_1 = __importDefault(require("express"));
+var cors_1 = __importDefault(require("cors"));
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
 var hls_parser_1 = __importDefault(require("hls-parser"));
 var db_1 = require("./db");
 var app = (0, express_1.default)();
 exports.app = app;
+app.use((0, cors_1.default)());
 app.get('/', function (req, res) {
     return res.status(200).sendFile(path_1.default.join(__dirname, '../public/client.html'));
 });
