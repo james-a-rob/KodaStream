@@ -21,7 +21,7 @@ const process = (scene: Scene, event: Event) => {
         console.log('ffmpeg', ff.kill);
         ff.addInput(sceneLocation)
             .inputOptions(
-                '-re'
+                '-re',
             )
             .addOptions([
                 '-profile:v baseline',
@@ -31,7 +31,8 @@ const process = (scene: Scene, event: Event) => {
                 '-sc_threshold 0',
                 `-hls_segment_filename ${segmentLocation}`,
                 '-hls_playlist_type event',
-                '-hls_flags delete_segments+program_date_time+append_list+omit_endlist+independent_segments+discont_start',
+                '-hls_flags program_date_time+append_list+omit_endlist+independent_segments+discont_start',
+                '-hls_wrap 5',
                 '-f hls'
 
             ]).output(outputLocation).on('end', () => {
