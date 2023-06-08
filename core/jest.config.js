@@ -8,5 +8,5 @@ export default {
       }],
     }
   },
-  modulePathIgnorePatterns: ['<rootDir>/dist/']
+  modulePathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/events/']
 };

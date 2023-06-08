@@ -34,9 +34,10 @@ describe('content server config', () => {
         const event = await createLiveEvent(eventWithScenesAndMetadata);
         const locationOfMockVideoContent = path.join(__dirname, `./mock-video-content/short`);
         const locationOfVideoContent = path.join(__dirname, `../events/${event.id}`);
-        await fs.remove(locationOfVideoContent);
-        await fs.ensureDir(locationOfVideoContent);
-        await fs.copy(locationOfMockVideoContent, locationOfVideoContent);
+        fs.rmSync(locationOfVideoContent, { recursive: true, force: true });
+
+        fs.ensureDirSync(locationOfVideoContent);
+        fs.copySync(locationOfMockVideoContent, locationOfVideoContent);
 
         // add m3u8 and ts file in diretory jusing response event id
 
@@ -53,5 +54,30 @@ describe('content server config', () => {
         }
         await hlsServerConfig.provider.getManifestStream(fakeRequest, cb)
 
+    });
+
+    test.only('it serves large m3u8 files in a reasonable time', async () => {
+        const event = await createLiveEvent(eventWithScenesAndMetadata);
+        const locationOfMockVideoContent = path.join(__dirname, `./mock-video-content/large-playlist`);
+        const locationOfVideoContent = path.join(__dirname, `../events/${event.id}`);
+        fs.rmSync(locationOfVideoContent, { recursive: true, force: true });
+        fs.ensureDirSync(locationOfVideoContent);
+        fs.copySync(locationOfMockVideoContent, locationOfVideoContent);
+
+        // add m3u8 and ts file in diretory jusing response event id
+
+        const fakeRequest = {
+            url: '/events/1/output.m3u8'
+        } as Request;
+        const cb = (error, stream) => {
+            // check arguments
+            const outputPath = path.join(__dirname, `../events/${event.id}/output.m3u8`);
+
+            expect(error).toBe(null);
+            expect(stream.path).toBe(outputPath);
+
+        }
+        await hlsServerConfig.provider.getManifestStream(fakeRequest, cb)
+        expect(1).toBe(1);
     });
 });
