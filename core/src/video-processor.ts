@@ -52,53 +52,52 @@ const process = (scene: Scene, event: Event) => {
 
 export const start = async (eventId: number) => {
     // clean up dir before start
-    // const eventDirLocation = path.join(__dirname, `../events/${eventId}`);
-    // await fs.emptyDir(eventDirLocation)
+    const eventDirLocation = path.join(__dirname, `../events/${eventId}`);
+    const pathExists = await fs.pathExists(eventDirLocation);
+    if (pathExists) {
+        await fs.emptyDir(eventDirLocation)
 
-    // remove run
-    const run = async () => {
-
-        let nextSceneExists;
-        let sceneIteration = 0;
-        const liveEvent = await getLiveEvent(eventId.toString());
-        console.log("first live event", liveEvent)
-        const firstScene = liveEvent.scenes[0];
-        if (firstScene) {
-            nextSceneExists = true;
-        }
-        while (nextSceneExists) {
-
-            const uptoDateLiveEvent = await getLiveEvent(eventId.toString());
-
-            if (uptoDateLiveEvent.status === StreamStatus.Finished) {
-                // clean up m3u8 file here. maybe clean up entire dir if needed
-
-                break;
-            }
-
-            console.log('up to date live event ${sceneIteration}', uptoDateLiveEvent);
-
-            const sceneToStream = uptoDateLiveEvent.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration });
-
-
-            await process(sceneToStream, uptoDateLiveEvent);
-            const nextScene = uptoDateLiveEvent.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration + 1 });
-
-            if (nextScene) {
-                nextSceneExists = true;
-                sceneIteration++;
-
-            } else if (!nextScene && uptoDateLiveEvent.loop) {
-                nextSceneExists = true;
-                sceneIteration = 0;
-            }
-            else {
-                nextSceneExists = false;
-            }
-
-        }
     }
-    run();
 
+
+    let nextSceneExists;
+    let sceneIteration = 0;
+    const liveEvent = await getLiveEvent(eventId.toString());
+    console.log("first live event", liveEvent)
+    const firstScene = liveEvent.scenes[0];
+    if (firstScene) {
+        nextSceneExists = true;
+    }
+    while (nextSceneExists) {
+
+        const uptoDateLiveEvent = await getLiveEvent(eventId.toString());
+
+        if (uptoDateLiveEvent.status === StreamStatus.Finished) {
+            // clean up m3u8 file here. maybe clean up entire dir if needed
+
+            break;
+        }
+
+        console.log('up to date live event ${sceneIteration}', uptoDateLiveEvent);
+
+        const sceneToStream = uptoDateLiveEvent.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration });
+
+
+        await process(sceneToStream, uptoDateLiveEvent);
+        const nextScene = uptoDateLiveEvent.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration + 1 });
+
+        if (nextScene) {
+            nextSceneExists = true;
+            sceneIteration++;
+
+        } else if (!nextScene && uptoDateLiveEvent.loop) {
+            nextSceneExists = true;
+            sceneIteration = 0;
+        }
+        else {
+            nextSceneExists = false;
+        }
+
+    }
 
 }

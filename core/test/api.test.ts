@@ -1,13 +1,15 @@
 import "reflect-metadata";
 import request from 'supertest';
 import AppDataSource from '../src/data-source';
+import { start } from '../src/video-processor';
 import { Event } from "../src/entity/Event";
 import { Scene } from "../src/entity/Scene";
 import { StreamStatus } from "../src/enums";
 import app from '../src/api';
 
+
 jest.mock('../src/video-processor', () => ({
-    start: () => { }
+    start: jest.fn()
 }));
 
 const simpleEvent = {
@@ -22,6 +24,11 @@ const simpleEvent = {
 
 const simpleStoppedEvent = {
     status: StreamStatus.Finished
+
+}
+
+const simpleRestartedEvent = {
+    status: StreamStatus.Started
 
 }
 
@@ -68,6 +75,8 @@ beforeEach(async () => {
 
 afterEach(async () => {
     await AppDataSource.destroy();
+    jest.clearAllMocks();
+
 });
 
 
@@ -84,7 +93,7 @@ describe("live streaming", () => {
 
             expect(response.status).toEqual(200);
             expect(response.body.url).toEqual('https://streamer.com/output-1234.m3u8');
-
+            expect(start).toHaveBeenCalledTimes(1);
             expect(response.body.scenes).toEqual([
                 {
                     id: 1,
@@ -200,10 +209,36 @@ describe("live streaming", () => {
 
             expect(response.body.status).toEqual("started");
             expect(response2.body.status).toEqual("finished");
+            expect(start).toHaveBeenCalledTimes(1);
+
 
         });
 
         test("restart event", async () => {
+            const response = await request(app)
+                .post('/event')
+                .send(simpleEvent)
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
+
+            const response2 = await request(app)
+                .put('/event/1')
+                .send(simpleStoppedEvent)
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
+
+            const response3 = await request(app)
+                .put('/event/1')
+                .send(simpleRestartedEvent)
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
+
+
+            expect(response.body.status).toEqual("started");
+            expect(response2.body.status).toEqual("finished");
+            expect(response3.body.status).toEqual("started");
+            expect(start).toHaveBeenCalledTimes(2);
+
 
         });
 

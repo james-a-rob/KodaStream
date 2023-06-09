@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { start } from './video-processor';
+import { StreamStatus } from './enums';
 import { createLiveEvent, getLiveEvent, updateLiveEvent } from './db';
 
 const app = express();
@@ -10,6 +11,7 @@ app.post("/event", async (req: Request, res: Response) => {
     if (!req.body.url || !req.body.status || !req.body.scenes) {
         return res.status(400).json({})
     }
+    // console.log(start);
     const event = await createLiveEvent(req.body);
     // ensure status is started
     start(event.id);
@@ -18,10 +20,15 @@ app.post("/event", async (req: Request, res: Response) => {
 });
 
 app.put("/event/:id", async (req: Request, res: Response) => {
-    const event = await updateLiveEvent(req.params.id, req.body);
-    //if switching from finished to started the call start again
+    const currentEvent = await getLiveEvent(req.params.id);
+    const updatedEvents = await updateLiveEvent(req.params.id, req.body);
+
+    const shouldRestart = currentEvent.status === StreamStatus.Finished && req.body.status === StreamStatus.Started;
+    if (shouldRestart) {
+        start(currentEvent.id);
+    }
     res.setHeader('Content-Type', 'application/json');
-    res.send(event);
+    res.send(updatedEvents);
 
 });
 

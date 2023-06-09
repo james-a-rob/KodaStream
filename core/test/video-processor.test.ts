@@ -143,11 +143,10 @@ describe('video processor', () => {
 
         const tsExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
 
-        // give time for seconds ts file to potentially appear. 
-        await new Promise((r) => setTimeout(r, 3000));
+        // give time for seconds ts file to potentially appear. Set equal to length of playlist segment
+        await new Promise((r) => setTimeout(r, 6000));
         const tsExists2 = fs.existsSync(`${eventsLocation}/file-2-001.ts`);
 
-        // fs.pathExists()
         expect(exists).toBe(true);
         expect(tsExists).toBe(true);
         expect(tsExists2).toBe(false);
