@@ -4,7 +4,7 @@ import ffmpeg from 'fluent-ffmpeg';
 import pathToFfmpeg from 'ffmpeg-static';
 import { Scene } from "./entity/Scene";
 import { Event } from "./entity/Event";
-
+import { StreamStatus } from './enums';
 import { getLiveEvent } from "./db";
 
 ffmpeg.setFfmpegPath(pathToFfmpeg);
@@ -17,7 +17,6 @@ const process = (scene: Scene, event: Event) => {
         const segmentLocation = path.join(__dirname, `../events/${event.id}/file-${scene.id}-%03d.ts`);
         const outputLocation = path.join(__dirname, `../events/${event.id}/output-initial.m3u8`);
 
-        // todo try with await
         fs.ensureDir(newEventDirLocation)
         const ff = ffmpeg()
         console.log('ffmpeg', ff.kill);
@@ -51,7 +50,12 @@ const process = (scene: Scene, event: Event) => {
     });
 }
 
-export const start = (eventId: number) => {
+export const start = async (eventId: number) => {
+    // clean up dir before start
+    // const eventDirLocation = path.join(__dirname, `../events/${eventId}`);
+    // await fs.emptyDir(eventDirLocation)
+
+    // remove run
     const run = async () => {
 
         let nextSceneExists;
@@ -65,9 +69,17 @@ export const start = (eventId: number) => {
         while (nextSceneExists) {
 
             const uptoDateLiveEvent = await getLiveEvent(eventId.toString());
+
+            if (uptoDateLiveEvent.status === StreamStatus.Finished) {
+                // clean up m3u8 file here. maybe clean up entire dir if needed
+
+                break;
+            }
+
             console.log('up to date live event ${sceneIteration}', uptoDateLiveEvent);
 
             const sceneToStream = uptoDateLiveEvent.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration });
+
 
             await process(sceneToStream, uptoDateLiveEvent);
             const nextScene = uptoDateLiveEvent.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration + 1 });

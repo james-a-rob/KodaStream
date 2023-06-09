@@ -36,8 +36,7 @@ Stop stream.
 Whilst an event is live it is possible to update the scenes of that event. Changes will take effect once the current scene has finished playing to viewers.
 
 
-
-### Stopping a stream
+### Stopping an event
 To stop an event, call the /events/:id PUT setting the status property to be "finsihed"
 
 Example JSON body request to stop a stream.
@@ -49,7 +48,9 @@ Example JSON body request to stop a stream.
 
 ```
 
-You can always restart an event by calling the PUT endpoint again and specifying and specifying the event status as "started".
+### Restarting an event
+
+You can always restart an event by calling the PUT endpoint again and specifying the event status as "started".
 
 ```
 {

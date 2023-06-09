@@ -151,7 +151,7 @@ describe("live streaming", () => {
     });
 
     describe('update', () => {
-        test("repalce scenes", async () => {
+        test("replace scenes", async () => {
             const response = await request(app)
                 .post('/event')
                 .send(simpleEvent)
@@ -200,6 +200,10 @@ describe("live streaming", () => {
 
             expect(response.body.status).toEqual("started");
             expect(response2.body.status).toEqual("finished");
+
+        });
+
+        test("restart event", async () => {
 
         });
 

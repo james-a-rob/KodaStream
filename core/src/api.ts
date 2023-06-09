@@ -11,6 +11,7 @@ app.post("/event", async (req: Request, res: Response) => {
         return res.status(400).json({})
     }
     const event = await createLiveEvent(req.body);
+    // ensure status is started
     start(event.id);
     res.json(event);
 
@@ -18,6 +19,7 @@ app.post("/event", async (req: Request, res: Response) => {
 
 app.put("/event/:id", async (req: Request, res: Response) => {
     const event = await updateLiveEvent(req.params.id, req.body);
+    //if switching from finished to started the call start again
     res.setHeader('Content-Type', 'application/json');
     res.send(event);
 
