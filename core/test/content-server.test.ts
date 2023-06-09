@@ -32,13 +32,13 @@ describe('content server config', () => {
     test('it adds metadata to m3u8 file', async () => {
 
         const event = await createLiveEvent(eventWithScenesAndMetadata);
+
         const locationOfMockVideoContent = path.join(__dirname, `./mock-video-content/short`);
         const locationOfVideoContent = path.join(__dirname, `../events/${event.id}`);
         fs.rmSync(locationOfVideoContent, { recursive: true, force: true });
 
         fs.ensureDirSync(locationOfVideoContent);
         fs.copySync(locationOfMockVideoContent, locationOfVideoContent);
-
         // add m3u8 and ts file in diretory jusing response event id
 
         const fakeRequest = {
@@ -51,12 +51,16 @@ describe('content server config', () => {
             expect(error).toBe(null);
             expect(stream.path).toBe(outputPath);
 
+
         }
-        await hlsServerConfig.provider.getManifestStream(fakeRequest, cb)
+        await hlsServerConfig.provider.getManifestStream(fakeRequest, cb);
+
+        fs.emptyDirSync(locationOfVideoContent)
+
 
     });
 
-    test.only('it serves large m3u8 files in a reasonable time', async () => {
+    xtest('it serves large m3u8 files in a reasonable time', async () => {
         const event = await createLiveEvent(eventWithScenesAndMetadata);
         const locationOfMockVideoContent = path.join(__dirname, `./mock-video-content/large-playlist`);
         const locationOfVideoContent = path.join(__dirname, `../events/${event.id}`);

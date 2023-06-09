@@ -11,11 +11,13 @@ ffmpeg.setFfmpegPath(pathToFfmpeg);
 
 const process = (scene: Scene, event: Event) => {
     return new Promise((resolve, reject) => {
+        console.log("event ot process", event);
         const sceneLocation = path.join(__dirname, `../${scene.location}`);
         const newEventDirLocation = path.join(__dirname, `../events/${event.id}`);
         const segmentLocation = path.join(__dirname, `../events/${event.id}/file-${scene.id}-%03d.ts`);
         const outputLocation = path.join(__dirname, `../events/${event.id}/output-initial.m3u8`);
 
+        // todo try with await
         fs.ensureDir(newEventDirLocation)
         const ff = ffmpeg()
         console.log('ffmpeg', ff.kill);
@@ -55,6 +57,7 @@ export const start = (eventId: number) => {
         let nextSceneExists;
         let sceneIteration = 0;
         const liveEvent = await getLiveEvent(eventId.toString());
+        console.log("first live event", liveEvent)
         const firstScene = liveEvent.scenes[0];
         if (firstScene) {
             nextSceneExists = true;
@@ -62,10 +65,11 @@ export const start = (eventId: number) => {
         while (nextSceneExists) {
 
             const uptoDateLiveEvent = await getLiveEvent(eventId.toString());
+            console.log('up to date live event ${sceneIteration}', uptoDateLiveEvent);
 
             const sceneToStream = uptoDateLiveEvent.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration });
 
-            await process(sceneToStream, liveEvent);
+            await process(sceneToStream, uptoDateLiveEvent);
             const nextScene = uptoDateLiveEvent.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration + 1 });
 
             if (nextScene) {

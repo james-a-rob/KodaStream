@@ -54,14 +54,12 @@ export const updateLiveEvent = async (id: string, liveEvent): Promise<Event> => 
         },
     });
 
+    const updatedEvent = { ...event, ...liveEvent }
+    updatedEvent.scenes = liveEvent.scenes || updatedEvent.scenes;
+    console.log("saving updated live event", updatedEvent);
+    await eventRepository.save(updatedEvent);
 
-    const updatedScenes = [...event.scenes, ...liveEvent.scenes];
-
-    event.scenes = updatedScenes;
-
-    await eventRepository.save(event);
-
-    return event;
+    return updatedEvent;
 }
 
 

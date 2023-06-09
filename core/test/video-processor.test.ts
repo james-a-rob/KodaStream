@@ -1,7 +1,7 @@
 import "reflect-metadata";
-import fs from 'fs';
+import fs from 'fs-extra';
 import path from 'path';
-import { createLiveEvent, updateLiveEvent } from '../src/db';
+import { createLiveEvent, updateLiveEvent, getLiveEvent } from '../src/db';
 import AppDataSource from '../src/data-source';
 import { start } from "../src/video-processor";
 import { StreamStatus } from "../src/enums";
@@ -34,6 +34,16 @@ const eventWithScenesAndMetadata = {
 const updatedEventWithScenesAndMetadata = {
     scenes: [
         {
+            id: 1,
+            location: 'videos/final_sebastien_stylist_intro.mp4',
+            metadata: 'Nike',
+        },
+        {
+            id: 2,
+            location: 'videos/final_sebastien_stylist_intro.mp4',
+            metadata: 'Nike2',
+        },
+        {
             location: 'videos/final_sebastien_stylist_intro.mp4',
             metadata: 'Nike3',
         }
@@ -50,6 +60,10 @@ const eventWithScenesAndMetadataAndLoop = {
             metadata: 'data1',
         }
     ]
+}
+
+const updatedEventWithToBeStopped = {
+    status: StreamStatus.Finished
 }
 
 beforeEach(async () => {
@@ -73,9 +87,12 @@ describe('video processor', () => {
         console.log(`${eventsLocation}/output-initial.m3u8`);
         const exists = await waitForFileExists(`${eventsLocation}/output-initial.m3u8`);
         const tsExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
+        const tsExists2 = await waitForFileExists(`${eventsLocation}/file-2-001.ts`);
 
         expect(exists).toBe(true);
         expect(tsExists).toBe(true);
+        expect(tsExists2).toBe(true);
+
 
     }, 20000);
 
@@ -102,6 +119,35 @@ describe('video processor', () => {
         expect(tsExists).toBe(true);
         expect(tsExists2).toBe(true);
         expect(tsExists3).toBe(true);
+
+
+    }, 20000);
+
+    test("stops", async () => {
+
+        const event = await createLiveEvent(eventWithScenesAndMetadata);
+        const eventsLocation = path.join(__dirname, `../events/${event.id}`);
+
+        fs.rmSync(eventsLocation, { recursive: true, force: true });
+
+        start(event.id);
+
+        await updateLiveEvent(event.id.toString(), updatedEventWithToBeStopped);
+        const gottenLiveEvent = await getLiveEvent(event.id.toString());
+
+        console.log("gottenLiveEvent", gottenLiveEvent);
+
+        console.log(`${eventsLocation}/output-initial.m3u8`);
+        const exists = await waitForFileExists(`${eventsLocation}/output-initial.m3u8`);
+        console.log('set stopped')
+
+        const tsExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
+        const tsExists2 = await waitForFileExists(`${eventsLocation}/file-2-001.ts`);
+
+        expect(exists).toBe(true);
+        expect(tsExists).toBe(true);
+        expect(tsExists2).toBe(true);
+
 
 
     }, 20000);

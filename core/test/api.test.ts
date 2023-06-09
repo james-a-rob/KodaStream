@@ -20,6 +20,11 @@ const simpleEvent = {
     ]
 }
 
+const simpleStoppedEvent = {
+    status: StreamStatus.Finished
+
+}
+
 const eventWithTwoScenesAndMetadata = {
     url: 'https://streamer.com/output-1234.m3u8',
     status: StreamStatus.Started,
@@ -35,10 +40,13 @@ const eventWithTwoScenesAndMetadata = {
     ]
 }
 
-const addAdditionalScene = {
+const newScenes = {
     scenes: [
         {
             location: 'https://s3.com/videos/5678.mp4'
+        },
+        {
+            location: 'https://s3.com/videos/abcd.mp4'
         }
     ]
 }
@@ -143,7 +151,7 @@ describe("live streaming", () => {
     });
 
     describe('update', () => {
-        test("add additional scene to already streaming event", async () => {
+        test("repalce scenes", async () => {
             const response = await request(app)
                 .post('/event')
                 .send(simpleEvent)
@@ -152,7 +160,7 @@ describe("live streaming", () => {
 
             const response2 = await request(app)
                 .put('/event/1')
-                .send(addAdditionalScene)
+                .send(newScenes)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
 
@@ -165,16 +173,34 @@ describe("live streaming", () => {
             ]);
             expect(response2.body.scenes).toEqual([
                 {
-                    id: 1,
-                    location: 'https://s3.com/videos/1234.mp4',
-                    metadata: ''
-                },
-                {
                     id: 2,
                     location: 'https://s3.com/videos/5678.mp4',
                     metadata: ''
+                },
+                {
+                    id: 3,
+                    location: 'https://s3.com/videos/abcd.mp4',
+                    metadata: ''
                 }
             ]);
+        });
+
+        test("stop event", async () => {
+            const response = await request(app)
+                .post('/event')
+                .send(simpleEvent)
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
+
+            const response2 = await request(app)
+                .put('/event/1')
+                .send(simpleStoppedEvent)
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
+
+            expect(response.body.status).toEqual("started");
+            expect(response2.body.status).toEqual("finished");
+
         });
 
     })
