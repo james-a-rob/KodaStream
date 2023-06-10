@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 
-import fs from 'fs';
+import fs from 'fs-extra';
 import path from 'path';
 import HLS from 'hls-parser';
 import { getLiveEvent } from './db';
@@ -35,9 +35,16 @@ const hlsServerConfig = {
         },
         getManifestStream: async (req: Request, cb) => {
             //remove sync calls
-            const m3u8Data = fs.readFileSync(path.join(__dirname, `../${req.url.replace("output", "output-initial")}`));
             const eventId = req.url.split("/")[2];
             const event = await getLiveEvent(eventId);
+
+            if (!event) {
+                return cb(true, null);
+            }
+
+            const m3u8Data = fs.readFileSync(path.join(__dirname, `../${req.url.replace("output", "output-initial")}`));
+
+            console.log('event - - ', event);
 
             const playlist = HLS.parse(m3u8Data.toString());
             playlist.segments.forEach((segment) => {
@@ -56,8 +63,22 @@ const hlsServerConfig = {
                 segment.dateRange = dateRange;
             });
             const outputPath = path.join(__dirname, `../events/${eventId}/output.m3u8`);
-            fs.writeFileSync(outputPath, HLS.stringify(playlist));
-            const stream = fs.createReadStream(outputPath);
+            try {
+                console.log("write file")
+                fs.writeFileSync(outputPath, HLS.stringify(playlist));
+
+            } catch (e) {
+                console.log("write failed", e);
+            }
+            console.log("create read stream")
+            let stream;
+            try {
+                stream = await fs.createReadStream(outputPath);
+
+            } catch (e) {
+                console.log("read failed")
+            }
+
 
             cb(null, stream);
         },

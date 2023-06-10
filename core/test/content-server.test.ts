@@ -15,6 +15,20 @@ afterEach(async () => {
     await AppDataSource.destroy();
 });
 
+afterAll(() => {
+    fs.emptyDirSync(path.join(__dirname, `../events/1`));
+
+})
+
+async function waitForFileExists(filePath, currentTime = 0, timeout = 20000) {
+    if (fs.existsSync(filePath)) return true;
+    if (currentTime === timeout) return false;
+    // wait for 1 second
+    await new Promise((resolve, reject) => setTimeout(() => resolve(true), 1000));
+    // waited for 1 second
+    return waitForFileExists(filePath, currentTime + 1000, timeout);
+}
+
 const eventWithScenesAndMetadata = {
     url: 'https://streamer.com/output-1234.m3u8',
     loop: false,
@@ -35,27 +49,58 @@ describe('content server config', () => {
 
         const locationOfMockVideoContent = path.join(__dirname, `./mock-video-content/short`);
         const locationOfVideoContent = path.join(__dirname, `../events/${event.id}`);
-        fs.rmSync(locationOfVideoContent, { recursive: true, force: true });
+        // fs.rmSync(locationOfVideoContent, { recursive: true, force: true });
+        try {
+            fs.ensureDirSync(locationOfVideoContent);
+            fs.copySync(locationOfMockVideoContent, locationOfVideoContent);
+        } catch (e) {
+            console.log("failed to copy files")
+        }
 
-        fs.ensureDirSync(locationOfVideoContent);
-        fs.copySync(locationOfMockVideoContent, locationOfVideoContent);
         // add m3u8 and ts file in diretory jusing response event id
 
         const fakeRequest = {
             url: '/events/1/output.m3u8'
         } as Request;
-        const cb = (error, stream) => {
+        const cb = async (error, stream) => {
             // check arguments
             const outputPath = path.join(__dirname, `../events/${event.id}/output.m3u8`);
+            // await waitForFileExists(`${locationOfVideoContent}/output.m3u8`)
 
             expect(error).toBe(null);
             expect(stream.path).toBe(outputPath);
+            stream.close();
+            console.log("clsoe stream")
+            try {
+                console.log("empty dir");
+
+            } catch (e) {
+                console.log("failed to empty dir sync", e)
+            }
+
 
 
         }
         await hlsServerConfig.provider.getManifestStream(fakeRequest, cb);
 
-        fs.emptyDirSync(locationOfVideoContent)
+        console.log("end test 1")
+
+    });
+
+    test('handles request for event that does not exist', async () => {
+        console.log("- - -  - -start test 2")
+
+
+
+        const fakeRequest = {
+            url: '/events/1/output.m3u8'
+        } as Request;
+        const cb = async (error, stream) => {
+            // check arguments
+            expect(error).toBe(true);
+
+        }
+        await hlsServerConfig.provider.getManifestStream(fakeRequest, cb);
 
 
     });
