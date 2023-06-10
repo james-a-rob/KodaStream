@@ -86,7 +86,7 @@ describe("live streaming", () => {
             expect(response.headers["content-type"]).toMatch(/json/);
 
             expect(response.status).toEqual(200);
-            expect(response.body.url).toEqual('output.m3u8');
+            expect(response.body.url).toEqual(`/events/${response.body.id}/output.m3u8`);
             expect(start).toHaveBeenCalledTimes(1);
             expect(response.body.scenes).toEqual([
                 {
@@ -107,7 +107,7 @@ describe("live streaming", () => {
             expect(response.headers["content-type"]).toMatch(/json/);
 
             expect(response.status).toEqual(200);
-            expect(response.body.url).toEqual('output.m3u8');
+            expect(response.body.url).toEqual(`/events/${response.body.id}/output.m3u8`);
             expect(response.body.loop).toBe(true);
             expect(response.body.scenes).toEqual([
                 {

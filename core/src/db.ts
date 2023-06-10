@@ -24,9 +24,12 @@ export const createLiveEvent = async (liveEvent): Promise<Event> => {
     event.status = liveEvent.status || StreamStatus.Started;
     event.scenes = scenes;
 
-    await eventRepository.save(event);
+    const savedEvent = await eventRepository.save(event);
+    savedEvent.url = `/events/${savedEvent.id}/output.m3u8`;
 
-    return event;
+    //save again. This time setting url using id
+    await eventRepository.save(savedEvent);
+    return savedEvent;
 }
 
 export const getLiveEvent = async (id: string): Promise<Event> => {
