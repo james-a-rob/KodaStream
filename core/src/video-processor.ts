@@ -73,8 +73,6 @@ export const start = async (eventId: number) => {
         const uptoDateLiveEvent = await getLiveEvent(eventId.toString());
 
         if (uptoDateLiveEvent.status === StreamStatus.Finished) {
-            // clean up m3u8 file here. maybe clean up entire dir if needed
-
             break;
         }
 

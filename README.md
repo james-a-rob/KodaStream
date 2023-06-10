@@ -18,9 +18,10 @@ Take existing video content and repurpose as engaging live streams.
 
 ## Video walkthrough
 The easiest way to get setup and creating live streams is to follow this video walkthrough.
+COMING SOON
 
 ## Install
-Clone this repo and then run ```npm install``` from inside the core directory.
+Clone this repo and then run ```npm install``` from inside the ./core directory.
 
 
 ## Getting started
@@ -28,7 +29,7 @@ Clone this repo and then run ```npm install``` from inside the core directory.
 
 
 ## Starting an event
-All you need to start a live stream is one or more peices of video content (added to the video directory). With the app running you can call the /events enpoint with a POST request.
+All you need to start a live stream is one or more pieces of video content (added to the ./video directory). With the app running you can call the ```/events``` enpoint with a POST request.
 
 Example JSON body request to start a stream. 
 
@@ -76,12 +77,33 @@ A succesful create request return a JSON response in the following structure.
 
 ```
 
-## Updating an event
-Whilst an event is live it is possible to update the scenes of that event. Changes will take effect once the current scene has finished playing to viewers.
+## Updating scenes of a current playing event
+Whilst an event is live it is possible to update the scenes of that event. Scene updates are graceful. Changes will take effect once the current scene has finished playing to viewers.
+
+Scene updates can be specified by calling the ```/events/:id``` PUT enpoint and specifing an array of new scenes. The request JSON will looking something like this.
+
+```json
+{
+    "scenes": [
+        {
+
+            "location": "videos/video-three.mp4",
+            "metadata": "info about video three"
+        },
+        {
+            "location": "videos/video-four.mp4",
+            "metadata": "info about video four"
+        }
+    ]
+}
+
+```
+
+The previous scenes array will be entirely replaced with the new scenes passed to the PUT endpoint. The veiwer will see the current scene they are viewing play in its entirety. The next scene they will see will be the first scene (videos/video-three.mp4) of the above scene array.
 
 
 ## Stopping an event
-To stop an event, call the /events/:id PUT setting the status property to be "finsihed"
+To stop an event, call the ```/events/:id``` PUT endpoint setting the status property to be "finsihed"
 
 Example JSON body request to stop a stream.
 
@@ -105,4 +127,5 @@ You can always restart an event by calling the PUT endpoint again and specifying
 
 
 ## Contributing 
+Air is in the early stages so feedback and suggestions are welcome. Feel free to open an issue or submit a pull request.
 
