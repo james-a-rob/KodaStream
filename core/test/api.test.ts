@@ -13,8 +13,6 @@ jest.mock('../src/video-processor', () => ({
 }));
 
 const simpleEvent = {
-    url: 'https://streamer.com/output-1234.m3u8',
-    status: StreamStatus.Started,
     scenes: [
         {
             location: 'https://s3.com/videos/1234.mp4'
@@ -33,8 +31,6 @@ const simpleRestartedEvent = {
 }
 
 const eventWithTwoScenesAndMetadata = {
-    url: 'https://streamer.com/output-1234.m3u8',
-    status: StreamStatus.Started,
     scenes: [
         {
             location: 'https://s3.com/videos/1234.mp4',
@@ -59,9 +55,7 @@ const newScenes = {
 }
 
 const simpleLoopedEvent = {
-    url: 'https://streamer.com/output-1234.m3u8',
     loop: true,
-    status: StreamStatus.Started,
     scenes: [
         {
             location: 'https://s3.com/videos/1234.mp4'
@@ -84,7 +78,7 @@ describe("live streaming", () => {
     describe('create', () => {
         test("can create a simple live event that starts imediatly", async () => {
             const response = await request(app)
-                .post('/event')
+                .post('/events')
                 .send(simpleEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -92,7 +86,7 @@ describe("live streaming", () => {
             expect(response.headers["content-type"]).toMatch(/json/);
 
             expect(response.status).toEqual(200);
-            expect(response.body.url).toEqual('https://streamer.com/output-1234.m3u8');
+            expect(response.body.url).toEqual('output.m3u8');
             expect(start).toHaveBeenCalledTimes(1);
             expect(response.body.scenes).toEqual([
                 {
@@ -105,7 +99,7 @@ describe("live streaming", () => {
 
         test("create stream with loop enabled", async () => {
             const response = await request(app)
-                .post('/event')
+                .post('/events')
                 .send(simpleLoopedEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -113,7 +107,7 @@ describe("live streaming", () => {
             expect(response.headers["content-type"]).toMatch(/json/);
 
             expect(response.status).toEqual(200);
-            expect(response.body.url).toEqual('https://streamer.com/output-1234.m3u8');
+            expect(response.body.url).toEqual('output.m3u8');
             expect(response.body.loop).toBe(true);
             expect(response.body.scenes).toEqual([
                 {
@@ -126,7 +120,7 @@ describe("live streaming", () => {
 
         test('create a stream with multiple scenes with their own metadata', async () => {
             const response = await request(app)
-                .post('/event')
+                .post('/events')
                 .send(eventWithTwoScenesAndMetadata)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -148,7 +142,7 @@ describe("live streaming", () => {
 
         test("create handle no data sent", async () => {
             const response = await request(app)
-                .post('/event')
+                .post('/events')
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
 
@@ -162,13 +156,13 @@ describe("live streaming", () => {
     describe('update', () => {
         test("replace scenes", async () => {
             const response = await request(app)
-                .post('/event')
+                .post('/events')
                 .send(simpleEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
 
             const response2 = await request(app)
-                .put('/event/1')
+                .put('/events/1')
                 .send(newScenes)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -196,13 +190,13 @@ describe("live streaming", () => {
 
         test("stop event", async () => {
             const response = await request(app)
-                .post('/event')
+                .post('/events')
                 .send(simpleEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
 
             const response2 = await request(app)
-                .put('/event/1')
+                .put('/events/1')
                 .send(simpleStoppedEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -216,19 +210,19 @@ describe("live streaming", () => {
 
         test("restart event", async () => {
             const response = await request(app)
-                .post('/event')
+                .post('/events')
                 .send(simpleEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
 
             const response2 = await request(app)
-                .put('/event/1')
+                .put('/events/1')
                 .send(simpleStoppedEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
 
             const response3 = await request(app)
-                .put('/event/1')
+                .put('/events/1')
                 .send(simpleRestartedEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -261,7 +255,7 @@ describe("live streaming", () => {
             await eventRepository.save(event);
 
             const response = await request(app)
-                .get('/event/1')
+                .get('/events/1')
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
 

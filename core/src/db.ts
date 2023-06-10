@@ -3,6 +3,7 @@ import "reflect-metadata";
 import AppDataSource from './data-source';
 import { Event } from "./entity/Event";
 import { Scene } from "./entity/Scene";
+import { StreamStatus } from "./enums";
 
 
 export const createLiveEvent = async (liveEvent): Promise<Event> => {
@@ -18,9 +19,9 @@ export const createLiveEvent = async (liveEvent): Promise<Event> => {
 
     const event = new Event();
 
-    event.url = liveEvent.url;
+    event.url = "output.m3u8";
     event.loop = liveEvent.loop;
-    event.status = liveEvent.status;
+    event.status = liveEvent.status || StreamStatus.Started;
     event.scenes = scenes;
 
     await eventRepository.save(event);

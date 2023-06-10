@@ -7,8 +7,8 @@ import { createLiveEvent, getLiveEvent, updateLiveEvent } from './db';
 const app = express();
 app.use(bodyParser.json())
 
-app.post("/event", async (req: Request, res: Response) => {
-    if (!req.body.url || !req.body.status || !req.body.scenes) {
+app.post("/events", async (req: Request, res: Response) => {
+    if (!req.body.scenes) {
         return res.status(400).json({})
     }
     // console.log(start);
@@ -19,7 +19,7 @@ app.post("/event", async (req: Request, res: Response) => {
 
 });
 
-app.put("/event/:id", async (req: Request, res: Response) => {
+app.put("/events/:id", async (req: Request, res: Response) => {
     const currentEvent = await getLiveEvent(req.params.id);
     const updatedEvents = await updateLiveEvent(req.params.id, req.body);
 
@@ -32,7 +32,7 @@ app.put("/event/:id", async (req: Request, res: Response) => {
 
 });
 
-app.get("/event/:id", async (req: Request, res: Response) => {
+app.get("/events/:id", async (req: Request, res: Response) => {
     const event = await getLiveEvent(req.params.id);
 
     res.setHeader('Content-Type', 'application/json');
