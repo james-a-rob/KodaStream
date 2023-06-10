@@ -18,7 +18,8 @@ Take existing video content and repurpose as engaging live streams.
 
 ## Video walkthrough
 The easiest way to get setup and creating live streams is to follow this video walkthrough.
-COMING SOON
+
+COMING SOON!
 
 ## Install
 Clone this repo and then run ```npm install``` from inside the ./core directory.
@@ -50,9 +51,9 @@ Example JSON body request to start a stream.
 
 ```
 
-The above payload starts a stream composed of 2 videos that will play one after the other. The stream has loop turned on so will continutally loop back to playing video 1 as soon as video 2 has been played. Both scenes have a string of metadata attached to them that can be accessed on the client side. Metadata is used to show time specific information to a viewer.
+The above payload starts a stream composed of 2 videos that will be streamed one after the other. The stream has loop set to true so the event will continutally loop back to playing video 1 as soon as video 2 has finished played.  Both scenes have a string of metadata attached to them that can be accessed on the client side. Metadata is used to show time specific information to a viewer e.g. details about a specifc product.
 
-A succesful create request return a JSON response in the following structure.
+A successful create request returns a JSON response in the following structure. The stream can now be viewed at ```http://localhost:3000```. This is a simple HTML demo app that defaults to playing ```/events/1/output.m3u8```. This page is useful for testing purposes.
 
 ```json
 {
@@ -99,7 +100,7 @@ Scene updates can be specified by calling the ```/events/:id``` PUT enpoint and 
 
 ```
 
-The previous scenes array will be entirely replaced with the new scenes passed to the PUT endpoint. The veiwer will see the current scene they are viewing play in its entirety. The next scene they will see will be the first scene (videos/video-three.mp4) of the above scene array.
+The previous scenes array will be entirely replaced with the new scenes passed to the PUT endpoint. The viewer will see the current scene they are viewing play in its entirety. The next scene the viewer sees will be the first scene (videos/video-three.mp4) of the above scenes array.
 
 
 ## Stopping an event
@@ -127,5 +128,5 @@ You can always restart an event by calling the PUT endpoint again and specifying
 
 
 ## Contributing 
-Air is in the early stages so feedback and suggestions are welcome. Feel free to open an issue or submit a pull request.
+Air is in the early stages so feedback and suggestions are extreamly welcome. Feel free to open an issue or submit a pull request.
 
