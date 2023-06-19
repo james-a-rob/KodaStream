@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import ffmpeg from 'fluent-ffmpeg';
+
 import pathToFfmpeg from 'ffmpeg-static';
 import { Scene } from "./entity/Scene";
 import { Event } from "./entity/Event";
@@ -11,7 +12,6 @@ ffmpeg.setFfmpegPath(pathToFfmpeg);
 
 const process = (scene: Scene, event: Event) => {
     return new Promise((resolve, reject) => {
-        console.log("event ot process", event);
         const sceneLocation = path.join(__dirname, `../${scene.location}`);
         const newEventDirLocation = path.join(__dirname, `../events/${event.id}`);
         const segmentLocation = path.join(__dirname, `../events/${event.id}/file-${scene.id}-%03d.ts`);
@@ -19,7 +19,7 @@ const process = (scene: Scene, event: Event) => {
 
         fs.ensureDir(newEventDirLocation)
         const ff = ffmpeg()
-        console.log('ffmpeg', ff.kill);
+
         ff.addInput(sceneLocation)
             .inputOptions(
                 '-re',
@@ -31,9 +31,8 @@ const process = (scene: Scene, event: Event) => {
                 '-hls_time 6',
                 '-sc_threshold 0',
                 `-hls_segment_filename ${segmentLocation}`,
-                '-hls_playlist_type event',
                 '-hls_flags program_date_time+append_list+omit_endlist+independent_segments+discont_start',
-                '-hls_wrap 5',
+                '-hls_wrap 10',
                 '-f hls'
 
             ]).output(outputLocation).on('end', () => {
@@ -63,7 +62,7 @@ export const start = async (eventId: number) => {
     let nextSceneExists;
     let sceneIteration = 0;
     const liveEvent = await getLiveEvent(eventId.toString());
-    console.log("first live event", liveEvent)
+
     const firstScene = liveEvent.scenes[0];
     if (firstScene) {
         nextSceneExists = true;
@@ -76,7 +75,6 @@ export const start = async (eventId: number) => {
             break;
         }
 
-        console.log('up to date live event ${sceneIteration}', uptoDateLiveEvent);
 
         const sceneToStream = uptoDateLiveEvent.scenes.find((scene) => { return scene.id === firstScene.id + sceneIteration });
 
@@ -91,6 +89,7 @@ export const start = async (eventId: number) => {
         } else if (!nextScene && uptoDateLiveEvent.loop) {
             nextSceneExists = true;
             sceneIteration = 0;
+
         }
         else {
             nextSceneExists = false;

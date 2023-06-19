@@ -84,7 +84,6 @@ describe('video processor', () => {
         fs.rmSync(eventsLocation, { recursive: true, force: true });
         start(event.id);
 
-        console.log(`${eventsLocation}/output-initial.m3u8`);
         const exists = await waitForFileExists(`${eventsLocation}/output-initial.m3u8`);
         const tsExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
         const tsExists2 = await waitForFileExists(`${eventsLocation}/file-2-001.ts`);
@@ -107,9 +106,7 @@ describe('video processor', () => {
         await updateLiveEvent(event.id.toString(), updatedEventWithScenesAndMetadata);
 
 
-        console.log(`${eventsLocation}/output-initial.m3u8`);
         const exists = await waitForFileExists(`${eventsLocation}/output-initial.m3u8`);
-        console.log('set updated')
 
         const tsExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
         const tsExists2 = await waitForFileExists(`${eventsLocation}/file-2-001.ts`);
@@ -135,11 +132,8 @@ describe('video processor', () => {
         await updateLiveEvent(event.id.toString(), updatedEventWithToBeStopped);
         const gottenLiveEvent = await getLiveEvent(event.id.toString());
 
-        console.log("gottenLiveEvent", gottenLiveEvent);
 
-        console.log(`${eventsLocation}/output-initial.m3u8`);
         const exists = await waitForFileExists(`${eventsLocation}/output-initial.m3u8`);
-        console.log('set stopped')
 
         const tsExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
 

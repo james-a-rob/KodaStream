@@ -2,3 +2,4 @@ core/node_modules
 website/node_modules
 core/src/events
 core/events/*
+videos

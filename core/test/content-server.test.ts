@@ -50,12 +50,10 @@ describe('content server config', () => {
         const locationOfMockVideoContent = path.join(__dirname, `./mock-video-content/short`);
         const locationOfVideoContent = path.join(__dirname, `../events/${event.id}`);
         // fs.rmSync(locationOfVideoContent, { recursive: true, force: true });
-        try {
-            fs.ensureDirSync(locationOfVideoContent);
-            fs.copySync(locationOfMockVideoContent, locationOfVideoContent);
-        } catch (e) {
-            console.log("failed to copy files")
-        }
+
+        fs.ensureDirSync(locationOfVideoContent);
+        fs.copySync(locationOfMockVideoContent, locationOfVideoContent);
+
 
         // add m3u8 and ts file in diretory jusing response event id
 
@@ -70,27 +68,13 @@ describe('content server config', () => {
             expect(error).toBe(null);
             expect(stream.path).toBe(outputPath);
             stream.close();
-            console.log("clsoe stream")
-            try {
-                console.log("empty dir");
-
-            } catch (e) {
-                console.log("failed to empty dir sync", e)
-            }
-
-
-
         }
         await hlsServerConfig.provider.getManifestStream(fakeRequest, cb);
 
-        console.log("end test 1")
 
     });
 
     test('handles request for event that does not exist', async () => {
-        console.log("- - -  - -start test 2")
-
-
 
         const fakeRequest = {
             url: '/events/1/output.m3u8'
