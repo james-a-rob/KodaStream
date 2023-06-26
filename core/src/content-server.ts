@@ -52,7 +52,7 @@ const hlsServerConfig = {
 
 
 
-            const playlist = HLS.parse(m3u8Data);
+            const playlist = HLS.parse(m3u8Data.toString());
             console.log(playlist)
             playlist.segments.forEach((segment, i) => {
                 const idFromSegmentFile = segment.uri.split("-")[1]
