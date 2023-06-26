@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <video autoplay muted preload="true" id="video" height="auto" controls></video>
+    <video playsinline autoplay muted preload="true" id="video" height="auto" controls></video>
     <div id="metadata"></div>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
@@ -57,6 +57,17 @@
 
                 video.play();
             });
+
+            video.addEventListener('timeupdate', () => {
+                const track = video.textTracks[0];
+                if (track) {
+
+                    const cue = track.cues[track.cues.length - 1];
+                    metadataContainer.innerHTML = cue.value.data;
+                }
+            });
+
+
         }
     </script>
 </body>
