@@ -14,8 +14,7 @@ const process = (scene: Scene, event: Event) => {
     return new Promise((resolve, reject) => {
         const sceneLocation = path.join(__dirname, `../${scene.location}`);
         const newEventDirLocation = path.join(__dirname, `../events/${event.id}`);
-        const initMp4Location = `events/${event.id}/init.mp4`;
-        const segmentLocation = path.join(__dirname, `../events/${event.id}/file-${scene.id}-%03d.m4s`);
+        const segmentLocation = path.join(__dirname, `../events/${event.id}/file-${scene.id}-%03d.ts`);
         const outputLocation = path.join(__dirname, `../events/${event.id}/output-initial.m3u8`);
 
         fs.ensureDir(newEventDirLocation)
@@ -30,8 +29,6 @@ const process = (scene: Scene, event: Event) => {
                 '-level 3.0',
                 '-start_number 0',
                 '-hls_time 6',
-                '-hls_segment_type fmp4',
-                `-hls_fmp4_init_filename ${initMp4Location}`,
                 '-sc_threshold 0',
                 `-hls_segment_filename ${segmentLocation}`,
                 '-hls_flags program_date_time+append_list+omit_endlist+independent_segments+discont_start',

@@ -88,13 +88,7 @@ const hlsServerConfig = {
         },
         getSegmentStream: (req: Request, cb) => {
             console.log(req.url)
-            let fileLocation;
-            if (req.url.includes('mp4')) {
-                fileLocation = 'init.mp4';
-            } else {
-                fileLocation = req.url;
-            }
-            const stream = fs.createReadStream(path.join(__dirname, `../${fileLocation}`));
+            const stream = fs.createReadStream(path.join(__dirname, `../${req.url}`));
             cb(null, stream);
         }
     }
