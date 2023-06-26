@@ -45,35 +45,35 @@ const hlsServerConfig = {
             const m3u8Data = fs.readFileSync(path.join(__dirname, `../${req.url.replace("output", "output-initial")}`));
 
 
-            const playlist = HLS.parse(m3u8Data.toString());
+            // const playlist = HLS.parse(m3u8Data.toString());
 
-            playlist.segments.forEach((segment) => {
-                const idFromSegmentFile = segment.uri.split("-")[1]
+            // playlist.segments.forEach((segment) => {
+            //     const idFromSegmentFile = segment.uri.split("-")[1]
 
-                const scene = event.scenes.filter((dbValue) => {
+            //     const scene = event.scenes.filter((dbValue) => {
 
-                    return dbValue.id.toString() === idFromSegmentFile
-                });
-                const dateRange = {
-                    id: `video-${scene[0].id}`,
-                    start: new Date(segment.programDateTime),
-                    duration: segment.duration,
-                    attributes: { 'X-CUSTOM-KEY': scene[0].metadata }
-                }
-                segment.dateRange = dateRange;
-            });
+            //         return dbValue.id.toString() === idFromSegmentFile
+            //     });
+            //     const dateRange = {
+            //         id: `video-${scene[0].id}`,
+            //         start: new Date(segment.programDateTime),
+            //         duration: segment.duration,
+            //         attributes: { 'X-CUSTOM-KEY': scene[0].metadata }
+            //     }
+            //     segment.dateRange = dateRange;
+            // });
 
-            const outputPath = path.join(__dirname, `../events/${eventId}/output.m3u8`);
-            try {
-                fs.writeFileSync(outputPath, HLS.stringify(playlist));
+            // const outputPath = path.join(__dirname, `../events/${eventId}/output.m3u8`);
+            // try {
+            //     fs.writeFileSync(outputPath, HLS.stringify(playlist));
 
-            } catch (e) {
-                console.log("write failed", e);
-            }
+            // } catch (e) {
+            //     console.log("write failed", e);
+            // }
 
             let stream;
             try {
-                stream = await fs.createReadStream(outputPath);
+                stream = await fs.createReadStream(path.join(__dirname, `../${req.url.replace("output", "output-initial")}`));
 
             } catch (e) {
                 console.log("read failed")
