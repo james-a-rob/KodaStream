@@ -13,6 +13,10 @@ app.get('/', (req: Request, res: Response) => {
     return res.status(200).sendFile(path.join(__dirname, '../public/client.html'));
 });
 
+app.get('/init.mp4', (req: Request, res: Response) => {
+    return res.status(200).sendFile(path.join(__dirname, '../public/client.html'));
+});
+
 app.get('/ios-demo', (req: Request, res: Response) => {
     return res.status(200).sendFile(path.join(__dirname, '../public/client-ios.html'));
 });
@@ -83,8 +87,14 @@ const hlsServerConfig = {
             cb(null, stream);
         },
         getSegmentStream: (req: Request, cb) => {
-
-            const stream = fs.createReadStream(path.join(__dirname, `../${req.url}`));
+            console.log(req.url)
+            let fileLocation;
+            if (req.url.includes('mp4')) {
+                fileLocation = 'init.mp4';
+            } else {
+                fileLocation = req.url;
+            }
+            const stream = fs.createReadStream(path.join(__dirname, `../${fileLocation}`));
             cb(null, stream);
         }
     }
