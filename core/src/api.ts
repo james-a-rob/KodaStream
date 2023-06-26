@@ -11,7 +11,7 @@ app.post("/events", async (req: Request, res: Response) => {
     if (!req.body.scenes) {
         return res.status(400).json({})
     }
-    // console.log(start);
+
     const event = await createLiveEvent(req.body);
     // ensure status is started
     start(event.id);
