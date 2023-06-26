@@ -33,7 +33,8 @@ const process = (scene: Scene, event: Event) => {
                 `-hls_segment_filename ${segmentLocation}`,
                 '-hls_flags program_date_time+append_list+omit_endlist+independent_segments+discont_start',
                 '-hls_wrap 10',
-                '-f hls'
+                '-f hls',
+                '-g 25'
 
             ]).output(outputLocation).on('end', () => {
                 resolve(true);

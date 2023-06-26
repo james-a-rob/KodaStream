@@ -49,8 +49,11 @@ const hlsServerConfig = {
             const m3u8Data = fs.readFileSync(path.join(__dirname, `../${req.url.replace("output", "output-initial")}`));
 
 
-            const playlist = HLS.parse(m3u8Data.toString());
 
+
+
+            const playlist = HLS.parse(m3u8Data);
+            console.log(playlist)
             playlist.segments.forEach((segment, i) => {
                 const idFromSegmentFile = segment.uri.split("-")[1]
 
@@ -58,13 +61,18 @@ const hlsServerConfig = {
 
                     return dbValue.id.toString() === idFromSegmentFile
                 });
+
                 const dateRange = {
                     id: `video-${scene[0].id}-${i}`,
-                    start: new Date(segment.programDateTime),
+                    classId: `video-${scene[0].id}-${i}`,
+                    // this date cant be dynamic or safari will break
+                    start: new Date("2023-06-26T17:36:21.000Z"),
                     duration: segment.duration,
+                    endOnNext: "YES",
                     attributes: { 'X-CUSTOM-KEY': scene[0].metadata }
                 }
                 segment.dateRange = dateRange;
+
             });
 
             const outputPath = path.join(__dirname, `../events/${eventId}/output.m3u8`);

@@ -33,15 +33,8 @@
 
                 const dateRangeTag = frag.frag.tagList[locationOfDateRange][1];
                 const dateRangeDate = dateRangeTag.split(",")[1].split('"')[1];
-                const dateRangeValue = dateRangeTag.split(",")[3].split('"')[1];
-                const rawProgramDateTime = frag.frag.rawProgramDateTime;
-                console.log('date range date', dateRangeDate);
-                console.log('frag start date', rawProgramDateTime);
-                if (new Date(dateRangeDate) >= new Date(rawProgramDateTime)) {
-                    console.log('RENDER TO SCREEN', dateRangeValue);
-                    metadataContainer.innerHTML = `Metadata from video content: ${dateRangeValue}`;
-
-                }
+                const dateRangeValue = dateRangeTag.split(",")[5].split('"')[1];
+                metadataContainer.innerHTML = `Metadata from video content: ${dateRangeValue}`;
 
             });
             hls.on(Hls.Events.FRAG_LOADED, (data, data2) => {
