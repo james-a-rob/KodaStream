@@ -47,21 +47,21 @@ const hlsServerConfig = {
 
             const playlist = HLS.parse(m3u8Data.toString());
 
-            // playlist.segments.forEach((segment) => {
-            //     const idFromSegmentFile = segment.uri.split("-")[1]
+            playlist.segments.forEach((segment, i) => {
+                const idFromSegmentFile = segment.uri.split("-")[1]
 
-            //     const scene = event.scenes.filter((dbValue) => {
+                const scene = event.scenes.filter((dbValue) => {
 
-            //         return dbValue.id.toString() === idFromSegmentFile
-            //     });
-            //     const dateRange = {
-            //         id: `video-${scene[0].id}`,
-            //         start: new Date(segment.programDateTime),
-            //         duration: segment.duration,
-            //         attributes: { 'X-CUSTOM-KEY': scene[0].metadata }
-            //     }
-            //     segment.dateRange = dateRange;
-            // });
+                    return dbValue.id.toString() === idFromSegmentFile
+                });
+                const dateRange = {
+                    id: `video-${scene[0].id}-${i}`,
+                    start: new Date(segment.programDateTime),
+                    duration: segment.duration,
+                    attributes: { 'X-CUSTOM-KEY': scene[0].metadata }
+                }
+                segment.dateRange = dateRange;
+            });
 
             const outputPath = path.join(__dirname, `../events/${eventId}/output.m3u8`);
             try {
