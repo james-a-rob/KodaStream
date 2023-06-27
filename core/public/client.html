@@ -60,6 +60,19 @@
                 }
             });
 
+            video.textTracks.addEventListener('addtrack', ({ track }) => {
+                // check if the track is of kind "metadata", this is where Safari adds any EXT-X-DATERANGE information
+                if (track && track.kind === "metadata") {
+                    // by default the track is disabled, set it to "hidden" to allow it to start parsing any EXT-X-DATERANGE
+                    // THIS LINE IS REQUIRED FOR METADATA
+                    track.mode = "hidden";
+                    // track.cues will now be populated with all available EXT-X-DATERANGES in the entire manifest!
+                    track.addEventListener("cuechange", async (evt) => {
+                        // if this event is dispatched the `track.activeCues` property will contain the active EXT-X-DATERANGE
+                    });
+                }
+            });
+
 
         }
     </script>
