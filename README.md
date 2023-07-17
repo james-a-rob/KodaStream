@@ -1,15 +1,24 @@
-### Air is currently in alpha. Not recommended for production use.
-
 ## Description
 
 Air is a headless live streaming solution with a focus on pre-recorded content and interactivity. 
 
 Take existing video content and repurpose as engaging live streams.
 
+## In Production
+Sneaker market place [Sneak in Peace](https://sneakinpeace.com) uses Air to broadcast their “watch and shop” live stream. 
+
+![sneak gif](production.gif)
+
+(Example live stream gif)
+
 ## Features
- - Developer first, start live streams with a single API request.
- - Scalable, content delivered via the HLS protocol. 
- - Interactivity, sync data with video and build out rich end-user experiences.
+ - Scalable - Content delivered via the HLS protocol. 
+ - Interactivity - Sync data with video and build out rich end-user experiences.
+ - High quality content - No restrictions on video quality.
+ - Open - Go read the code, its TypeScript.
+ - Self-hosted - Run in the cloud or on premises.
+ - Developer first - Start live streams with a single API request.
+
 
 ## Terminology
  - Event - A live stream that is made up of one of more scenes.
@@ -17,7 +26,7 @@ Take existing video content and repurpose as engaging live streams.
  - Viewers - End-user consuming the stream via a web browser, native app or other device.
 
 ## Video walkthrough
-The easiest way to get setup and creating live streams is to follow this video walkthrough.
+The easiest way to get setup and start creating live streams is to follow this video walkthrough.
 
 COMING SOON!
 
@@ -28,7 +37,7 @@ Clone this repo and then run ```npm install``` from inside the ./core directory.
 ## Getting started
 ```npm run start:dev```
 
-There is now two apps running:
+You now have two servers running locally on your machine.
 
 1. **The Air API** on port 4000. This is a REST API that manages creation and updating of events. Use this API to start your live streams. The events endpoint can be called at http://localhost:4000/events. 
 2. **The Air Content Server** on port 3000. This server is used to distribute the live stream to viewers. It uses the HLS protocol. A simple demo page that streams event with id 1 is available at  http://localhost:3000
@@ -131,7 +140,8 @@ You can always restart an event by calling the PUT endpoint again and specifying
 
 ```
 
-
 ## Contributing 
 Air is in the early stages so feedback and suggestions are extreamly welcome. Feel free to open an issue or submit a pull request.
+
+## Deploying
 
