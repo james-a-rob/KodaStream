@@ -1,5 +1,6 @@
 core/node_modules
 website/node_modules
 core/src/events
+core/dist
 core/events/*
 videos
