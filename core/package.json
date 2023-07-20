@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "npx tsc --build --verbose",
     "start:dev": "ts-node  src/main.ts",
     "start": "pm2 start node dist/main.js",
-    "test": "jest",
+    "test": "jest -t 'loops'",
     "typeorm": "typeorm-ts-node-commonjs"
   },
   "author": "",

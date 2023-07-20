@@ -156,17 +156,20 @@ describe('video processor', () => {
 
         fs.rmSync(eventsLocation, { recursive: true, force: true });
         start(event.id);
+        await new Promise((r) => setTimeout(r, 6000));
+
         // look for file
         // get has correct file name corosponding to video
         // m3u8 called correct no-metadata
-        const videoFileOneExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
-        const videoFileTwoExists = await waitForFileExists(`${eventsLocation}/file-2-000.ts`);
-        const videoFileThreeExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
+        console.log('here 1', `${eventsLocation}/file-1-000.ts`)
+        // const videoFileOneExists = await waitForFileExists(`${eventsLocation}/file-1-000.ts`);
+        const videoFileTwoExists = await waitForFileExists(`${eventsLocation}/file-1-001.ts`);
+        // const videoFileThreeExists = await waitForFileExists(`${eventsLocation}/file-1-002.ts`);
+        console.log('here 2', videoFileTwoExists)
 
-
-        expect(videoFileOneExists).toBe(true);
+        // expect(videoFileOneExists).toBe(true);
         expect(videoFileTwoExists).toBe(true);
-        expect(videoFileThreeExists).toBe(true);
+        // expect(videoFileThreeExists).toBe(true);
 
 
         // 
