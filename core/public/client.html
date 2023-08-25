@@ -11,70 +11,178 @@
     <div id="metadata"></div>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
-        const video = document.getElementById('video');
-        const videoSrc = '/events/1/output.m3u8';
-        const metadataContainer = document.getElementById('metadata');
-        if (Hls.isSupported()) {
-            const hls = new Hls({
-                renderTextTracksNatively: false,
-                xhrSetup: function (xhr, url) {
-                    xhr.withCredentials = true; // do send cookies
-                    xhr.setRequestHeader('Access-Control-Allow-Headers', '*')
+        // const video = document.getElementById('video');
+        // const videoSrc = '/events/1/output.m3u8';
+        // const metadataContainer = document.getElementById('metadata');
+        // if (Hls.isSupported()) {
+        //     const hls = new Hls({
+        //         renderTextTracksNatively: false,
+        //         xhrSetup: function (xhr, url) {
+        //             xhr.withCredentials = true; // do send cookies
+        //             xhr.setRequestHeader('Access-Control-Allow-Headers', '*')
+        //         }
+        //     });
+
+        //     hls.loadSource(videoSrc);
+        //     hls.attachMedia(video);
+
+        //     hls.on(Hls.Events.FRAG_CHANGED, (data, frag) => {
+
+        //         console.log('frag changed', frag);
+        //         const locationOfDateRange = frag.frag.tagList[0][0] === 'DIS' ? 2 : 1;
+
+        //         const dateRangeTag = frag.frag.tagList[locationOfDateRange][1];
+        //         const dateRangeDate = dateRangeTag.split(",")[1].split('"')[1];
+        //         const dateRangeValue = dateRangeTag.split(",")[5].split('"')[1];
+        //         metadataContainer.innerHTML = `Metadata from video content: ${dateRangeValue}`;
+
+        //     });
+        //     hls.on(Hls.Events.FRAG_LOADED, (data, data2) => {
+        //         // console.log('hls3', data, data2);
+        //     });
+        //     hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        //         console.log('hls1', hls);
+        //         video.play();
+        //     });
+        // } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        //     video.src = videoSrc;
+        //     video.addEventListener('loadedmetadata', () => {
+
+        //         video.play();
+        //     });
+
+        //     video.addEventListener('timeupdate', () => {
+        //         const track = video.textTracks[0];
+        //         if (track) {
+
+        //             const cue = track.cues[track.cues.length - 1];
+        //             metadataContainer.innerHTML = cue.value.data;
+        //         }
+        //     });
+
+        //     video.textTracks.addEventListener('addtrack', ({ track }) => {
+        //         // check if the track is of kind "metadata", this is where Safari adds any EXT-X-DATERANGE information
+        //         if (track && track.kind === "metadata") {
+        //             // by default the track is disabled, set it to "hidden" to allow it to start parsing any EXT-X-DATERANGE
+        //             // THIS LINE IS REQUIRED FOR METADATA
+        //             track.mode = "hidden";
+        //             // track.cues will now be populated with all available EXT-X-DATERANGES in the entire manifest!
+        //             track.addEventListener("cuechange", async (evt) => {
+        //                 // if this event is dispatched the `track.activeCues` property will contain the active EXT-X-DATERANGE
+        //             });
+        //         }
+        //     });
+
+
+        // }
+
+        const videoElement = document.getElementById('video');
+        const metadataContainer = document.getElementById('metadata')
+
+
+        /** Player used to embed live stream on a webpage */
+        class AirPlayer {
+
+            constructor(options) {
+
+                this.options = options;
+                this.videoElement = options.videoElement;
+                this.videoSource = options.videoSource;
+                if (Hls.isSupported()) {
+                    this.setupWithHlsLib();
+                } else {
+                    this.setupWithoutHlsLib();
                 }
-            });
+            }
 
-            hls.loadSource(videoSrc);
-            hls.attachMedia(video);
+            setupWithHlsLib() {
+                const hls = new Hls({
+                    renderTextTracksNatively: false,
+                    xhrSetup: function (xhr, url) {
+                        xhr.withCredentials = true; // do send cookies
+                        xhr.setRequestHeader('Access-Control-Allow-Headers', '*')
+                    }
+                });
 
-            hls.on(Hls.Events.FRAG_CHANGED, (data, frag) => {
+                hls.loadSource(this.videoSource);
+                hls.attachMedia(this.videoElement);
 
-                console.log('frag changed', frag);
-                const locationOfDateRange = frag.frag.tagList[0][0] === 'DIS' ? 2 : 1;
+                hls.on(Hls.Events.FRAG_CHANGED, (data, frag) => {
+                    const tag = this.getMetadataTagFromTagList(frag.frag.tagList);
+                    if (!tag) {
+                        return;
+                    }
+                    const metadata = this.getMetadataFromTag(tag);
+                    this.options.onMetadataUpdate(metadata);
 
-                const dateRangeTag = frag.frag.tagList[locationOfDateRange][1];
-                const dateRangeDate = dateRangeTag.split(",")[1].split('"')[1];
-                const dateRangeValue = dateRangeTag.split(",")[5].split('"')[1];
-                metadataContainer.innerHTML = `Metadata from video content: ${dateRangeValue}`;
+                });
+                hls.on(Hls.Events.FRAG_LOADED, (data, data2) => {
+                    // console.log('hls3', data, data2);
+                });
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    this.videoElement.play();
+                });
+            }
 
-            });
-            hls.on(Hls.Events.FRAG_LOADED, (data, data2) => {
-                // console.log('hls3', data, data2);
-            });
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                console.log('hls1', hls);
-                video.play();
-            });
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = videoSrc;
-            video.addEventListener('loadedmetadata', () => {
+            setupWithoutHlsLib() {
+                this.videoElement.src = this.videoSource;
+                this.videoElement.addEventListener('loadedmetadata', () => {
 
-                video.play();
-            });
+                    this.videoElement.play();
+                });
 
-            video.addEventListener('timeupdate', () => {
-                const track = video.textTracks[0];
-                if (track) {
+                this.videoElement.addEventListener('timeupdate', () => {
+                    const track = video.textTracks[0];
+                    if (track) {
 
-                    const cue = track.cues[track.cues.length - 1];
-                    metadataContainer.innerHTML = cue.value.data;
+                        const cue = track.cues[track.cues.length - 1];
+                        this.options.onMetadataUpdate(cue.value.data);
+
+                    }
+                });
+
+                this.videoElement.textTracks.addEventListener('addtrack', ({ track }) => {
+                    // check if the track is of kind "metadata", this is where Safari adds any EXT-X-DATERANGE information
+                    if (track && track.kind === "metadata") {
+                        // by default the track is disabled, set it to "hidden" to allow it to start parsing any EXT-X-DATERANGE
+                        // THIS LINE IS REQUIRED FOR METADATA
+                        track.mode = "hidden";
+                        // track.cues will now be populated with all available EXT-X-DATERANGES in the entire manifest!
+                        track.addEventListener("cuechange", async (evt) => {
+                            // if this event is dispatched the `track.activeCues` property will contain the active EXT-X-DATERANGE
+                        });
+                    }
+                });
+            }
+
+            getMetadataTagFromTagList(tagList) {
+                const metadataTag = tagList.filter((tag) => {
+                    if (tag[0] === "EXT-X-DATERANGE") {
+                        return tag;
+                    }
+                });
+                if (metadataTag.length > 0) {
+                    return metadataTag[0];
                 }
-            });
+            }
 
-            video.textTracks.addEventListener('addtrack', ({ track }) => {
-                // check if the track is of kind "metadata", this is where Safari adds any EXT-X-DATERANGE information
-                if (track && track.kind === "metadata") {
-                    // by default the track is disabled, set it to "hidden" to allow it to start parsing any EXT-X-DATERANGE
-                    // THIS LINE IS REQUIRED FOR METADATA
-                    track.mode = "hidden";
-                    // track.cues will now be populated with all available EXT-X-DATERANGES in the entire manifest!
-                    track.addEventListener("cuechange", async (evt) => {
-                        // if this event is dispatched the `track.activeCues` property will contain the active EXT-X-DATERANGE
-                    });
-                }
-            });
+            getMetadataFromTag(tag) {
+                return tag[1].split(",")[5].split("=")[1].split('"')[1];
+            }
 
 
         }
+
+        var player = new AirPlayer({
+            videoElement: videoElement,
+            videoSource: '/events/1/output.m3u8',
+            onMetadataUpdate: (data) => {
+                console.log('metadata updated', data);
+                metadataContainer.innerHTML = data;
+
+            }
+        });
+        console.log('- - - -', player);
     </script>
 </body>
 
