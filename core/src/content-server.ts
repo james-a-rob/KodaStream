@@ -13,6 +13,15 @@ app.get('/', (req: Request, res: Response) => {
     return res.status(200).sendFile(path.join(__dirname, '../public/client.html'));
 });
 
+app.get('/hls-parser', (req: Request, res: Response) => {
+    return res.status(200).sendFile(path.join(__dirname, '../public/parser.js'));
+});
+
+app.get('/hls', (req: Request, res: Response) => {
+    return res.status(200).sendFile(path.join(__dirname, '../public/hls.js'));
+});
+
+
 app.get('/init.mp4', (req: Request, res: Response) => {
     return res.status(200).sendFile(path.join(__dirname, '../public/client.html'));
 });
@@ -62,18 +71,22 @@ const hlsServerConfig = {
                     return dbValue.id.toString() === idFromSegmentFile
                 });
 
+
+
                 const dateRange = {
-                    id: `video-${scene[0].id}-${i}`,
-                    classId: `video-${scene[0].id}-${i}`,
+                    id: `video-${scene[0].id}-${Math.random()}`,
+                    classId: `video-${scene[0].id}-${Math.random()}}`,
                     // this date cant be dynamic or safari will break
                     start: new Date("2023-06-26T17:36:21.000Z"),
                     duration: segment.duration,
                     endOnNext: "YES",
-                    attributes: { 'X-CUSTOM-KEY': scene[0].metadata }
+                    // add iteration so safari picks up new metadata. Should come from db
+                    attributes: {'X-CUSTOM-KEY': scene[0].metadata }
                 }
                 segment.dateRange = dateRange;
 
             });
+
 
             const outputPath = path.join(__dirname, `../events/${eventId}/output.m3u8`);
             try {
