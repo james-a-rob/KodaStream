@@ -74,8 +74,8 @@ const hlsServerConfig = {
 
 
                 const dateRange = {
-                    id: `video-${scene[0].id}-${Math.random()}`,
-                    classId: `video-${scene[0].id}-${Math.random()}}`,
+                    id: `video-${scene[0].id}`,
+                    classId: `video-${scene[0].id}`,
                     // this date cant be dynamic or safari will break
                     start: new Date("2023-06-26T17:36:21.000Z"),
                     duration: segment.duration,
