@@ -1,4 +1,6 @@
 import express, { Request, Response } from 'express';
+import { v4 as uuidv4 } from 'uuid';
+
 import cors from 'cors';
 
 import fs from 'fs-extra';
@@ -12,6 +14,15 @@ app.use(cors());
 app.get('/', (req: Request, res: Response) => {
     return res.status(200).sendFile(path.join(__dirname, '../public/client.html'));
 });
+
+app.get('/video-js', (req: Request, res: Response) => {
+    return res.status(200).sendFile(path.join(__dirname, '../public/client-video-js.html'));
+});
+
+app.get('/video-js-file', (req: Request, res: Response) => {
+    return res.status(200).sendFile(path.join(__dirname, '../public/video-js.js'));
+});
+
 
 app.get('/hls-parser', (req: Request, res: Response) => {
     return res.status(200).sendFile(path.join(__dirname, '../public/parser.js'));
@@ -74,10 +85,10 @@ const hlsServerConfig = {
 
 
                 const dateRange = {
-                    id: `video-${scene[0].id}`,
+                    id: `${uuidv4()}`,
                     classId: `video-${scene[0].id}`,
                     // this date cant be dynamic or safari will break
-                    start: new Date("2023-06-26T17:36:21.000Z"),
+                    start: new Date("1970-01-01T00:00:00.001Z"),
                     duration: segment.duration,
                     endOnNext: "YES",
                     // add iteration so safari picks up new metadata. Should come from db

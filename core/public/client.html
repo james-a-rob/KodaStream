@@ -31,6 +31,34 @@
                 } else {
                     this.setupWithoutHlsLib();
                 }
+                // this.setupWithoutHlsLib();
+
+                var switchAwayTime;
+                var switchBackTime;
+
+                document.addEventListener("visibilitychange", () => {
+                    if (document.hidden) {
+                        switchAwayTime = Date.now();
+                        console.log('currentTime away', this.videoElement.currentTime)
+
+                        console.log("Browser tab is hidden")
+                    } else {
+                        switchBackTime = Date.now();
+                        const timeToJump = switchBackTime - switchAwayTime;
+                        console.log('timeToJump', timeToJump);
+                        console.log("Browser tab is visible")
+                        console.log('currentTime back', this.videoElement.currentTime)
+                        if (this.videoElement.muted) {
+                            console.log('jump')
+                            this.videoElement.currentTime = this.videoElement.currentTime + timeToJump;
+                        } else {
+                            console.log('no jump')
+                        }
+
+                    }
+                });
+
+
 
             }
 
@@ -65,17 +93,16 @@
             setupWithoutHlsLib() {
                 this.videoElement.src = this.videoSource;
                 this.videoElement.addEventListener('loadedmetadata', (event) => {
+                    var track = player.textTracks()[0];
+                    debugger;
 
                     this.videoElement.play();
-                });
 
-                this.videoElement.textTracks.addEventListener("cuechange", (event) => {
-                    let cues = event.target.track.activeCues;
                 });
 
 
                 // cancel when nav away?
-                setInterval(async()=>{
+                setInterval(async () => {
                     //refactor into fetch function
                     const m3u8Response = await fetch(this.videoSource)
                     const m3u8FileContent = await m3u8Response.text();
@@ -83,21 +110,21 @@
 
                     parser.push(m3u8FileContent);
                     const manifest = parser.manifest;
-                    if(manifest.dateRanges.length < 1){
+                    if (manifest.dateRanges.length < 1) {
                         return
                     }
-                    if(parser.manifest.mediaSequence> 1){
-                        const metadata = manifest.dateRanges[manifest.dateRanges.length-3]
+                    if (parser.manifest.mediaSequence > 1) {
+                        const metadata = manifest.dateRanges[manifest.dateRanges.length - 3]
                         this.options.onMetadataUpdate(metadata.xCustomKey);
 
-                    }else{
-                        const metadata = manifest.dateRanges[manifest.dateRanges.length-1]
+                    } else {
+                        const metadata = manifest.dateRanges[manifest.dateRanges.length - 1]
                         this.options.onMetadataUpdate(metadata.xCustomKey);
 
 
                     }
 
-                },2000);
+                }, 2000);
             }
 
             getMetadataTagFromTagList(tagList) {
