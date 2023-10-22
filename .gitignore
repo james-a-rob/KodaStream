@@ -4,3 +4,5 @@ core/src/events
 core/dist
 core/events/*
 videos
+.DS_Store
+core/.DS_Store
