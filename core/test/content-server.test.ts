@@ -1,4 +1,6 @@
 import "reflect-metadata";
+import HLS from 'hls-parser';
+
 import { Request } from 'express';
 import fs from 'fs-extra';
 import path from 'path';
@@ -36,7 +38,7 @@ const eventWithScenesAndMetadata = {
     scenes: [
         {
             location: 'videos/final_sebastien_stylist_intro.mp4',
-            metadata: 'Nike',
+            metadata: "{\"name\":\"Nike\"}",
         }
     ]
 }
@@ -63,7 +65,7 @@ describe('content server config', () => {
         const cb = async (error, stream) => {
             // check arguments
             const outputPath = path.join(__dirname, `../events/${event.id}/output.m3u8`);
-            // await waitForFileExists(`${locationOfVideoContent}/output.m3u8`)
+
 
             expect(error).toBe(null);
             expect(stream.path).toBe(outputPath);

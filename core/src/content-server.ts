@@ -92,7 +92,7 @@ const hlsServerConfig = {
                     duration: segment.duration,
                     endOnNext: "YES",
                     // add iteration so safari picks up new metadata. Should come from db
-                    attributes: {'X-CUSTOM-KEY': scene[0].metadata }
+                    attributes: {'X-CUSTOM-KEY': encodeURIComponent(scene[0].metadata) }
                 }
                 segment.dateRange = dateRange;
 

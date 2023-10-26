@@ -34,11 +34,11 @@ const eventWithTwoScenesAndMetadata = {
     scenes: [
         {
             location: 'https://s3.com/videos/1234.mp4',
-            metadata: 'Nike'
+            metadata: {name: 'Nike'}
         },
         {
             location: 'https://s3.com/videos/5678.mp4',
-            metadata: 'Asics'
+            metadata: {name: 'Asics'}
         }
     ]
 }
@@ -126,16 +126,17 @@ describe("live streaming", () => {
                 .set('Accept', 'application/json');
 
             expect(response.headers["content-type"]).toMatch(/json/);
+
             expect(response.body.scenes).toEqual([
                 {
                     id: 1,
                     location: 'https://s3.com/videos/1234.mp4',
-                    metadata: 'Nike'
+                    metadata: "{\"name\":\"Nike\"}"
                 },
                 {
                     id: 2,
                     location: 'https://s3.com/videos/5678.mp4',
-                    metadata: 'Asics'
+                    metadata: "{\"name\":\"Asics\"}"
                 }
             ]);
         });

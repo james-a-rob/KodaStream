@@ -12,6 +12,14 @@ app.post("/events", async (req: Request, res: Response) => {
         return res.status(400).json({})
     }
 
+    req.body.scenes.forEach((scene, index) => {
+        if (scene.metadata && typeof scene.metadata !== "string") {
+            const stringMetadata = JSON.stringify(scene.metadata);
+            req.body.scenes[index].metadata = stringMetadata;
+        }
+    });
+
+
     const event = await createLiveEvent(req.body);
     // ensure status is started
     start(event.id);

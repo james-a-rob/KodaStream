@@ -190,7 +190,7 @@
             videoSource: '/events/1/output.m3u8',
             onMetadataUpdate: (data) => {
                 const decodedJson = player.decodeJson(data)
-                metadataContainer.innerHTML = decodedJson.test;
+                metadataContainer.innerHTML = decodedJson.description;
             }
         });
         console.log('- - - -', player);
