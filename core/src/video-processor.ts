@@ -20,6 +20,7 @@ const process = (scene: Scene, event: Event) => {
         fs.ensureDir(newEventDirLocation)
         const ff = ffmpeg()
 
+
         ff.addInput(sceneLocation)
             .inputOptions(
                 '-re',
@@ -39,7 +40,6 @@ const process = (scene: Scene, event: Event) => {
             ]).output(outputLocation).on('end', () => {
                 resolve(true);
             }).on('start', (data) => {
-                // console.log(data);
             })
             .on('progress', (data) => {
                 // console.log(data);
@@ -47,6 +47,7 @@ const process = (scene: Scene, event: Event) => {
             }).on('error', (err, stdout, stderr) => {
                 console.log('error---', err, stdout, stderr)
             }).run();
+
     });
 }
 

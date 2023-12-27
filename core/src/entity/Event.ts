@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { Scene } from "./Scene";
+import { Viewer } from "./Viewer";
+
 import { StreamStatus } from "../enums";
 
 @Entity()
@@ -19,5 +21,8 @@ export class Event {
 
     @OneToMany(() => Scene, (scene) => scene.event, { cascade: true })
     scenes: Scene[]
+
+    @OneToMany(() => Scene, (viewer) => viewer.event, { cascade: true })
+    viewer: Viewer[]
 
 }

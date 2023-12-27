@@ -1,9 +1,11 @@
 import "reflect-metadata";
 import request from 'supertest';
+import moment from 'moment';
 import AppDataSource from '../src/data-source';
 import { start } from '../src/video-processor';
 import { Event } from "../src/entity/Event";
 import { Scene } from "../src/entity/Scene";
+import { Viewer } from "../src/entity/Viewer";
 import { StreamStatus } from "../src/enums";
 import app from '../src/api';
 
@@ -34,11 +36,11 @@ const eventWithTwoScenesAndMetadata = {
     scenes: [
         {
             location: 'https://s3.com/videos/1234.mp4',
-            metadata: {name: 'Nike'}
+            metadata: { name: 'Nike' }
         },
         {
             location: 'https://s3.com/videos/5678.mp4',
-            metadata: {name: 'Asics'}
+            metadata: { name: 'Asics' }
         }
     ]
 }
@@ -79,6 +81,7 @@ describe("live streaming", () => {
         test("can create a simple live event that starts imediatly", async () => {
             const response = await request(app)
                 .post('/events')
+                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -100,6 +103,7 @@ describe("live streaming", () => {
         test("create stream with loop enabled", async () => {
             const response = await request(app)
                 .post('/events')
+                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleLoopedEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -121,6 +125,7 @@ describe("live streaming", () => {
         test('create a stream with multiple scenes with their own metadata', async () => {
             const response = await request(app)
                 .post('/events')
+                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(eventWithTwoScenesAndMetadata)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -144,8 +149,10 @@ describe("live streaming", () => {
         test("create handle no data sent", async () => {
             const response = await request(app)
                 .post('/events')
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json');
+                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+                .set('Content-Type', 'application/json')            
+                .set('Accept', 'application/json')
+                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
 
             expect(response.headers["content-type"]).toMatch(/json/);
 
@@ -158,6 +165,7 @@ describe("live streaming", () => {
         test("replace scenes", async () => {
             const response = await request(app)
                 .post('/events')
+                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -192,6 +200,7 @@ describe("live streaming", () => {
         test("stop event", async () => {
             const response = await request(app)
                 .post('/events')
+                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -212,6 +221,7 @@ describe("live streaming", () => {
         test("restart event", async () => {
             const response = await request(app)
                 .post('/events')
+                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -274,7 +284,103 @@ describe("live streaming", () => {
             ]);
         });
     });
-
-
 });
+
+
+describe("view counter", () => {
+    it('adds or udpates viewers of event', async () => {
+        const viewerRepository = AppDataSource.getRepository(Viewer);
+
+        const singleSecond = 1000;
+        const time1MinAgo = Date.now() - (singleSecond * 60);
+        moment.now = function () {
+            return time1MinAgo;
+        }
+        const simpleViewData = {
+            sessionId: 'abc'
+
+        }
+
+        const eventRepository = AppDataSource.getRepository(Event);
+        const sceneOne = new Scene();
+        sceneOne.location = "https://s3.com/videos/1234.mp4";
+
+        const event = new Event();
+        event.url = 'https://streamer.com/output-1234.m3u8';
+        event.status = StreamStatus.Started;
+        event.scenes = [sceneOne];
+        await eventRepository.save(event);
+
+        const response = await request(app)
+            .post('/events/1/views')
+            .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+            .send(simpleViewData)
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+        const response2 = await request(app)
+            .post('/events/1/views')
+            .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+            .send(simpleViewData)
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+        const allViewers = await viewerRepository.find();
+
+        expect(response.status).toEqual(200);
+        expect(response.body.id).toEqual(1);
+        expect(response.body.sessionId).toEqual('abc');
+        expect(allViewers.length).toBe(1);
+        expect(moment(response.body.datetime).format('x')).toEqual(time1MinAgo.toString());
+    })
+
+    it('lists current viewers for an event', async () => {
+        // set time 1 min in past
+        const singleSecond = 1000;
+        const time1MinAgo = Date.now() - (singleSecond * 60);
+        const time2MinAgo = Date.now() - (singleSecond * (60 * 2));
+        const time61MinAgo = Date.now() - (singleSecond * (60 * 61));
+
+        const eventRepository = AppDataSource.getRepository(Event);
+        const viewerRepository = AppDataSource.getRepository(Viewer);
+
+        const sceneOne = new Scene();
+        sceneOne.location = "https://s3.com/videos/1234.mp4";
+
+        const event = new Event();
+        event.url = 'https://streamer.com/output-1234.m3u8';
+        event.status = StreamStatus.Started;
+        event.scenes = [sceneOne];
+        await eventRepository.save(event);
+
+        const viewer1 = new Viewer();
+        viewer1.datetime = moment.utc(time1MinAgo).format();
+        viewer1.sessionId = "1";
+        viewer1.event = event;
+        await viewerRepository.save(viewer1)
+
+        const viewer2 = new Viewer();
+        viewer2.datetime = moment.utc(time2MinAgo).format();
+        viewer2.sessionId = "2";
+        viewer2.event = event;
+        await viewerRepository.save(viewer2)
+
+        const viewer3 = new Viewer();
+        viewer3.datetime = moment.utc(time61MinAgo).format();
+        viewer3.sessionId = "3";
+        viewer3.event = event;
+        await viewerRepository.save(viewer3)
+
+        const response = await request(app)
+            .get('/events/1/views')
+            .send()
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+        expect(response.status).toEqual(200);
+        expect(response.body.currentViewers).toEqual(2);
+
+
+    })
+})
 

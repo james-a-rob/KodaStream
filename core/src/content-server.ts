@@ -64,59 +64,55 @@ const hlsServerConfig = {
 
             if (!event) {
                 return cb(true, null);
-            }
+            } else {
 
-            const m3u8Data = fs.readFileSync(path.join(__dirname, `../${req.url.replace("output", "output-initial")}`));
-
-
+                const m3u8Data = fs.readFileSync(path.join(__dirname, `../${req.url.replace("output", "output-initial")}`));
 
 
+                const playlist = HLS.parse(m3u8Data.toString());
 
-            const playlist = HLS.parse(m3u8Data.toString());
+                playlist.segments.forEach((segment, i) => {
+                    const idFromSegmentFile = segment.uri.split("-")[1]
 
-            playlist.segments.forEach((segment, i) => {
-                const idFromSegmentFile = segment.uri.split("-")[1]
+                    const scene = event.scenes.filter((dbValue) => {
+                        return dbValue.id.toString() === idFromSegmentFile
+                    });
 
-                const scene = event.scenes.filter((dbValue) => {
+                    if (scene[0]) {
+                        const dateRange = {
+                            id: `${uuidv4()}`,
+                            classId: `video-${scene[0].id}`,
+                            // this date cant be dynamic or safari will break
+                            start: new Date("1970-01-01T00:00:00.001Z"),
+                            duration: segment.duration,
+                            endOnNext: "YES",
+                            // add iteration so safari picks up new metadata. Should come from db
+                            attributes: { 'X-CUSTOM-KEY': encodeURIComponent(scene[0].metadata) }
+                        }
+                        segment.dateRange = dateRange;
+                    }
 
-                    return dbValue.id.toString() === idFromSegmentFile
                 });
 
 
+                const outputPath = path.join(__dirname, `../events/${eventId}/output.m3u8`);
+                try {
+                    fs.writeFileSync(outputPath, HLS.stringify(playlist));
 
-                const dateRange = {
-                    id: `${uuidv4()}`,
-                    classId: `video-${scene[0].id}`,
-                    // this date cant be dynamic or safari will break
-                    start: new Date("1970-01-01T00:00:00.001Z"),
-                    duration: segment.duration,
-                    endOnNext: "YES",
-                    // add iteration so safari picks up new metadata. Should come from db
-                    attributes: {'X-CUSTOM-KEY': encodeURIComponent(scene[0].metadata) }
+                } catch (e) {
+                    console.log("write failed", e);
                 }
-                segment.dateRange = dateRange;
 
-            });
+                let stream;
+                try {
+                    stream = await fs.createReadStream(outputPath);
 
+                } catch (e) {
+                    console.log("read failed")
+                }
 
-            const outputPath = path.join(__dirname, `../events/${eventId}/output.m3u8`);
-            try {
-                fs.writeFileSync(outputPath, HLS.stringify(playlist));
-
-            } catch (e) {
-                console.log("write failed", e);
+                cb(null, stream);
             }
-
-            let stream;
-            try {
-                stream = await fs.createReadStream(outputPath);
-
-            } catch (e) {
-                console.log("read failed")
-            }
-
-
-            cb(null, stream);
         },
         getSegmentStream: (req: Request, cb) => {
             console.log(req.url)

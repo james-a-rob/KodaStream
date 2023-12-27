@@ -1,8 +1,10 @@
 import "reflect-metadata";
-
+import { MoreThan } from "typeorm"
+import moment from 'moment';
 import AppDataSource from './data-source';
 import { Event } from "./entity/Event";
 import { Scene } from "./entity/Scene";
+import { Viewer } from "./entity/Viewer";
 import { StreamStatus } from "./enums";
 
 
@@ -63,6 +65,59 @@ export const updateLiveEvent = async (id: string, liveEvent): Promise<Event> => 
     await eventRepository.save(updatedEvent);
 
     return updatedEvent;
+}
+
+export const logViewer = async (datetime: string, sessionId: string, eventId: string) => {
+    const viewerRepository = AppDataSource.getRepository(Viewer)
+    const event = await getLiveEvent(eventId);
+
+    const existingViewer = await viewerRepository.findOneBy({
+        sessionId: sessionId,
+    })
+
+
+    if(existingViewer){
+        existingViewer.datetime = datetime;
+        viewerRepository.save(existingViewer);
+        return existingViewer;
+    }else{
+        const viewer = {
+            datetime,
+            sessionId,
+            event: event
+        };
+    
+    
+        const savedViewer = await viewerRepository.save(viewer);
+    
+        return savedViewer;
+    }
+
+}
+
+export const getViewers = async (eventId: string) => {
+    const singleSecond = 1000;
+    const viewerRepository = AppDataSource.getRepository(Viewer);
+
+    const time60MinAgo = Date.now() - (singleSecond * (60 * 60));
+    const time60MinAgoFormated = moment(time60MinAgo).utc().format()
+
+    const viewers = await viewerRepository.find({
+        cache:3000,
+        where: {
+            datetime: MoreThan(time60MinAgoFormated),
+            event: {
+                id: parseInt(eventId),
+            }
+        },
+        relations: {
+            event: true
+        },
+    });
+
+    return {
+        currentViewers: viewers.length
+    }
 }
 
 
