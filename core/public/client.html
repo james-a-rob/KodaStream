@@ -27,6 +27,7 @@
                 this.videoElement = options.videoElement;
                 this.videoSource = options.videoSource;
                 this.apiUrl = options.apiUrl;
+                this.eventId = options.eventId;
 
                 this.setupSendViewerEvent(options.sessionId)
                 this.setupOnViewerCountChange(options.onViewerCountChange)
@@ -192,7 +193,7 @@
                 const sendViewerEvent = async () => {
                     // fetch
                     // check no cross origin issues
-                    const response = await fetch(this.apiUrl + "/events/1/views",
+                    const response = await fetch(this.apiUrl + "/events/"+this.eventId+"/views",
                         {
                             method: "POST",
                             body: JSON.stringify({ sessionId }),
@@ -222,7 +223,7 @@
                 const getViewerCount = async () => {
                     // fetch
                     // check no cross origin issues
-                    const response = await fetch(this.apiUrl + "/events/1/views");
+                    const response = await fetch(this.apiUrl + "/events/"+this.eventId+"/views");
                     const views = await response.json();
 
                     //on view change
@@ -246,6 +247,7 @@
         const player = new AirPlayer({
             videoElement: videoElement,
             videoSource: '/events/1/output.m3u8',
+            eventId: '1',
             apiUrl: "http://localhost:4000",
             sessionId: "1703778468",
             onViewerCountChange: (data) => {

@@ -2,8 +2,7 @@ import { ConnectionOptions, DatabaseType } from 'typeorm';
 
 type Config = {
     dev: ConnectionOptions,
-    prod: ConnectionOptions,
-    prodLocal: ConnectionOptions
+    prod: ConnectionOptions
 }
 
 const config: Config = {
@@ -11,18 +10,6 @@ const config: Config = {
         type: "sqlite",
         database: ":memory:",
         dropSchema: true,
-        synchronize: true,
-        logging: false,
-
-    },
-    "prodLocal": {
-
-        type: "postgres",
-        host: 'localhost',
-        username: 'postgres',
-        password: '1234',
-        database: 'lope',
-        port: 5432,
         synchronize: true,
         logging: false,
 

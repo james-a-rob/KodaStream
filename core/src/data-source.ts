@@ -12,6 +12,6 @@ import config from './config';
 const AppDataSource = new DataSource({
     entities: [Event, Scene, Viewer],
 
-    ...config['dev']
+    ...config['prod']
 })
 export default AppDataSource;
