@@ -7,11 +7,10 @@ import { Viewer } from "./entity/Viewer";
 
 import config from './config';
 
-
 // const AppDataSource = new DataSource(dbConfig)
 const AppDataSource = new DataSource({
     entities: [Event, Scene, Viewer],
 
-    ...config['prod']
+    ...config[process.env.NODE_ENV]
 })
 export default AppDataSource;

@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc --build --verbose",
-    "start:dev": "ts-node  src/main.ts",
-    "start": "pm2 start node dist/main.js",
-    "test": "jest",
+    "start:dev": "NODE_ENV=dev ts-node  src/main.ts",
+    "start": "NODE_ENV=prod pm2 start node dist/main.js",
+    "test": "NODE_ENV=dev jest",
     "typeorm": "typeorm-ts-node-commonjs"
   },
   "author": "",
