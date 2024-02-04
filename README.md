@@ -1,23 +1,21 @@
-## Description
+## Interactive Video API
 
-Air is a headless live streaming solution with a focus on pre-recorded content and interactivity. 
+Developer first API for creating interactive videos. Create engaging live stream and on-demand videos.
 
-Take existing video content and repurpose as engaging live streams.
+See in action [Sneak in Peace](https://sneakinpeace.com)
 
-## In Production
-Sneaker market place [Sneak in Peace](https://sneakinpeace.com) uses Air to broadcast their “watch and shop” live stream. 
+## Usecases
+ - Online Shopping channels 
+ - Interactive videos
+ - Live shopping
+ - Virtual sales agents
 
-![sneak gif](production.gif)
-
-(Example live stream gif)
 
 ## Features
- - Scalable - Content delivered via the HLS protocol. 
  - Interactivity - Sync data with video and build out rich end-user experiences.
- - High quality content - No restrictions on video quality.
- - Open - Go read the code, its TypeScript.
- - Self-hosted - Run in the cloud or on premises.
- - Developer first - Start live streams with a single API request.
+ - Scalable - Cluster architecture. 
+ - User friendly managment UI.
+ - Open Source - Self hosted or managed deployment.
 
 
 ## Terminology
