@@ -12,7 +12,7 @@ app.use(cors());
 
 app.post("/events", async (req: Request, res: Response) => {
 
-    if (req.headers.accesskey !== 'dh2873hd8qwegiuf873wgf783w4') {
+    if (req.headers.accesskey !== process.env.APIKEY) {
         return res.status(403).json({ error: 'Access denied' })
     }
 
@@ -38,6 +38,7 @@ app.post("/events", async (req: Request, res: Response) => {
 
 app.put("/events/:id", async (req: Request, res: Response) => {
     const currentEvent = await getLiveEvent(req.params.id);
+    //check current state vs target state before any update.
     const updatedEvents = await updateLiveEvent(req.params.id, req.body);
 
     const shouldRestart = currentEvent.status === StreamStatus.Finished && req.body.status === StreamStatus.Started;

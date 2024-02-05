@@ -80,7 +80,6 @@ describe('video processor', () => {
 
         const event = await createLiveEvent(eventWithScenesAndMetadata);
         const eventsLocation = path.join(__dirname, `../events/${event.id}`);
-
         fs.rmSync(eventsLocation, { recursive: true, force: true });
         start(event.id);
 
