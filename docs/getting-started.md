@@ -94,7 +94,7 @@ Example JSON body request to stop a stream.
 
 ```json
 {
-    "status": "finished"
+    "status": "stopped"
 }
 
 ```

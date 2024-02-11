@@ -21,11 +21,11 @@ const eventWithScenesAndMetadata = {
     status: StreamStatus.Started,
     scenes: [
         {
-            location: 'videos/final_sebastien_stylist_intro.mp4',
+            location: 'videos/test-vids/short-test.mp4',
             metadata: 'Nike',
         },
         {
-            location: 'videos/final_sebastien_stylist_intro.mp4',
+            location: 'videos/test-vids/short-test.mp4',
             metadata: 'Nike2',
         }
     ]
@@ -35,16 +35,16 @@ const updatedEventWithScenesAndMetadata = {
     scenes: [
         {
             id: 1,
-            location: 'videos/final_sebastien_stylist_intro.mp4',
+            location: 'videos/test-vids/short-test.mp4',
             metadata: 'Nike',
         },
         {
             id: 2,
-            location: 'videos/final_sebastien_stylist_intro.mp4',
+            location: 'videos/test-vids/short-test.mp4',
             metadata: 'Nike2',
         },
         {
-            location: 'videos/final_sebastien_stylist_intro.mp4',
+            location: 'videos/test-vids/short-test.mp4',
             metadata: 'Nike3',
         }
     ]
@@ -56,14 +56,14 @@ const eventWithScenesAndMetadataAndLoop = {
     status: StreamStatus.Started,
     scenes: [
         {
-            location: 'videos/final_sebastien_stylist_intro.mp4',
+            location: 'videos/test-vids/short-test.mp4',
             metadata: 'data1',
         }
     ]
 }
 
 const updatedEventWithToBeStopped = {
-    status: StreamStatus.Finished
+    status: StreamStatus.Stopped
 }
 
 beforeEach(async () => {

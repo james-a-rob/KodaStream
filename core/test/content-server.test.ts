@@ -37,7 +37,7 @@ const eventWithScenesAndMetadata = {
     status: StreamStatus.Started,
     scenes: [
         {
-            location: 'videos/final_sebastien_stylist_intro.mp4',
+            location: 'videos/test-vids/short-test.mp4',
             metadata: "{\"name\":\"Nike\"}",
         }
     ]

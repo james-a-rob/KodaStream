@@ -41,7 +41,7 @@ app.put("/events/:id", async (req: Request, res: Response) => {
     //check current state vs target state before any update.
     const updatedEvents = await updateLiveEvent(req.params.id, req.body);
 
-    const shouldRestart = currentEvent.status === StreamStatus.Finished && req.body.status === StreamStatus.Started;
+    const shouldRestart = currentEvent.status === StreamStatus.Stopped && req.body.status === StreamStatus.Started;
     if (shouldRestart) {
         start(currentEvent.id);
     }

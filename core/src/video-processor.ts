@@ -73,7 +73,7 @@ export const start = async (eventId: number) => {
 
         const uptoDateLiveEvent = await getLiveEvent(eventId.toString());
 
-        if (uptoDateLiveEvent.status === StreamStatus.Finished) {
+        if (uptoDateLiveEvent.status === StreamStatus.Stopped) {
             break;
         }
 

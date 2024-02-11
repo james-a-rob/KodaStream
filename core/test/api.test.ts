@@ -23,7 +23,7 @@ const simpleEvent = {
 }
 
 const simpleStoppedEvent = {
-    status: StreamStatus.Finished
+    status: StreamStatus.Stopped
 
 }
 
@@ -212,7 +212,7 @@ describe("live streaming", () => {
                 .set('Accept', 'application/json');
 
             expect(response.body.status).toEqual("started");
-            expect(response2.body.status).toEqual("finished");
+            expect(response2.body.status).toEqual("stopped");
             expect(start).toHaveBeenCalledTimes(1);
 
 
@@ -240,7 +240,7 @@ describe("live streaming", () => {
 
 
             expect(response.body.status).toEqual("started");
-            expect(response2.body.status).toEqual("finished");
+            expect(response2.body.status).toEqual("stopped");
             expect(response3.body.status).toEqual("started");
             expect(start).toHaveBeenCalledTimes(2);
 

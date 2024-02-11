@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "npx tsc --build --verbose",
     "start:dev": "NODE_ENV=dev ts-node  src/main.ts",
     "start": "NODE_ENV=dev pm2 start node dist/main.js -i max",
     "test": "NODE_ENV=test jest",
+    "test:unit": "NODE_ENV=test jest --watch --testPathPattern=src",
     "typeorm": "typeorm-ts-node-commonjs"
   },
   "author": "",

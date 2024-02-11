@@ -15,7 +15,7 @@ Create futuristic video experiences with high engagement
 </div>
 
 
-## 👤 Usecases
+## 👤 Use cases
  - Shoppable videos
  - Online TV channels
  - Interactive video tours
@@ -26,7 +26,7 @@ Create futuristic video experiences with high engagement
  - Time based interactivity: Synchronize video moments with rich user experiences.
  - Multi-format: support for on-demand, live and simulated live content.
  - Chromeless video player: Bring your own styles.
- - REST API: automate workflows.
+ - REST API: automate workflows in your preferred programming language.
  - Self hosted: Fully own the deployment. Need support? We can help.
  - Web-based video creation UI (Coming Soon!)
 
