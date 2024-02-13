@@ -150,7 +150,7 @@ describe("live streaming", () => {
             const response = await request(app)
                 .post('/events')
                 .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
-                .set('Content-Type', 'application/json')            
+                .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
                 .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
 
@@ -246,6 +246,24 @@ describe("live streaming", () => {
 
 
         });
+
+        test("starting an already started stream", async () => {
+            const responseStart1 = await request(app)
+                .post('/events')
+                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+                .send({ status: 'started', ...simpleEvent })
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
+
+            const responseStart2 = await request(app)
+                .put('/events/1')
+                .send({ status: 'started', ...simpleEvent })
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json');
+
+            expect(responseStart2.status).toEqual(400)
+            expect(responseStart2.text).toEqual("not possible to update event. Invalid stream status sent");
+        })
 
     })
 

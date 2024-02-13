@@ -193,7 +193,7 @@
                 const sendViewerEvent = async () => {
                     // fetch
                     // check no cross origin issues
-                    const response = await fetch(this.apiUrl + "/events/"+this.eventId+"/views",
+                    const response = await fetch(this.apiUrl + "/events/" + this.eventId + "/views",
                         {
                             method: "POST",
                             body: JSON.stringify({ sessionId }),
@@ -223,7 +223,7 @@
                 const getViewerCount = async () => {
                     // fetch
                     // check no cross origin issues
-                    const response = await fetch(this.apiUrl + "/events/"+this.eventId+"/views");
+                    const response = await fetch(this.apiUrl + "/events/" + this.eventId + "/views");
                     const views = await response.json();
 
                     //on view change
@@ -238,7 +238,7 @@
                 // initial call, or just call refresh directly
                 setTimeout(getViewerCount, 1000);
 
-                
+
             }
 
         }
@@ -246,7 +246,7 @@
 
         const player = new AirPlayer({
             videoElement: videoElement,
-            videoSource: '/events/77/output.m3u8',
+            videoSource: '/events/79/output.m3u8',
             eventId: '1',
             apiUrl: "http://localhost:4000",
             sessionId: "1703778468",

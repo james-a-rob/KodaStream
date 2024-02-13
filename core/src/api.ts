@@ -3,7 +3,7 @@ import cors from 'cors';
 import moment from 'moment';
 import bodyParser from 'body-parser';
 import { start } from './video-processor';
-import { StreamStatus } from './enums';
+import { checkIfAttempingEventRestart, checkIfStatusUpdateisValid } from './helpers/event-validation';
 import { createLiveEvent, getLiveEvent, updateLiveEvent, logViewer, getViewers } from './db';
 
 const app = express();
@@ -41,7 +41,11 @@ app.put("/events/:id", async (req: Request, res: Response) => {
     //check current state vs target state before any update.
     const updatedEvents = await updateLiveEvent(req.params.id, req.body);
 
-    const shouldRestart = currentEvent.status === StreamStatus.Stopped && req.body.status === StreamStatus.Started;
+    const statusUpdateisValid = checkIfStatusUpdateisValid(currentEvent.status, req.body.status)
+    if (!statusUpdateisValid) {
+        return res.status(400).send("not possible to update event. Invalid stream status sent")
+    }
+    const shouldRestart = checkIfAttempingEventRestart(currentEvent.status, req.body.status);
     if (shouldRestart) {
         start(currentEvent.id);
     }
