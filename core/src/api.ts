@@ -88,4 +88,6 @@ app.get("/events/:id/views", async (req: Request, res: Response) => {
 
 });
 
+app.post("/videos", () => { });
+
 export default app;

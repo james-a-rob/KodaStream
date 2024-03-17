@@ -58,19 +58,26 @@ describe('content server config', () => {
 
 
         // add m3u8 and ts file in diretory jusing response event id
+        const outputPath = path.join(__dirname, `../events/${event.id}/output.m3u8`);
 
         const fakeRequest = {
             url: '/events/1/output.m3u8'
         } as Request;
         const cb = async (error, stream) => {
             // check arguments
-            const outputPath = path.join(__dirname, `../events/${event.id}/output.m3u8`);
 
-
+            const m3u8Data = fs.readFileSync(stream.path);
+            const playlist = HLS.parse(m3u8Data.toString());
+            const expectedMetadata = encodeURIComponent(JSON.stringify({
+                "name": "Nike",
+                "scene-id": event.scenes[0].id
+            }));
+            expect(playlist.source.includes(expectedMetadata)).toBe(true);
             expect(error).toBe(null);
             expect(stream.path).toBe(outputPath);
             stream.close();
         }
+        waitForFileExists(outputPath)
         await hlsServerConfig.provider.getManifestStream(fakeRequest, cb);
 
 

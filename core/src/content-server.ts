@@ -32,6 +32,10 @@ app.get('/hls', (req: Request, res: Response) => {
     return res.status(200).sendFile(path.join(__dirname, '../public/hls.js'));
 });
 
+app.get('/koda-player', (req: Request, res: Response) => {
+    return res.status(200).sendFile(path.join(__dirname, '../public/koda-player.js'));
+});
+
 
 app.get('/init.mp4', (req: Request, res: Response) => {
     return res.status(200).sendFile(path.join(__dirname, '../public/client.html'));
@@ -77,17 +81,18 @@ const hlsServerConfig = {
                     const scene = event.scenes.filter((dbValue) => {
                         return dbValue.id.toString() === idFromSegmentFile
                     });
-
                     if (scene[0]) {
                         const dateRange = {
                             id: `${uuidv4()}`,
                             classId: `video-${scene[0].id}`,
-                            // this date cant be dynamic or safari will break
+                            // this date cant be dynamic or safari will break.linux issue?
                             start: new Date("1970-01-01T00:00:00.001Z"),
                             duration: segment.duration,
-                            endOnNext: "YES",
+                            // is this needed at all?
+                            // endOnNext: "NO",
+                            attributes: { 'X-CUSTOM-KEY': encodeURIComponent(JSON.stringify({ ...JSON.parse(scene[0].metadata), "scene-id": scene[0].id })) }
+
                             // add iteration so safari picks up new metadata. Should come from db
-                            attributes: { 'X-CUSTOM-KEY': encodeURIComponent(scene[0].metadata) }
                         }
                         segment.dateRange = dateRange;
                     }

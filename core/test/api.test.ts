@@ -8,6 +8,7 @@ import { Scene } from "../src/entity/Scene";
 import { Viewer } from "../src/entity/Viewer";
 import { StreamStatus } from "../src/enums";
 import app from '../src/api';
+import { describe } from "node:test";
 
 
 jest.mock('../src/video-processor', () => ({
@@ -305,7 +306,7 @@ describe("live streaming", () => {
 });
 
 
-describe("view counter", () => {
+describe("live stream view counter", () => {
     it('adds or udpates viewers of event', async () => {
         const viewerRepository = AppDataSource.getRepository(Viewer);
 
@@ -400,5 +401,9 @@ describe("view counter", () => {
 
 
     })
-})
+});
+
+describe("video on demand", () => {
+
+});
 
