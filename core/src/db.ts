@@ -4,8 +4,8 @@ import moment from 'moment';
 import AppDataSource from './data-source';
 import { Event } from "./entity/Event";
 import { Scene } from "./entity/Scene";
-import { Viewer } from "./entity/Viewer";
-import { StreamStatus } from "./enums";
+import { Log } from "./entity/Log";
+import { StreamStatus, LogType } from "./enums";
 
 
 export const createLiveEvent = async (liveEvent): Promise<Event> => {
@@ -67,56 +67,47 @@ export const updateLiveEvent = async (id: string, liveEvent): Promise<Event> => 
     return updatedEvent;
 }
 
-export const logViewer = async (datetime: string, sessionId: string, eventId: string) => {
-    const viewerRepository = AppDataSource.getRepository(Viewer)
+export const log = async (datetime: string, sessionId: string, eventId: string, type: LogType, name: string, url: string) => {
+    const logRepository = AppDataSource.getRepository(Log)
     const event = await getLiveEvent(eventId);
 
-    const existingViewer = await viewerRepository.findOneBy({
-        sessionId: sessionId,
-    })
+    const log = {
+        datetime,
+        sessionId,
+        event: event,
+        type: type,
+        name: name,
+        url: url
+    };
 
 
-    if(existingViewer){
-        existingViewer.datetime = datetime;
-        viewerRepository.save(existingViewer);
-        return existingViewer;
-    }else{
-        const viewer = {
-            datetime,
-            sessionId,
-            event: event
-        };
-    
-    
-        const savedViewer = await viewerRepository.save(viewer);
-    
-        return savedViewer;
-    }
+    const savedLog = await logRepository.save(log);
+    return savedLog;
 
 }
 
 export const getViewers = async (eventId: string) => {
     const singleSecond = 1000;
-    const viewerRepository = AppDataSource.getRepository(Viewer);
+    const logRepository = AppDataSource.getRepository(Log);
 
     const time60MinAgo = Date.now() - (singleSecond * (60 * 60));
     const time60MinAgoFormated = moment(time60MinAgo).utc().format()
 
-    const viewers = await viewerRepository.find({
-        cache:3000,
-        where: {
-            datetime: MoreThan(time60MinAgoFormated),
-            event: {
-                id: parseInt(eventId),
-            }
-        },
-        relations: {
-            event: true
-        },
-    });
+
+    const currentViewers = await logRepository
+        .createQueryBuilder("log")
+        .leftJoinAndSelect("log.event", "event")
+        .select("log.sessionId")
+
+        .where("log.datetime > :datetime", { datetime: time60MinAgoFormated })
+        .andWhere("log.type = :type", { type: LogType.View })
+        .andWhere("event.id = :id", { id: parseInt(eventId) })
+        .addGroupBy("log.sessionId")
+        .getRawMany()
+
 
     return {
-        currentViewers: viewers.length
+        currentViewers: currentViewers.length
     }
 }
 

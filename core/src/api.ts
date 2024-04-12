@@ -4,7 +4,7 @@ import moment from 'moment';
 import bodyParser from 'body-parser';
 import { start } from './video-processor';
 import { checkIfAttempingEventRestart, checkIfStatusUpdateisValid } from './helpers/event-validation';
-import { createLiveEvent, getLiveEvent, updateLiveEvent, logViewer, getViewers } from './db';
+import { createLiveEvent, getLiveEvent, updateLiveEvent, log, getViewers } from './db';
 
 const app = express();
 app.use(bodyParser.json())
@@ -62,19 +62,23 @@ app.get("/events/:id", async (req: Request, res: Response) => {
 
 });
 
-app.post("/events/:id/views", async (req: Request, res: Response) => {
+app.post("/events/:id/log", async (req: Request, res: Response) => {
     if (!req.body.sessionId) {
         return res.status(400).json({ error: 'Invalid request' })
     }
 
+    if (!req.body.type) {
+        return res.status(400).json({ error: 'Invalid request. No type' })
+    }
+
     const utcMoment = moment.utc();
 
-    const viewer = await logViewer(utcMoment.format('YYYY-MM-DD[T]HH:mm:ss.SSS[Z]'), req.body.sessionId, req.params.id);
+    const logEvent = await log(utcMoment.format('YYYY-MM-DD[T]HH:mm:ss.SSS[Z]'), req.body.sessionId, req.params.id, req.body.type, req.body.name, req.body.url);
     res.setHeader(`Access-Control-Allow-Origin`, `*`);
     res.setHeader(`Access-Control-Allow-Methods`, `GET,PUT,POST,DELETE`);
     res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
     res.setHeader('Content-Type', 'application/json');
-    res.send(viewer);
+    res.send(logEvent);
 
 });
 

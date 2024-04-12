@@ -1,4 +1,4 @@
-class KodaPlayer {
+export class KodaPlayer {
 
     constructor(options) {
 
@@ -148,10 +148,10 @@ class KodaPlayer {
         const sendViewerEvent = async () => {
             // fetch
             // check no cross origin issues
-            const response = await fetch(this.apiUrl + "/events/" + this.eventId + "/log",
+            const response = await fetch(this.apiUrl + "/events/" + this.eventId + "/views",
                 {
                     method: "POST",
-                    body: JSON.stringify({ sessionId, type: 'view' }),
+                    body: JSON.stringify({ sessionId }),
                     headers: {
                         'Access-Control-Allow-Headers': '*',
                         "Content-Type": "application/json",

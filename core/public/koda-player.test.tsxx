@@ -1,0 +1,6 @@
+import { KodaPlayer } from './simple.tsxx'
+describe("koda play", () => {
+    it("polls m3u8 file when in meta data only mode", () => {
+        expect(KodaPlayer).toBe(2)
+    });
+})

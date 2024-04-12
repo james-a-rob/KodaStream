@@ -3,13 +3,13 @@ import { DataSource } from "typeorm";
 
 import { Event } from "./entity/Event";
 import { Scene } from "./entity/Scene";
-import { Viewer } from "./entity/Viewer";
+import { Log } from "./entity/Log";
 
 import config from './config';
 
 // const AppDataSource = new DataSource(dbConfig)
 const AppDataSource = new DataSource({
-    entities: [Event, Scene, Viewer],
+    entities: [Event, Scene, Log],
 
     ...config[process.env.NODE_ENV]
 })

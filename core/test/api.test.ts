@@ -5,8 +5,8 @@ import AppDataSource from '../src/data-source';
 import { start } from '../src/video-processor';
 import { Event } from "../src/entity/Event";
 import { Scene } from "../src/entity/Scene";
-import { Viewer } from "../src/entity/Viewer";
-import { StreamStatus } from "../src/enums";
+import { Log } from "../src/entity/Log";
+import { StreamStatus, LogType } from "../src/enums";
 import app from '../src/api';
 import { describe } from "node:test";
 
@@ -306,9 +306,9 @@ describe("live streaming", () => {
 });
 
 
-describe("live stream view counter", () => {
-    it('adds or udpates viewers of event', async () => {
-        const viewerRepository = AppDataSource.getRepository(Viewer);
+describe("analytics", () => {
+    it('create a log event of type view', async () => {
+        const logRepository = AppDataSource.getRepository(Log);
 
         const singleSecond = 1000;
         const time1MinAgo = Date.now() - (singleSecond * 60);
@@ -316,8 +316,9 @@ describe("live stream view counter", () => {
             return time1MinAgo;
         }
         const simpleViewData = {
-            sessionId: 'abc'
-
+            sessionId: 'abc',
+            type: LogType.View,
+            name: 'special-name'
         }
 
         const eventRepository = AppDataSource.getRepository(Event);
@@ -331,25 +332,65 @@ describe("live stream view counter", () => {
         await eventRepository.save(event);
 
         const response = await request(app)
-            .post('/events/1/views')
+            .post('/events/1/log')
             .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
             .send(simpleViewData)
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
 
-        const response2 = await request(app)
-            .post('/events/1/views')
-            .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
-            .send(simpleViewData)
-            .set('Content-Type', 'application/json')
-            .set('Accept', 'application/json');
-
-        const allViewers = await viewerRepository.find();
+        const allLogs = await logRepository.find();
 
         expect(response.status).toEqual(200);
         expect(response.body.id).toEqual(1);
         expect(response.body.sessionId).toEqual('abc');
-        expect(allViewers.length).toBe(1);
+        expect(response.body.name).toEqual('special-name');
+
+        expect(allLogs.length).toBe(1);
+        expect(moment(response.body.datetime).format('x')).toEqual(time1MinAgo.toString());
+    })
+
+    it('create a log event of type click', async () => {
+        const logRepository = AppDataSource.getRepository(Log);
+
+        const singleSecond = 1000;
+        const time1MinAgo = Date.now() - (singleSecond * 60);
+        moment.now = function () {
+            return time1MinAgo;
+        }
+        const simpleViewData = {
+            sessionId: 'abc',
+            type: LogType.Click,
+            name: 'special-name-click',
+            url: 'https://link-that-is-clicked.com'
+        }
+
+        const eventRepository = AppDataSource.getRepository(Event);
+        const sceneOne = new Scene();
+        sceneOne.location = "https://s3.com/videos/1234.mp4";
+
+        const event = new Event();
+        event.url = 'https://streamer.com/output-1234.m3u8';
+        event.status = StreamStatus.Started;
+        event.scenes = [sceneOne];
+        await eventRepository.save(event);
+
+        const response = await request(app)
+            .post('/events/1/log')
+            .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+            .send(simpleViewData)
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+        const allLogs = await logRepository.find();
+
+        expect(response.status).toEqual(200);
+        expect(response.body.id).toEqual(1);
+        expect(response.body.sessionId).toEqual('abc');
+        expect(response.body.name).toEqual('special-name-click');
+        expect(response.body.url).toEqual('https://link-that-is-clicked.com');
+
+
+        expect(allLogs.length).toBe(1);
         expect(moment(response.body.datetime).format('x')).toEqual(time1MinAgo.toString());
     })
 
@@ -361,7 +402,7 @@ describe("live stream view counter", () => {
         const time61MinAgo = Date.now() - (singleSecond * (60 * 61));
 
         const eventRepository = AppDataSource.getRepository(Event);
-        const viewerRepository = AppDataSource.getRepository(Viewer);
+        const logRepository = AppDataSource.getRepository(Log);
 
         const sceneOne = new Scene();
         sceneOne.location = "https://s3.com/videos/1234.mp4";
@@ -372,23 +413,34 @@ describe("live stream view counter", () => {
         event.scenes = [sceneOne];
         await eventRepository.save(event);
 
-        const viewer1 = new Viewer();
-        viewer1.datetime = moment.utc(time1MinAgo).format();
-        viewer1.sessionId = "1";
-        viewer1.event = event;
-        await viewerRepository.save(viewer1)
+        const log1 = new Log();
+        log1.datetime = moment.utc(time1MinAgo).format();
+        log1.sessionId = "1";
+        log1.type = LogType.View;
+        log1.event = event;
+        await logRepository.save(log1)
 
-        const viewer2 = new Viewer();
-        viewer2.datetime = moment.utc(time2MinAgo).format();
-        viewer2.sessionId = "2";
-        viewer2.event = event;
-        await viewerRepository.save(viewer2)
+        const log2 = new Log();
+        log2.datetime = moment.utc(time2MinAgo).format();
+        log2.sessionId = "2";
+        log2.type = LogType.View;
+        log2.event = event;
+        await logRepository.save(log2)
 
-        const viewer3 = new Viewer();
-        viewer3.datetime = moment.utc(time61MinAgo).format();
-        viewer3.sessionId = "3";
-        viewer3.event = event;
-        await viewerRepository.save(viewer3)
+
+        const log3 = new Log();
+        log3.datetime = moment.utc(time61MinAgo).format();
+        log3.sessionId = "3";
+        log3.type = LogType.View;
+        log3.event = event;
+        await logRepository.save(log3)
+
+        const log4 = new Log();
+        log4.datetime = moment.utc(time2MinAgo).format();
+        log4.sessionId = "1";
+        log4.type = LogType.View;
+        log4.event = event;
+        await logRepository.save(log4)
 
         const response = await request(app)
             .get('/events/1/views')
