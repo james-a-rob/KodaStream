@@ -8,6 +8,8 @@ class KodaPlayer {
 
         this.apiUrl = options.apiUrl;
         this.eventId = options.eventId;
+        this.sessionId = options.sessionId;
+
 
         this.setupSendViewerEvent(options.sessionId)
         this.setupOnViewerCountChange(options.onViewerCountChange)
@@ -141,6 +143,22 @@ class KodaPlayer {
         const encodedPayload = encodeURIComponent(JSON.stringify(payload));
         console.log(encodedPayload);
         return encodedPayload;
+    }
+
+    async logEvent(type, name, url) {
+
+        const response = await fetch(this.apiUrl + "/events/" + this.eventId + "/log",
+            {
+                method: "POST",
+                body: JSON.stringify({ sessionId: this.sessionId, type, name, url }),
+                headers: {
+                    'Access-Control-Allow-Headers': '*',
+                    "Content-Type": "application/json",
+                },
+            },
+
+        );
+        const sendViewResp = await response.json();
     }
 
     setupSendViewerEvent(sessionId) {
