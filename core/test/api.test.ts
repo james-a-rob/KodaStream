@@ -79,7 +79,7 @@ afterEach(async () => {
 
 describe("live streaming", () => {
     describe('create', () => {
-        test.only("can create a simple live event that starts imediatly", async () => {
+        test("can create a simple live event that starts imediatly", async () => {
             const response = await request(app)
                 .post('/events')
                 .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
@@ -172,6 +172,7 @@ describe("live streaming", () => {
 
             const response2 = await request(app)
                 .put('/events/1')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(newScenes)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -207,6 +208,7 @@ describe("live streaming", () => {
 
             const response2 = await request(app)
                 .put('/events/1')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleStoppedEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -228,12 +230,14 @@ describe("live streaming", () => {
 
             const response2 = await request(app)
                 .put('/events/1')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleStoppedEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
 
             const response3 = await request(app)
                 .put('/events/1')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleRestartedEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -257,6 +261,8 @@ describe("live streaming", () => {
 
             const responseStart2 = await request(app)
                 .put('/events/1')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
+
                 .send({ status: 'started', ...simpleEvent })
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');

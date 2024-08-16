@@ -2,6 +2,7 @@ core/node_modules
 website/node_modules
 core/src/events
 core/dist
+core/.env
 core/events/*
 videos
 .DS_Store
