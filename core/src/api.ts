@@ -37,6 +37,10 @@ app.post("/events", async (req: Request, res: Response) => {
 });
 
 app.put("/events/:id", async (req: Request, res: Response) => {
+    if (req.headers.accesskey !== process.env.APIKEY) {
+        return res.status(403).json({ error: 'Access denied' })
+    }
+
     const currentEvent = await getLiveEvent(req.params.id);
     //check current state vs target state before any update.
     const updatedEvents = await updateLiveEvent(req.params.id, req.body);

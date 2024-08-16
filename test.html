@@ -1,0 +1,1818 @@
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/m3u8-parser@7.1.0/dist/m3u8-parser.min.js"></script>
+
+
+
+
+<script>
+    function tvOpen(element) {
+        element.classList.toggle('tv-open');
+
+    }
+</script>
+
+
+
+<style>
+    body {
+
+        min-height: 100vh;
+        background: rgb(109, 194, 88) !important;
+        background: linear-gradient(90deg, rgba(109, 194, 88, 1) 0%, rgba(34, 34, 34, 1) 0%, rgba(43, 43, 43, 1) 38%, rgba(0, 40, 52, 1) 90%) !important;
+    }
+
+
+
+    .collection-title-tag {
+        display: none !Important;
+    }
+
+
+    .tv-open {
+        background: #f0eeed !Important;
+        height: 440px;
+    }
+
+    .tv-open .nav-explore-image {
+        display: none !Important;
+    }
+
+    .tv-open .nav-explore-info {
+        display: none !Important;
+    }
+
+    .tv-open .nav-explore-tag {
+        display: none !Important;
+    }
+
+
+    .tv-open .tv-product-contain {
+        display: none;
+    }
+
+    .right-nav {
+        background: transparent !important;
+    }
+
+
+
+
+
+
+    .nav-explore-item {
+        background: #505050a6;
+        color: #fff !important;
+
+    }
+
+    .nav-explore-info {
+        padding: 20px 30px 20px 20px !important;
+    }
+
+    .nav-explore-title {
+        display: -webkit-box !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        -webkit-line-clamp: 2 !important;
+        line-clamp: 2 !important;
+    }
+
+    .nav-explore-item:hover {
+        background: #ffffff !Important;
+        color: #000 !important;
+    }
+
+
+    .viewers-button {
+        position: relative;
+        display: inline-flex;
+        padding: 5px 8px 5px 8px;
+        border-radius: 4px;
+        background-color: #ffffffa3;
+        color: #000 !important;
+        letter-spacing: 0em;
+        font-size: 0.75em;
+        float: right;
+        transition: 0.2s;
+        height: 23px;
+        font-weight: 500;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+
+    }
+
+    .viewers-button img {
+        margin-right: 4px;
+    }
+
+    .live-tags-placement {
+        width: 100%;
+        position: relative;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .nav-explore-tag {
+        display: flex;
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        border-radius: 4px;
+        background: #f0eeed;
+        color: #000;
+        padding: 2px 7px;
+        font-size: 9px;
+    }
+
+    .window {
+        background: transparent !Important;
+        padding: 0 !important;
+        width: 11px;
+        opacity: 0.8;
+        filter: invert(1);
+    }
+
+
+    .schedule-container {
+        display: none;
+    }
+
+    right-nav-scroll {
+        overflow-y: unset !important;
+    }
+
+    .now-playing-container-cards {
+        height: 100%;
+        min-height: 100%;
+        max-height: unset !Important;
+        display: flex;
+        position: relative;
+        width: auto;
+        flex-direction: column;
+        overflow: hidden;
+
+        -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1), transparent 100%);
+        transition: all 0.3s;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+
+
+    }
+
+    .now-playing-container-cards:hover {
+        -webkit-mask-image: unset !Important;
+
+        overflow-y: scroll !Important;
+    }
+
+    .now-playing-container {
+        display: flex;
+        background: transparent;
+        position: relative;
+        height: 100vh;
+        width: 100%;
+        flex-direction: column;
+        padding: 0;
+        margin-bottom: 16px;
+        border-radius: 6px;
+    }
+
+    .now-playing-container-inner {
+        margin-bottom: 8px;
+        display: flex;
+        background: #ffffffd4;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #000;
+        position: relative;
+        top: 0;
+        padding: 40px 40px 8px;
+        flex-direction: column;
+        border-radius: 6px;
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        transition: all 0.2s;
+    }
+
+    .now-playing-container-inner:hover {
+        color: #000 !important;
+        background: #fff;
+    }
+
+
+    .now-playing-container-inner.fade-out {
+        height: 0 !important;
+        min-height: 0 !important;
+        opacity: 0 !important;
+        max-height: 0 !important;
+    }
+
+
+
+    .now-playing-container-cards:hover .nav-explore-item {
+        background: #202020a6;
+
+    }
+
+
+
+
+
+    .now-playing-content.minimized {
+        overflow: hidden;
+        max-height: 115px;
+        display: block;
+        -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1), transparent 100%);
+    }
+
+    .now-playing-image {
+        width: 100px;
+    }
+
+    .now-playing-info {
+        display: block;
+        width: 100%;
+        text-transform: uppercase;
+        margin-top: 0px;
+        margin-bottom: 6px;
+        font-size: 0.8em;
+        letter-spacing: 0.4px;
+        font-weight: 500;
+    }
+
+    .now-playing-content {
+        padding-right: 0;
+        margin-bottom: 30px;
+        position: relative;
+        line-height: 1.5;
+        display: block;
+    }
+
+    .now-playing-title {
+        font-size: 1.5em;
+        text-transform: capitalize;
+        line-height: 1.4 !important;
+        font-weight: 400;
+        margin-bottom: 12px;
+        font-family: RecklessNeue-Book !important;
+        display: inline;
+        width: unset;
+        white-space: unset;
+        overflow: unset;
+        text-overflow: unset;
+        color: inherit !Important;
+        max-width: unset !important;
+    }
+
+    .product-list {
+        display: flex !Important;
+        position: relative !Important;
+        flex-direction: row !Important;
+        background: transparent !important;
+        width: 100% !Important;
+        flex-wrap: nowrap !Important;
+        overflow: hidden !Important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        margin-top: 8px;
+
+    }
+
+    .tap-video {
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        z-index: 10;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+    }
+
+    .tap-video-btn {
+        display: block;
+        position: relative;
+        background: #0000007d;
+        text-align: center;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 0.8em;
+        padding: 6px 12px 6px 26px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+
+    }
+
+
+    .tap-video-btn img {
+        filter: invert(1);
+        position: absolute;
+        width: 14px;
+        left: 8px;
+    }
+
+    #recommendations ::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    #recommendations {
+        background: transparent !Important;
+        border-radius: 6px;
+        -ms-overflow-style: none !important;
+        scrollbar-width: none !important;
+    }
+
+    .product-list-item {
+        display: inline-flex;
+        position: relative;
+        align-items: center;
+        background: #f0eeed;
+        min-width: 23.8% !important;
+        height: 87px !important;
+        float: left;
+        flex-wrap: wrap;
+        flex-direction: column;
+        overflow: hidden;
+        border: 0;
+        margin-right: 6px;
+        border-radius: 6px;
+        opacity: 0.5;
+        filter: brightness(45%);
+        transition: all 0.2s;
+    }
+
+    .product-list-item:hover {
+        opacity: 1;
+        filter: brightness(100%);
+    }
+
+    .bottom-nav-container {
+        background: transparent !Important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+    }
+
+    .bottom-nav-shadow {
+        background-image: linear-gradient(rgba(0, 0, 0, 0), #000000);
+        height: 160px !Important;
+        position: absolute !Important;
+    }
+
+    .product-list-item img {
+        margin-top: -20px;
+    }
+
+    .product-info-bottom {
+        display: none !Important;
+    }
+
+    .product-list-image[src=""] {
+        display: none;
+    }
+
+    .sidebar-box {
+        padding: 0;
+    }
+
+    .home-nav-explore-contain {
+        overflow: hidden !important;
+    }
+
+    .open-description {
+        min-height: 255px;
+        padding: 0 !Important;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+    }
+
+    .open-description::-webkit-scrollbar {
+        display: none;
+    }
+
+
+    .swipe-up {
+        display: none;
+
+    }
+
+
+
+
+    body {
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .live-streaming-video {
+        width: 100vw;
+        height: 56.25vw;
+        min-height: 100vh;
+        min-width: 177.77vh;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: pink;
+    }
+
+
+    .video-home-top {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+        padding: 24px;
+        display: flex;
+        justify-content: flex-start;
+        transition: top 0.4s
+    }
+
+    .video-home-top--offscreen {
+        top: -50px
+    }
+
+    .livetag {
+        color: #fff !important;
+        background: #ba2223 !Important;
+        padding-left: 19px !important;
+
+        margin-right: 4px !important;
+    }
+
+    .livetag:before {
+        content: "\2022";
+        font-size: 26px;
+        position: absolute;
+        top: 49%;
+        left: 6px;
+        transform: translateY(-54%);
+        color: white;
+    }
+
+    .abouttag {
+        background: #5b5b5b5e !Important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #ffffffc7 !important;
+
+    }
+
+    .stream-tags {
+        position: relative;
+        display: inline-block;
+        padding: 5px 11px 5px 11px;
+        border-radius: 4px;
+        background-color: #9e9e9ec2;
+        text-transform: uppercase;
+        color: #fff !important;
+        letter-spacing: 0.06em;
+        font-size: 0.7em;
+        margin-right: 4px;
+        left: 0px;
+        transition: 0.2s;
+    }
+
+    a.stream-tags {
+        font-weight: 500;
+    }
+
+    .nav-explore-item {}
+
+    .nav-explore-item:hover {
+        backdrop-filter: blur(10px) !Important;
+        -webkit-backdrop-filter: blur(10px) !important;
+    }
+
+
+    .info-description {
+        padding-top: 6px;
+        display: none;
+    }
+
+
+
+
+    .controls-btn {
+        line-height: 1;
+        color: white;
+
+        text-align: center;
+        outline: 0;
+        cursor: pointer;
+        width: 36px;
+        height: 36px;
+        border-radius: 100px;
+        z-index: 999;
+        position: fixed;
+        left: 16px;
+        top: 16px;
+        background: #0000007d;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 0;
+
+    }
+
+    .controls-btn img {
+        filter: invert(1);
+    }
+
+    .home-nav-explore-contain {
+        position: fixed;
+        display: flex;
+        align-items: flex-end;
+        width: 100%;
+        bottom: 55px;
+        padding: 16px;
+        overflow: auto;
+        white-space: nowrap;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        transition: bottom 0.4s;
+    }
+
+    .home-nav-explore-contain--offscreen {
+        bottom: -260px;
+    }
+
+    @media only screen and (max-width: 768px) {
+
+        .home-nav-explore-contain {
+            bottom: 0 !important;
+        }
+
+
+
+        .abouttag {
+            display: none !important;
+        }
+
+        .live-streaming-video {
+            transform: inherit;
+            object-fit: cover;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            min-width: auto;
+            top: 0;
+            left: 0;
+        }
+
+        .livetag {
+            margin-right: 0 !important;
+        }
+
+        .right-nav {
+            display: none;
+        }
+
+        .product-list-item {
+            opacity: 1 !important;
+        }
+    }
+
+
+
+    .product-list {
+        display: flex !Important;
+        position: relative !Important;
+        flex-direction: row !Important;
+        background: #fff !Important;
+        width: 100% !Important;
+        flex-wrap: nowrap !Important;
+    }
+
+    .product-list-item {
+        display: inline-flex;
+        position: relative;
+        align-items: center;
+        background: #f0eeed;
+        min-width: 120px;
+        float: left;
+        flex-wrap: wrap;
+        flex-direction: column;
+        border: 0;
+        margin-right: 6px;
+        border-radius: 6px;
+    }
+
+    .product-info-bottom {
+        display: none !Important;
+    }
+
+    .product-list-image[src=""] {
+        display: none;
+    }
+
+
+    .hide-info {
+
+        display: none !Important;
+    }
+
+    .un-wrap {
+        white-space: unset !Important;
+    }
+
+
+
+
+
+
+    .nav-explore-item:not(.expand) .open-description {
+        width: 600px;
+        padding: 12px;
+
+    }
+
+    .nav-explore-item:not(.expand) .first img {
+        width: 100px;
+
+    }
+
+    .nav-explore-item:not(.expand) .product-list {
+        display: none !important;
+    }
+
+    /* .expand {
+    max-height: 55vh !Important;
+    height: auto !Important;
+    white-space: unset !Important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: #1e1e1ea3 !important;
+    transition: all .2s;
+
+  } */
+
+    .expand .title-height {
+        display: none;
+
+    }
+
+    .expand .open-description {
+        overflow: scroll !Important;
+    }
+
+
+    .expand .info-description {
+        display: block;
+    }
+
+    .expand .open-description-shadow {
+        display: block;
+    }
+
+    .expand .open-description-shadow-bottom {
+        display: block;
+    }
+
+
+    .minized .now-playing-container-inner-shadow {
+        display: none;
+    }
+
+
+    .hidden {
+        display: none !important;
+    }
+
+
+
+    h1.video_title {
+        display: block;
+        line-height: 1.5;
+        font-weight: 400;
+        font-family: RecklessNeue-Book !important;
+    }
+
+    /* @media only screen and (min-width: 767px) { 
+        .bottom-contain{
+          display: none !important;
+        }
+    }
+ */
+
+
+
+    .swipe-box {
+        width: 100%;
+        height: 60px;
+        position: absolute;
+        top: 4px;
+        z-index: 999999999;
+        display: flex;
+        justify-content: center;
+    }
+
+    .expand .product-list-hero {
+        display: none;
+    }
+
+    .product-list-hero {
+        top: 6px;
+    }
+
+    /* LATEST CSS
+   */
+    .mobile-live-card {}
+
+    .home-page-container {
+        /* display:none; */
+
+    }
+
+    .bottom-nav-container--offscreen {
+        bottom: -180px;
+        transition: bottom 0.4s;
+    }
+
+    .component-library {
+        background: white;
+        height: 100vh;
+        display: none;
+    }
+
+    /* MOBILE CARD
+   */
+
+    .mobile-live-card {
+        background: #38383894;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 6px;
+        color: white;
+        width: 100%;
+        transition: height 1s;
+    }
+
+    .mobile-live-card__title {
+        margin-top: 0px;
+        font-family: RecklessNeue-Book;
+        line-height: 1.5;
+        font-weight: 400;
+        max-height: 50px;
+        overflow: hidden;
+
+    }
+
+    .mobile-live-card__swipe {
+        display: flex;
+        height: 8px;
+        align-items: end;
+        justify-content: center;
+    }
+
+    .mobile-live-card__swipe-touch-area {
+        position: absolute;
+        width: 100%;
+        height: 100px;
+        top: 0px;
+    }
+
+    .mobile-live-card__swipe-icon {
+        display: block;
+        background: #cbcbcb;
+        border-radius: 30px;
+        height: 2px;
+        width: 30px;
+        position: absolute;
+        margin-top: 2px;
+    }
+
+
+    /* MOBILE CARD EXPANDED STATES
+   */
+    .mobile-live-card--expanded {
+        transition: all .2s;
+        max-height: 55vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .mobile-live-card--expanded .mobile-live-card__header {
+        display: none;
+    }
+
+
+    .mobile-live-card--expanded .mobile-live-card__content {
+        display: flex;
+        flex: 1;
+
+    }
+
+    .mobile-live-card--expanded .mobile-live-card__products-container {
+        display: flex;
+    }
+
+    .mobile-live-card--expanded .mobile-live-card__main-image-container {
+        display: none;
+    }
+
+    .mobile-live-card--expanded .mobile-live-card__swipe {
+        height: 50px;
+        align-items: center;
+    }
+
+    .mobile-live-card--expanded .mobile-live-card__content-shadow {
+        display: block;
+    }
+
+
+    /* MOBILE CARD EXPANDED STATES END
+   */
+
+
+    /* MOBILE CARD LOADING STATES
+   */
+    .mobile-live-card--loading .mobile-live-card__title {
+        display: none;
+    }
+
+    .mobile-live-card--loading .mobile-live-card__loading-line-large {
+        display: flex;
+    }
+
+    .mobile-live-card--loading .mobile-live-card__loading-line-small {
+        display: flex;
+    }
+
+    .mobile-live-card__loading-line-large {
+        display: none;
+        width: 100%;
+        background: #6c6c6c;
+        height: 10px;
+        margin-top: 14px;
+        border-radius: 4px;
+
+    }
+
+    .mobile-live-card__loading-line-small {
+        display: none;
+        width: 80%;
+        background: #6c6c6c;
+        height: 10px;
+        margin-top: 14px;
+        border-radius: 4px;
+    }
+
+    /* MOBILE CARD LOADING STATES END
+   */
+
+    .mobile-live-card__header {
+        display: flex;
+        padding: 0 8px 8px 8px;
+    }
+
+    .mobile-live-card__products-container {
+        display: none;
+        gap: 8px;
+        padding-left: 8px;
+        padding-right: 8px;
+        padding-bottom: 12px;
+
+        border-radius: 0 0 6px 6px;
+    }
+
+    .mobile-live-card__loading-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-live-card__product {
+        background: #f0eeed;
+        flex: 1;
+        border-radius: 8px;
+        overflow: hidden;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
+
+
+    .mobile-live-card__product-image {
+        height: 80px
+    }
+
+
+    .mobile-live-card__main-image-container {
+        background: #555555;
+        height: 100px;
+        width: 100px;
+        margin: 0;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .mobile-live-card__main-image {
+        border-radius: 6px;
+        height: 100px;
+    }
+
+    .mobile-live-card__header-info {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        width: 60%;
+        height: 98px;
+        overflow: hidden;
+    }
+
+    .mobile-live-card__content {
+        display: none;
+        font-family: NTNeuss, Arial, Helvetica, sans-serif;
+        padding: 20px 20px 20px 20px;
+        overflow: scroll;
+        margin: 0px 12px 30px 12px;
+    }
+
+    .mobile-live-card__now-playing {
+        font-family: NTNeuss, Arial, Helvetica, sans-serif;
+        display: block;
+        width: 100%;
+        text-transform: uppercase;
+        margin-top: 0px;
+        margin-bottom: 2px;
+        font-size: 0.8em;
+        letter-spacing: 0.4px;
+        font-weight: 500;
+    }
+
+    .mobile-live-card-container {
+        width: 100%;
+    }
+
+    .mobile-live-card__content-shadow {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 1) 100%);
+        position: absolute;
+        bottom: 90px;
+        width: 100%;
+        height: 60px;
+        display: none;
+    }
+
+    .live-tag-mobile {
+        display: none;
+    }
+
+    @media only screen and (max-width: 768px) {
+
+        .now-playing-container-inner-mobile {
+            margin-bottom: 8px;
+            display: flex;
+            background: transparent;
+
+            color: #fff;
+            position: relative;
+            bottom: 0;
+            padding: 32px;
+            flex-direction: column;
+            border-radius: 6px;
+            overflow: scroll;
+            transition: all 0.2s;
+        }
+
+        .open-blur {
+            height: 100vh !important;
+            max-height: 100vh !important;
+            background: #0000004d !important;
+            backdrop-filter: blur(30px) !important;
+            padding: 100px 32px !important;
+            ;
+        }
+
+
+        .home-nav-explore-contain {
+            padding: 0 !important;
+        }
+
+        .controls-btn {
+            position: absolute !Important;
+            right: 12px !Important;
+            top: 12px !Important;
+            left: unset !important;
+            width: 30px !important;
+            height: 30px !important;
+        }
+
+
+        .live-tag-mobile {
+            display: inline-block ! Important;
+            border-radius: 4px;
+            color: #fff !important;
+            background: #ba2223 ! Important;
+
+            margin-right: 4px !important;
+            width: auto;
+            padding: 4px 8px 4px 20px;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            position: absolute;
+            left: 16px;
+        }
+
+        .live-tag-mobile:before {
+            content: "\2022";
+            font-size: 22px;
+            position: absolute;
+            top: 49%;
+            left: 8px;
+            transform: translateY(-54%);
+            color: white;
+        }
+
+        .video-home-top {
+            padding: 16px !Important;
+        }
+
+        .bottom-nav-item img {
+            filter: invert(100%) !important;
+        }
+
+        #mobile-watch {
+            filter: invert(0%) brightness(150%) !important;
+
+        }
+
+        .now-playing-info {
+            margin-bottom: 4px !important;
+            font-size: 0.7em !important;
+        }
+
+        h1.product_title {
+            font-size: 1.15em !Important;
+            margin-bottom: 4px !Important;
+            color: #fff !important;
+        }
+
+
+        .title-height {
+            min-height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            top: -4px;
+        }
+
+        .info-description {
+            font-size: 0.95em;
+        }
+
+        .open-description {
+            padding: 16px !important;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+
+        .video-home-top {
+            justify-content: flex-end !Important;
+        }
+
+        #recommendations {
+            height: 100% !important;
+            background: #f0eeed !important;
+            top: -8px;
+
+        }
+
+        .swipe-up {
+            display: block;
+            background: #cbcbcb;
+            border-radius: 30px;
+            height: 2px;
+            width: 30px;
+            position: absolute;
+            margin-top: 2px;
+        }
+
+    }
+</style>
+
+
+
+<div class="component-library">
+    Mobile live card loading
+    <div class="mobile-live-card mobile-live-card--loading">
+        <div class="mobile-live-card__swipe">
+            <div class="mobile-live-card__swipe-touch-area"></div>
+            <div class="mobile-live-card__swipe-icon"></div>
+        </div>
+        <div class="mobile-live-card__header">
+            <div class="mobile-live-card__main-image-container">
+                <img class="mobile-live-card__main-image" src="" />
+            </div>
+
+            <div class="mobile-live-card__header-info">
+                <div class="mobile-live-card__now-playing">NOW PLAYING</div>
+                <div class="mobile-live-card__title"></div>
+                <div class="mobile-live-card__loading-line-large"></div>
+                <div class="mobile-live-card__loading-line-small"></div>
+
+            </div>
+
+        </div>
+
+        <p class="mobile-live-card__content"></p>
+        <div class="mobile-live-card__products-container">
+            <div class="mobile-live-card__product"></div>
+            <div class="mobile-live-card__product"></div>
+            <div class="mobile-live-card__product"></div>
+            <div class="mobile-live-card__product"></div>
+        </div>
+
+    </div>
+
+    Mobile live card closed
+    <div class="mobile-live-card">
+        <div class="mobile-live-card__swipe">
+            <div class="mobile-live-card__swipe-touch-area"></div>
+
+            <div class="mobile-live-card__swipe-icon"></div>
+
+        </div>
+
+        <div class="mobile-live-card__header">
+
+            <div class="mobile-live-card__main-image-container">
+                <img id="mobile-live-card-image" class="mobile-live-card__main-image" />
+            </div>
+
+            <div class="mobile-live-card__header-info">
+                <div class="mobile-live-card__now-playing">NOW PLAYING</div>
+                <div class="mobile-live-card__title">title lorem ipsum</div>
+                <div class="mobile-live-card__loading-line-large"></div>
+                <div class="mobile-live-card__loading-line-small"></div>
+            </div>
+
+        </div>
+
+        <p class="mobile-live-card__content"></p>
+        <div class="mobile-live-card__content-shadow"></div>
+
+        <div class="mobile-live-card__products-container">
+            <div class="mobile-live-card__product"></div>
+            <div class="mobile-live-card__product"></div>
+            <div class="mobile-live-card__product"></div>
+            <div class="mobile-live-card__product"></div>
+        </div>
+
+    </div>
+    Mobile live card open
+
+    <div class="mobile-live-card mobile-live-card--expanded">
+        <div class="mobile-live-card__swipe">
+            <div class="mobile-live-card__swipe-touch-area"></div>
+
+            <div class="mobile-live-card__swipe-icon"></div>
+
+        </div>
+        <div class="mobile-live-card__header">
+
+            <div class="mobile-live-card__main-image-container">
+                <img class="mobile-live-card__main-image"
+                    src="https://cdn.shopify.com/s/files/1/0493/5663/6318/files/dummy-image.jpg?v=1698176256" />
+            </div>
+
+            <div class="mobile-live-card__header-info">
+                <div class="mobile-live-card__now-playing">NOW PLAYING</div>
+                <div class="mobile-live-card__title">title lorem ipsum</div>
+                <div class="mobile-live-card__loading-line-large"></div>
+                <div class="mobile-live-card__loading-line-small"></div>
+            </div>
+
+        </div>
+
+        <p class="mobile-live-card__content"></p>
+        <div class="mobile-live-card__content-shadow"></div>
+
+        <div class="mobile-live-card__products-container">
+            <div class="mobile-live-card__product">
+                <img
+                    src="https://cdn.shopify.com/s/files/1/0493/5663/6318/products/salomon-TECHSONICFORGRAMICCI-Rubber_DarkSapphire_Black-slip-on-sneakers-1.jpg?v=1682069462" />
+            </div>
+            <div class="mobile-live-card__product">
+                <img
+                    src="https://cdn.shopify.com/s/files/1/0493/5663/6318/products/salomon-TECHSONICFORGRAMICCI-Rubber_DarkSapphire_Black-slip-on-sneakers-1.jpg?v=1682069462" />
+
+            </div>
+            <div class="mobile-live-card__product">
+                <img
+                    src="https://cdn.shopify.com/s/files/1/0493/5663/6318/products/salomon-TECHSONICFORGRAMICCI-Rubber_DarkSapphire_Black-slip-on-sneakers-1.jpg?v=1682069462" />
+
+            </div>
+            <div class="mobile-live-card__product">
+                <img
+                    src="https://cdn.shopify.com/s/files/1/0493/5663/6318/products/salomon-TECHSONICFORGRAMICCI-Rubber_DarkSapphire_Black-slip-on-sneakers-1.jpg?v=1682069462" />
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="home-page-container">
+
+    <div class="video-home-top">
+
+        <button class="controls-btn mute-btn" title="Toggle Play">
+            <img class="mute " width="20px"
+                src="https://cdn.shopify.com/s/files/1/0493/5663/6318/t/385/assets/sound-off.svg?v=1714734858">
+            <img class="unmute hidden" width="20px"
+                src="https://cdn.shopify.com/s/files/1/0493/5663/6318/t/385/assets/sound-on.svg?v=1714734866">
+
+        </button>
+
+
+
+        <a href="#" class="live-tag-mobile">Live</a>
+
+
+    </div>
+
+
+
+
+    <video playsinline autoplay muted preload="true" id="live-streaming-video" class="live-streaming-video"
+        height="auto"></video>
+
+
+    <div class="tap-video">
+        <div class="tap-video-btn">
+            <img src="{{'icon-tap.svg' | asset_url }}" alt="tap icon"> Tap to Hide
+        </div>
+    </div>
+
+
+    <div id="mobile-live-card-container" class="home-nav-explore-contain un-wrap hide-desktop">
+
+        <div id="swipe-area" id="swipe-area" class="now-playing-container-inner-mobile" id="now-playing-info"
+            onclick="toggleMinimizeMobile(this)">
+            <div class="now-playing-info">Now Playing</div>
+            <h1 class="now-playing-title" id="now-playing-title">
+
+            </h1>
+
+            <div class="now-playing-content minimized" id="now-playing-content-mobile">
+            </div>
+
+        </div>
+
+        <div id="mobile-live-card">
+
+
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+    const interviews = {{ blogs['interviews'].articles | json }};
+    const shortStories = {{ blogs['short-stories'].articles | json }};
+    const brandStories = {{ blogs['brand-stories'].articles | json }};
+    const events = {{ blogs['events'].articles | json }};
+    const mobileLiveCard = document.getElementById('mobile-live-card');
+
+    const mobileLiveCardTitle = document.getElementById('mobile-live-card-title');
+    const mobileLiveCardDescription = document.getElementById('mobile-live-card-description');
+    const mobileLiveCardImage = document.getElementById('mobile-live-card-image-hero');
+
+
+    const articles = {
+        'interviews': interviews,
+        'short-stories': shortStories,
+        'brand-stories': brandStories,
+        'events': events
+    }
+    console.log(articles);
+    const videoElement = document.getElementById('live-streaming-video');
+
+
+    const videoSrc = 'https://d1fxstojfqplwe.cloudfront.net/content/events/1/output.m3u8';
+    const metadataContainer = document.getElementsByClassName('now-playing-container-inner')[0];
+    console.log('metadataContainer', metadataContainer)
+    const metadataImage = document.getElementById('now-playing-image');
+    const metadataContent = document.getElementById('now-playing-content');
+    const metadataTitle = document.getElementById('now-playing-title');
+
+    const image1 = document.getElementById('recommendation-image-1')
+    const image2 = document.getElementById('recommendation-image-2')
+    const image3 = document.getElementById('recommendation-image-3')
+    const image4 = document.getElementById('recommendation-image-4')
+
+    const mobileImage1 = document.getElementById('mobile-recommendation-image-1')
+    const mobileImage2 = document.getElementById('mobile-recommendation-image-2')
+    const mobileImage3 = document.getElementById('mobile-recommendation-image-3')
+    const mobileImage4 = document.getElementById('mobile-recommendation-image-4')
+
+
+    async function getProductsById(ids) {
+        const res = await fetch('https://sneakinpeace.myshopify.com/api/2023-07/graphql.json', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Shopify-Storefront-Access-Token': '18575032fe55cf1e802ea21e8be55552'
+            },
+            body: JSON.stringify({
+                query: `
+           query getProductById($id1: ID!, $id2: ID!, $id3: ID!, $id4: ID!) {
+              product1: product(id: $id1) {
+                id
+                title
+                tags
+                onlineStoreUrl
+                featuredImage{
+                    url
+                }
+              }
+               product2: product(id: $id2) {
+                id
+                title
+                tags
+                onlineStoreUrl
+                featuredImage{
+                    url
+                }
+              }
+               product3: product(id: $id3) {
+                id
+                title
+                tags
+                onlineStoreUrl
+                featuredImage{
+                    url
+                }
+              }
+             product4: product(id: $id4) {
+                id
+                title
+                tags
+                onlineStoreUrl
+                featuredImage{
+                    url
+                }
+              }
+            }
+          `,
+                variables: {
+                    id1: ids[0],
+                    id2: ids[1],
+                    id3: ids[2],
+                    id4: ids[3]
+                },
+            })
+        })
+
+        return await res.json();
+    }
+
+
+    const nowPlayingContainer = document.getElementById("now-playing");
+
+    const toggleMobile = () => {
+        const metadataContent = document.getElementById('now-playing-content');
+        metadataContent.classList.toggle('minimized');
+    }
+
+    const toggleMinimizeMobile = () => {
+        const metadataMobileContent = document.getElementById('now-playing-content-mobile');
+        metadataMobileContent.classList.toggle('minimized');
+    }
+
+    const description = (data) => {
+        return `
+        <div class="now-playing-container-inner" id="now-playing-info" onclick="toggleMinimize(this)">
+      <div class="now-playing-info">Now Playing</div>
+      <h1 class="now-playing-title" id="now-playing-title">
+        ${data.title}
+      </h1>
+
+      <div class="now-playing-content minimized" id="now-playing-content">
+   ${data.description}
+      </div>
+
+    </div>
+
+      
+      `
+    }
+
+    const renderTag = (tags) => {
+        if (tags.length === 0) {
+            return '';
+        }
+
+        const tag = tags.find((tag) => {
+            return !tag.startsWith('#') && !tag.startsWith('-')
+        })
+
+        return `<div class="nav-explore-tag">${tag}</div>`;
+    }
+
+    const productItem = (product) => {
+        return `<div data-product-id="${product.id}" data-product="${product.onlineStoreUrl}" class="nav-explore-item product-list-image open-quick-view">
+
+      ${renderTag(product.tags)}
+
+    <div class="nav-explore-image">
+    <img src="${product.featuredImage.url}" alt="">
+    </div>
+    
+      <div class="nav-explore-info">  
+           
+
+<div class="nav-explore-title">${product.title}</div>
+    </div>
+    
+  </div>`
+    }
+
+    const linkOutItem = (linkout) => {
+
+        return `    
+<div class="mobile-explore-item">
+   <div class="nav-explore-item"  onclick="tvOpen(this)">
+      <div class="nav-explore-tag window"> </div>
+      <div class="nav-explore-image">
+         <img src="https://www.sneakinpeace.com/cdn/shop/files/gucci_4dc63e53-422b-43dc-a077-5f0244f4cf55_grande.jpg?v=1712930788" alt="">
+      </div>
+      <div class="nav-explore-info">
+         <div class="nav-explore-sub">Collection</div>
+         <div class="nav-explore-title">Explore the Gucci Collection</div>
+      </div>
+   </div>
+</div>
+`
+    }
+
+
+    const renderNowPlaying = (data, products) => {
+
+
+        nowPlayingContainer.innerHTML = ""
+
+        const mobileNowPlayingTitle = document.getElementById('now-playing-title')
+        mobileNowPlayingTitle.innerHTML = data.title
+
+        const mobileNowPlayingDescription = document.getElementById('now-playing-content')
+        mobileNowPlayingDescription.innerHTML = data.description
+
+        const descriptionHtmlString = description(data);
+        nowPlayingContainer.insertAdjacentHTML('beforeend', descriptionHtmlString);
+
+
+        const linkOutItemHtmlString = linkOutItem(data);
+        nowPlayingContainer.insertAdjacentHTML('beforeend', linkOutItemHtmlString);
+
+
+        if (!products) {
+            return
+        }
+
+
+        for (const product in products.data) {
+            const newProductElement = document.createElement("div")
+            nowPlayingContainer.appendChild(newProductElement);
+
+            const htmlString = productItem(products.data[product]);
+            newProductElement.innerHTML = htmlString;
+        }
+    }
+
+    mobileLiveCard.addEventListener('click', () => {
+        tapVidButton.classList.add("hidden")
+
+        mobileLiveCard.classList.toggle("mobile-live-card--expanded");
+    })
+
+    /** Player used to embed live stream on a webpage */
+    class KodaPlayer {
+
+        constructor(options) {
+
+            this.options = options;
+            this.videoElement = options.videoElement;
+            this.videoSource = options.videoSource;
+
+            this.apiUrl = options.apiUrl;
+            this.eventId = options.eventId;
+
+            this.setupSendViewerEvent(options.sessionId)
+            this.setupOnViewerCountChange(options.onViewerCountChange)
+
+            if (Hls.isSupported()) {
+                this.setupWithHlsLib();
+            } else {
+                this.setupWithoutHlsLib();
+            }
+            // this.setupWithoutHlsLib();
+            var switchAwayTime;
+            var switchBackTime;
+
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    switchAwayTime = Date.now();
+                    console.log('currentTime away', this.videoElement.currentTime)
+
+                    console.log("Browser tab is hidden")
+                } else {
+                    switchBackTime = Date.now();
+                    const timeToJump = switchBackTime - switchAwayTime;
+                    console.log('timeToJump', timeToJump);
+                    console.log("Browser tab is visible")
+                    console.log('currentTime back', this.videoElement.currentTime)
+                    if (this.videoElement.muted) {
+                        console.log('jump')
+                        this.videoElement.currentTime = this.videoElement.currentTime + timeToJump;
+                    } else {
+                        console.log('no jump')
+                    }
+
+                }
+            });
+
+        }
+
+
+        setupWithHlsLib() {
+            const hls = new Hls({
+                renderTextTracksNatively: false,
+                xhrSetup: function (xhr, url) {
+                    xhr.setRequestHeader('Access-Control-Allow-Headers', '*')
+                }
+            });
+
+            hls.loadSource(this.videoSource);
+            hls.attachMedia(this.videoElement);
+
+            hls.on(Hls.Events.FRAG_CHANGED, (data, frag) => {
+                const tag = this.getMetadataTagFromTagList(frag.frag.tagList);
+                if (!tag) {
+                    return;
+                }
+                const metadata = this.getMetadataFromTag(tag);
+                this.options.onMetadataUpdate(metadata);
+
+            });
+            hls.on(Hls.Events.FRAG_LOADED, (data, data2) => {
+                // console.log('hls3', data, data2);
+            });
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                this.videoElement.play();
+            });
+        }
+
+        setupWithoutHlsLib() {
+            this.videoElement.src = this.videoSource;
+            this.videoElement.addEventListener('loadedmetadata', () => {
+
+                this.videoElement.play();
+            });
+            this.videoElement.textTracks.addEventListener("change", (event) => {
+                console.log(`'${event.type}' event fired`);
+            });
+
+
+            // cancel when nav away?
+            setInterval(async () => {
+                const averageBufferTime = 10;
+                //refactor into fetch function
+                console.log("video", this.videoElement.currentTime)
+                const m3u8Response = await fetch(this.videoSource)
+                const m3u8FileContent = await m3u8Response.text();
+                var parser = new m3u8Parser.Parser();
+
+                parser.push(m3u8FileContent);
+                const manifest = parser.manifest;
+                if (manifest.dateRanges.length < 1) {
+                    return
+                }
+                if (parser.manifest.mediaSequence > 1 && manifest.dateRanges > 4) {
+                    const currentlyPlayingSegment = this.videoElement.currentTime
+                    const metadata = manifest.dateRanges[manifest.dateRanges.length - 3]
+
+                    this.options.onMetadataUpdate(metadata.xCustomKey);
+
+                } else {
+                    const metadata = manifest.dateRanges[manifest.dateRanges.length - 1]
+                    this.options.onMetadataUpdate(metadata.xCustomKey);
+
+
+                }
+
+            }, 2000);
+        }
+
+
+        getMetadataTagFromTagList(tagList) {
+            const metadataTag = tagList.filter((tag) => {
+                if (tag[0] === "EXT-X-DATERANGE") {
+                    return tag;
+                }
+            });
+            if (metadataTag.length > 0) {
+                return metadataTag[0];
+            }
+        }
+
+        getMetadataFromTag(tag) {
+            return tag[1].split(",")[4].split("=")[1].split('"')[1];
+        }
+
+        decodeJson(payload) {
+            const decodedPayload = JSON.parse(decodeURIComponent(payload));
+            return decodedPayload;
+        }
+
+        // equivilant online tools for non devs https://www.freeformatter.com/json-escape.html or https://jsontostring.com/
+        encodeJson(payload) {
+            const encodedPayload = encodeURIComponent(JSON.stringify(payload));
+            console.log(encodedPayload);
+            return encodedPayload;
+        }
+
+        setupSendViewerEvent(sessionId) {
+            // push viewer event
+            const sendViewerEvent = async () => {
+                // fetch
+                // check no cross origin issues
+                const response = await fetch(this.apiUrl + "/events/" + this.eventId + "/views",
+                    {
+                        method: "POST",
+                        body: JSON.stringify({ sessionId }),
+                        headers: {
+                            'Access-Control-Allow-Headers': '*',
+                            "Content-Type": "application/json",
+                        },
+                    },
+
+                );
+                const sendViewResp = await response.json();
+
+                //on view change
+                console.log(sendViewResp);
+
+                setTimeout(sendViewerEvent, 5000);
+                // ...
+            }
+
+            // initial call, or just call refresh directly
+            sendViewerEvent();
+
+        }
+
+        setupOnViewerCountChange() {
+            var currentViewerCount = 0;
+            const getViewerCount = async () => {
+                // fetch
+                // check no cross origin issues
+                const response = await fetch(this.apiUrl + "/events/" + this.eventId + "/views");
+                const views = await response.json();
+
+                //on view change
+                console.log(views);
+
+                //on change callback
+
+                setTimeout(getViewerCount, 5000);
+                // ...
+            }
+
+            // initial call, or just call refresh directly
+            setTimeout(getViewerCount, 1000);
+
+
+        }
+
+
+    }
+
+    var currentScene;
+    const setupPlayer = (sessionId) => {
+        const player = new KodaPlayer({
+            videoElement: videoElement,
+            videoSource: videoSrc,
+            eventId: '1',
+            apiUrl: "https://koda.stream/api",
+            sessionId: sessionId,
+            onViewerCountChange: (data) => {
+                console.log(data);
+            },
+            onMetadataUpdate: async (data) => {
+                const json = player.decodeJson(data)
+                if (json['scene-id'] !== currentScene) {
+                    currentScene = json['scene-id']
+                    const productDetails = await getProductsById(json.productIds)
+                    renderNowPlaying(json, productDetails)
+                    mobileLiveCard.classList.remove("mobile-live-card--loading");
+                }
+            }
+
+
+        });
+    }
+
+
+    gtag('get', 'G-WCZ03SZFCQ', 'client_id', (sessionId) => setupPlayer(sessionId))
+
+
+
+</script>
+
+<script>
+
+    const muteBtn = document.querySelector('.mute-btn');
+    const tapVidButton = document.querySelector('.tap-video-btn')
+    const rightBlock = document.getElementById("right-block")
+    const homeTop = document.querySelector('.video-home-top')
+    const fullscreenButton = document.querySelector('.fullscreen-button')
+    const mobileCardContainer = document.querySelector('.home-nav-explore-contain')
+    const bottomNav = document.querySelector('.bottom-nav-container')
+
+    function toggleMute() {
+        videoElement.muted = !videoElement.muted;
+        updateMuteBtn();
+
+    }
+
+    function updateMuteBtn() {
+        muteBtn.querySelector('.mute').classList.toggle('hidden')
+        muteBtn.querySelector('.unmute').classList.toggle('hidden')
+
+    }
+
+    function toggleHidePanels() {
+        videoElement.muted = false;
+
+        rightBlock.classList.toggle('hidden')
+        homeTop.classList.toggle('video-home-top--offscreen')
+        bottomNav.classList.toggle('bottom-nav-container--offscreen')
+        mobileCardContainer.classList.toggle('home-nav-explore-contain--offscreen')
+        tapVidButton.classList.add("hidden")
+        mobileLiveCard.classList.remove("mobile-live-card--expanded");
+
+    }
+
+    function openFullscreen() {
+        videoElement.requestFullscreen()
+    }
+
+    muteBtn.addEventListener("click", toggleMute)
+    videoElement.addEventListener("click", toggleHidePanels)
+    tapVidButton.addEventListener("click", toggleHidePanels)
+    fullscreenButton.addEventListener("click", openFullscreen)
+
+</script>
+
+
+<script>
+
+
+
+    const swipeBox = document.querySelector('#swipe-area')
+    var hammertime = new Hammer(swipeBox, { threshold: 0.1 });
+    hammertime.get('swipe').set({ direction: Hammer.DIRECTION_VERTICAL });
+
+    hammertime.on('swipe', function (ev) {
+        tapVidButton.classList.add("hidden")
+        mobileLiveCard.classList.toggle("mobile-live-card--expanded");
+
+    });
+
+</script>
+
+<script>
+    function handleScroll() {
+        var container = document.getElementById('now-playing-container');
+        var info = document.getElementById('now-playing-info');
+
+        // Check if scrolled beyond certain threshold
+        if (container.scrollTop > 100) { // Adjust this threshold according to your needs
+            info.classList.add('hidden');
+        } else {
+            info.classList.remove('hidden');
+        }
+    }
+</script>

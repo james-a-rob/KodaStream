@@ -79,10 +79,10 @@ afterEach(async () => {
 
 describe("live streaming", () => {
     describe('create', () => {
-        test("can create a simple live event that starts imediatly", async () => {
+        test.only("can create a simple live event that starts imediatly", async () => {
             const response = await request(app)
                 .post('/events')
-                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -104,7 +104,7 @@ describe("live streaming", () => {
         test("create stream with loop enabled", async () => {
             const response = await request(app)
                 .post('/events')
-                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleLoopedEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -126,7 +126,7 @@ describe("live streaming", () => {
         test('create a stream with multiple scenes with their own metadata', async () => {
             const response = await request(app)
                 .post('/events')
-                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(eventWithTwoScenesAndMetadata)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -150,10 +150,9 @@ describe("live streaming", () => {
         test("create handle no data sent", async () => {
             const response = await request(app)
                 .post('/events')
-                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
-                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
 
             expect(response.headers["content-type"]).toMatch(/json/);
 
@@ -166,7 +165,7 @@ describe("live streaming", () => {
         test("replace scenes", async () => {
             const response = await request(app)
                 .post('/events')
-                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -201,7 +200,7 @@ describe("live streaming", () => {
         test("stop event", async () => {
             const response = await request(app)
                 .post('/events')
-                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -222,7 +221,7 @@ describe("live streaming", () => {
         test("restart event", async () => {
             const response = await request(app)
                 .post('/events')
-                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send(simpleEvent)
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -251,7 +250,7 @@ describe("live streaming", () => {
         test("starting an already started stream", async () => {
             const responseStart1 = await request(app)
                 .post('/events')
-                .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+                .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
                 .send({ status: 'started', ...simpleEvent })
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json');
@@ -333,7 +332,7 @@ describe("analytics", () => {
 
         const response = await request(app)
             .post('/events/1/log')
-            .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+            .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
             .send(simpleViewData)
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
@@ -376,7 +375,7 @@ describe("analytics", () => {
 
         const response = await request(app)
             .post('/events/1/log')
-            .set('accessKey', 'dh2873hd8qwegiuf873wgf783w4')
+            .set('accesskey', 'dh2873hd8qwegiuf873wgf783w4')
             .send(simpleViewData)
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
