@@ -191,7 +191,7 @@ class KodaPlayer {
 
     }
 
-    setupOnViewerCountChange() {
+    setupOnViewerCountChange(onViewerCountChange) {
         var currentViewerCount = 0;
         const getViewerCount = async () => {
             // fetch
@@ -201,7 +201,7 @@ class KodaPlayer {
 
             //on view change
             console.log(views);
-
+            onViewerCountChange(views)
             //on change callback
 
             setTimeout(getViewerCount, 5000);
