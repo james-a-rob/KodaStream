@@ -1,18 +1,18 @@
 version: '3'
 services:
-  app1:
+  api:
     build: ./api
     ports:
-      - "3001:3000"
+      - "3000:3000"
       - "2221:22"
     networks:
       - my-network
     environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5432/app1_db
+      - DATABASE_URL=postgresql://postgres:password@db:5432/koda-db
     depends_on:
       - db
 
-  app2:
+  content-server:
     build: ./content-server
     ports:
       - "3002:3000"
@@ -20,7 +20,7 @@ services:
     networks:
       - my-network
     environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5432/app1_db
+      - DATABASE_URL=postgresql://postgres:password@db:5432/koda-db
     depends_on:
       - db
 
@@ -29,7 +29,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: development_db
+      POSTGRES_DB: koda-db
     ports:
       - "5432"
     networks:
@@ -46,8 +46,8 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - app1
-      - app2
+      - api
+      - content-server
 
 networks:
   my-network:

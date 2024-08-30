@@ -8,10 +8,16 @@ RUN echo 'root:your_password' | chpasswd
 RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
+
 WORKDIR /usr/src/app
 
-COPY test.js ./
+COPY package*.json ./
 
-EXPOSE 22
+RUN npm install
 
-CMD ["node", "test.js"]
+COPY index.js ./
+
+EXPOSE 22 
+EXPOSE 3000
+
+CMD ["node", "index.js"]
