@@ -1,5 +1,5 @@
 # Getting started
-Lets learn AirVideo by creating our own online TV Channel.
+Lets learn KodaStream by creating our own online TV Channel.
 
 ## Install
 Clone this repo and then run ```npm install``` from inside the ./core directory.
@@ -9,8 +9,8 @@ Clone this repo and then run ```npm install``` from inside the ./core directory.
 
 You now have two servers running locally on your machine.
 
-1. **The Air API** on port 4000. This is a REST API that manages creation and updating of events. Use this API to start your live streams. The events endpoint can be called at http://localhost:4000/events. 
-2. **The Air Content Server** on port 3000. This server is used to distribute the live stream to viewers. It uses the HLS protocol. A simple demo page that streams event with id 1 is available at  http://localhost:3000
+1. **The KodaStream API** on port 4000. This is a REST API that manages creation and updating of events. Use this API to start your live streams. The events endpoint can be called at http://localhost:4000/events. 
+2. **The KodaStream Content Server** on port 3000. This server is used to distribute the live stream to viewers. It uses the HLS protocol. A simple demo page that streams event with id 1 is available at  http://localhost:3000
 
 
 ## Starting an event
@@ -111,7 +111,7 @@ You can always restart an event by calling the PUT endpoint again and specifying
 ```
 
 ## Contributing 
-Air is in the early stages so feedback and suggestions are extreamly welcome. Feel free to open an issue or submit a pull request.
+KodaStream is in the early stages so feedback and suggestions are extreamly welcome. Feel free to open an issue or submit a pull request.
 
 ## Deploying
 
