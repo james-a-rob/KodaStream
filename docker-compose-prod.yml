@@ -1,26 +1,28 @@
 version: '3'
 services:
-  app1:
-    build: ./api
+  backend:
+    build: ./backend
     ports:
-      - "3001:3000"
+      - "3000:3000"
+      - "4000:4000"
+      - "2221:22"
     networks:
       - my-network
     environment:
-      - DATABASE_URL=postgresql://postgres:password@production-ip:5432/app1_db
+      - DATABASE_URL=postgresql://postgres:password@db:5432/koda-db
     depends_on:
       - db
 
-  app2:
-    build: ./content-server
+  nginx:
+    image: nginx:latest
     ports:
-      - "3002:3000"
+      - "80:80"
     networks:
-      - my-networ
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@production-ip:5432/app1_db
+      - my-network
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - db
+      - backend
 
 networks:
   my-network:
