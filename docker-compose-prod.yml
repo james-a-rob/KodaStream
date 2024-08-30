@@ -1,0 +1,27 @@
+version: '3'
+services:
+  app1:
+    build: ./api
+    ports:
+      - "3001:3000"
+    networks:
+      - my-network
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@production-ip:5432/app1_db
+    depends_on:
+      - db
+
+  app2:
+    build: ./content-server
+    ports:
+      - "3002:3000"
+    networks:
+      - my-networ
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@production-ip:5432/app1_db
+    depends_on:
+      - db
+
+networks:
+  my-network:
+    driver: bridge

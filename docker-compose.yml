@@ -1,0 +1,56 @@
+version: '3'
+services:
+  app1:
+    build: ./api
+    ports:
+      - "3001:3000"
+      - "2221:22"
+    networks:
+      - my-network
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/app1_db
+    depends_on:
+      - db
+
+  app2:
+    build: ./content-server
+    ports:
+      - "3002:3000"
+      - "2222:22"
+    networks:
+      - my-network
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/app1_db
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: development_db
+    ports:
+      - "5432"
+    networks:
+      - my-network
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    networks:
+      - my-network
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app1
+      - app2
+
+networks:
+  my-network:
+    driver: bridge
+volumes:
+  pgdata:
