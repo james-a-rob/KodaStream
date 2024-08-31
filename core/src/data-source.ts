@@ -10,7 +10,7 @@ import config from './config';
 // const AppDataSource = new DataSource(dbConfig)
 const AppDataSource = new DataSource({
     entities: [Event, Scene, Log],
-
+    migrations: ['./src/migration/*.{ts,js}'],
     ...config[process.env.NODE_ENV]
 })
 export default AppDataSource;

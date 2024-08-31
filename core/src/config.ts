@@ -22,7 +22,8 @@ const config: Config = {
         password: '1234',
         database: 'kodastream-dev',
         port: 5432,
-        synchronize: true,
+        dropSchema: false,
+        synchronize: false,
         logging: false,
 
     },
@@ -39,7 +40,8 @@ const config: Config = {
         password: process.env.DB_PASS,
         database: process.env.DB_NAME,
         port: 25060,
-        synchronize: true,
+        dropSchema: false,
+        synchronize: false,
         logging: false,
 
     }
