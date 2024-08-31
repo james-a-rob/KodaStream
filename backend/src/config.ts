@@ -17,10 +17,10 @@ const config: Config = {
     },
     "dev": {
         type: "postgres",
-        host: 'localhost',
+        host: 'db',
         username: 'postgres',
-        password: '1234',
-        database: 'kodastream-dev',
+        password: 'password',
+        database: 'koda-db',
         port: 5432,
         dropSchema: false,
         synchronize: false,

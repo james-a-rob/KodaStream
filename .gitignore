@@ -1,9 +1,9 @@
-core/node_modules
+backend/node_modules
 website/node_modules
-core/src/events
-core/dist
-core/.env
-core/events/*
+backend/src/events
+backend/dist
+backend/.env
+backend/events/*
 videos
 .DS_Store
 core/.DS_Store
