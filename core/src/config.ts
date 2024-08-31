@@ -20,7 +20,7 @@ const config: Config = {
         host: 'localhost',
         username: 'postgres',
         password: '1234',
-        database: 'lope',
+        database: 'kodastream-dev',
         port: 5432,
         synchronize: true,
         logging: false,

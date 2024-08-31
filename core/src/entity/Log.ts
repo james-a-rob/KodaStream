@@ -8,19 +8,19 @@ export class Log {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column('text')
     datetime: string
 
-    @Column()
+    @Column('text')
     sessionId: string
 
-    @Column({ nullable: true })
+    @Column('text', { nullable: true })
     name?: string
 
-    @Column({ nullable: true })
+    @Column('text', { nullable: true })
     url?: string
 
-    @Column()
+    @Column('text')
     type: LogType
 
 

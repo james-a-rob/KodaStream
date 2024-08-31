@@ -1,48 +1,53 @@
 import express, { Request, Response } from 'express';
+
 import { v4 as uuidv4 } from 'uuid';
-
 import cors from 'cors';
-
 import fs from 'fs-extra';
 import path from 'path';
 import HLS from 'hls-parser';
 import { getLiveEvent } from './db';
+import * as currentPath from "./current-path.cjs";
+
+const current = currentPath.default;
+
+
+
 
 const app = express();
 app.use(cors());
 
 app.get('/', (req: Request, res: Response) => {
-    return res.status(200).sendFile(path.join(__dirname, '../public/client.html'));
+    return res.status(200).sendFile(path.join(current, '../public/client.html'));
 });
 
 app.get('/video-js', (req: Request, res: Response) => {
-    return res.status(200).sendFile(path.join(__dirname, '../public/client-video-js.html'));
+    return res.status(200).sendFile(path.join(current, '../public/client-video-js.html'));
 });
 
 app.get('/video-js-file', (req: Request, res: Response) => {
-    return res.status(200).sendFile(path.join(__dirname, '../public/video-js.js'));
+    return res.status(200).sendFile(path.join(current, '../public/video-js.js'));
 });
 
 
 app.get('/hls-parser', (req: Request, res: Response) => {
-    return res.status(200).sendFile(path.join(__dirname, '../public/parser.js'));
+    return res.status(200).sendFile(path.join(current, '../public/parser.js'));
 });
 
 app.get('/hls', (req: Request, res: Response) => {
-    return res.status(200).sendFile(path.join(__dirname, '../public/hls.js'));
+    return res.status(200).sendFile(path.join(current, '../public/hls.js'));
 });
 
 app.get('/koda-player', (req: Request, res: Response) => {
-    return res.status(200).sendFile(path.join(__dirname, '../public/koda-player.js'));
+    return res.status(200).sendFile(path.join(current, '../public/koda-player.js'));
 });
 
 
 app.get('/init.mp4', (req: Request, res: Response) => {
-    return res.status(200).sendFile(path.join(__dirname, '../public/client.html'));
+    return res.status(200).sendFile(path.join(current, '../public/client.html'));
 });
 
 app.get('/ios-demo', (req: Request, res: Response) => {
-    return res.status(200).sendFile(path.join(__dirname, '../public/client-ios.html'));
+    return res.status(200).sendFile(path.join(current, '../public/client-ios.html'));
 });
 
 const hlsServerConfig = {
@@ -54,7 +59,7 @@ const hlsServerConfig = {
                 return cb(null, true);
             }
 
-            fs.access(path.join(__dirname, `../${req.url.replace("output", "output-initial")}`), fs.constants.F_OK, function (err) {
+            fs.access(path.join(current, `../${req.url.replace("output", "output-initial")}`), fs.constants.F_OK, function (err) {
                 if (err) {
                     return cb(null, false);
                 }
@@ -70,7 +75,7 @@ const hlsServerConfig = {
                 return cb(true, null);
             } else {
 
-                const m3u8Data = fs.readFileSync(path.join(__dirname, `../${req.url.replace("output", "output-initial")}`));
+                const m3u8Data = fs.readFileSync(path.join(current, `../${req.url.replace("output", "output-initial")}`));
 
 
                 const playlist = HLS.parse(m3u8Data.toString());
@@ -100,7 +105,7 @@ const hlsServerConfig = {
                 });
 
 
-                const outputPath = path.join(__dirname, `../events/${eventId}/output.m3u8`);
+                const outputPath = path.join(current, `../events/${eventId}/output.m3u8`);
                 try {
                     fs.writeFileSync(outputPath, HLS.stringify(playlist));
 
@@ -121,7 +126,7 @@ const hlsServerConfig = {
         },
         getSegmentStream: (req: Request, cb) => {
             console.log(req.url)
-            const stream = fs.createReadStream(path.join(__dirname, `../${req.url}`));
+            const stream = fs.createReadStream(path.join(current, `../${req.url}`));
             cb(null, stream);
         }
     }

@@ -7,10 +7,10 @@ export class Scene {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column('text')
     location: string
 
-    @Column({ default: '' })
+    @Column('text', { default: '' })
     metadata: string
 
     @ManyToOne(() => Event, (event) => event.scenes)

@@ -30,6 +30,11 @@ Create futuristic video experiences with high engagement
  - Self hosted: Fully own the deployment. Need support? We can help.
  - Web-based video creation UI (Coming Soon!)
 
+ ## Setup
+clone repo
+docker up
+seed db
 
-## 🚀 Getting started
-Learn how to create an interactive TV channel with our [getting started doc](docs/getting-started.md).
+
+## 🚀 Tutorial
+Learn how to create an interactive TV channel with our [getting started doc](docs/hacker-news-tv.md).

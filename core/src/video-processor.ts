@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path';
+
 import ffmpeg from 'fluent-ffmpeg';
 
 import pathToFfmpeg from 'ffmpeg-static';
@@ -8,14 +9,19 @@ import { Event } from "./entity/Event";
 import { StreamStatus } from './enums';
 import { getLiveEvent } from "./db";
 
+import * as currentPath from "./current-path.cjs";
+
+const current = currentPath.default;
+
+
 ffmpeg.setFfmpegPath(pathToFfmpeg);
 
 const process = (scene: Scene, event: Event) => {
     return new Promise((resolve, reject) => {
-        const sceneLocation = path.join(__dirname, `../${scene.location}`);
-        const newEventDirLocation = path.join(__dirname, `../events/${event.id}`);
-        const segmentLocation = path.join(__dirname, `../events/${event.id}/file-${scene.id}-%03d.ts`);
-        const outputLocation = path.join(__dirname, `../events/${event.id}/output-initial.m3u8`);
+        const sceneLocation = path.join(current, `../${scene.location}`);
+        const newEventDirLocation = path.join(current, `../events/${event.id}`);
+        const segmentLocation = path.join(current, `../events/${event.id}/file-${scene.id}-%03d.ts`);
+        const outputLocation = path.join(current, `../events/${event.id}/output-initial.m3u8`);
 
         fs.ensureDir(newEventDirLocation)
         const ff = ffmpeg()
@@ -53,7 +59,7 @@ const process = (scene: Scene, event: Event) => {
 
 export const start = async (eventId: number) => {
     // clean up dir before start
-    const eventDirLocation = path.join(__dirname, `../events/${eventId}`);
+    const eventDirLocation = path.join(current, `../events/${eventId}`);
     const pathExists = await fs.pathExists(eventDirLocation);
     if (pathExists) {
         await fs.emptyDir(eventDirLocation)

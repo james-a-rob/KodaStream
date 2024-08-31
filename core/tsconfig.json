@@ -7,13 +7,9 @@
     "dist"
   ],
   "compilerOptions": {
-    "lib": [
-      "es5",
-      "es6"
-    ],
-    "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "target": "es6",
+    "module": "es2020",
+    "moduleResolution": "Node",
     "outDir": "./dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,

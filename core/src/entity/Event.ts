@@ -10,13 +10,13 @@ export class Event {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column('text')
     status: StreamStatus
 
-    @Column()
+    @Column('text')
     url: string
 
-    @Column({ type: 'boolean', default: false })
+    @Column('boolean', { default: false })
     loop: boolean
 
     @OneToMany(() => Scene, (scene) => scene.event, { cascade: true })
