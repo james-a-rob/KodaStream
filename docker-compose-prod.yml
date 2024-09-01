@@ -4,25 +4,24 @@ services:
     ports:
       - "3000:3000"
       - "4000:4000"
-      - "2221:22"
-    networks:
-      - my-network
     environment:
       - DATABASE_URL=postgresql://postgres:password@db:5432/koda-db
+    volumes:
+      - ./backend/public:/usr/src/app/public
+      - ./backend/src:/usr/src/app/src
     depends_on:
       - db
 
-  nginx:
-    image: nginx:latest
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: koda-db
     ports:
-      - "80:80"
-    networks:
-      - my-network
+      - "5432:5432"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - backend
+      - pgdata:/var/lib/postgresql/data
 
-networks:
-  my-network:
-    driver: bridge
+volumes:
+  pgdata:
