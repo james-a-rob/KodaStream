@@ -102,8 +102,7 @@
             opacity: 0;
         }
     </style>
-    <!-- <video playsinline autoplay muted preload="true" id="video" height="auto" controls></video>
-    <div id="metadata"></div> -->
+
     <script src="hls-parser"></script>
     <script src="hls"></script>
     <script src="koda-player"></script>
@@ -117,8 +116,8 @@
 
         const player = new KodaPlayer({
             videoElement: videoElement,
-            videoSource: '/events/7/output.m3u8',
-            eventId: '7',
+            videoSource: '/events/104/output.m3u8',
+            eventId: '104',
             apiUrl: "http://localhost:4000",
             sessionId: "1703778468",
             onViewerCountChange: (data) => {
@@ -129,8 +128,7 @@
                 metadataContainer.innerHTML = decodedJson.description;
             }
         });
-        console.log('- - - -', player);
-        player.logEvent('click')
+
 
     </script>
 </body>

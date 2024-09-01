@@ -1,13 +1,14 @@
-version: '3'
 services:
   backend:
     build: ./backend
     ports:
       - "3000:3000"
       - "4000:4000"
-      - "2221:22"
     environment:
       - DATABASE_URL=postgresql://postgres:password@db:5432/koda-db
+    volumes:
+      - ./backend/public:/usr/src/app/public
+      - ./backend/src:/usr/src/app/src
     depends_on:
       - db
 

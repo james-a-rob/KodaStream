@@ -11,7 +11,7 @@ app.use(bodyParser.json())
 app.use(cors());
 
 app.post("/events", async (req: Request, res: Response) => {
-
+    console.log('changed2')
     if (req.headers.accesskey !== process.env.APIKEY) {
         return res.status(403).json({ error: 'Access denied' })
     }

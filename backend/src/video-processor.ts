@@ -13,11 +13,13 @@ import * as currentPath from "./current-path.cjs";
 
 const current = currentPath.default;
 
-
+console.log('pathToFfmpeg', pathToFfmpeg)
 ffmpeg.setFfmpegPath(pathToFfmpeg);
 
 const process = (scene: Scene, event: Event) => {
     return new Promise((resolve, reject) => {
+        console.log('current', current)
+        console.log('scene.location', scene.location)
         const sceneLocation = path.join(current, `../${scene.location}`);
         const newEventDirLocation = path.join(current, `../events/${event.id}`);
         const segmentLocation = path.join(current, `../events/${event.id}/file-${scene.id}-%03d.ts`);
@@ -46,9 +48,10 @@ const process = (scene: Scene, event: Event) => {
             ]).output(outputLocation).on('end', () => {
                 resolve(true);
             }).on('start', (data) => {
+                // console.log('started', data)
             })
             .on('progress', (data) => {
-                // console.log(data);
+                // console.log('progress', data);
 
             }).on('error', (err, stdout, stderr) => {
                 console.log('error---', err, stdout, stderr)

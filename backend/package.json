@@ -8,9 +8,9 @@
     "migrations:generate": "NODE_ENV=dev tsx ./node_modules/typeorm/cli.js migration:generate -d ./src/data-source.ts src/migration/migration",
     "migrations:run": "NODE_ENV=dev tsx ./node_modules/typeorm/cli.js migration:run -d ./src/data-source.ts",
     "build": "npx tsc --build --verbose",
-    "test:integration": "APIKEY=dh2873hd8qwegiuf873wgf783w4 NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:unit": "NODE_ENV=test jest --watch --testPathPattern=src",
-    "start:dev": "APIKEY=dev-key NODE_ENV=dev tsx  src/main.ts",
+    "test:integration": "APIKEY=dh2873hd8qwegiuf873wgf783w4 NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "start:dev": "APIKEY=dev-key NODE_ENV=dev tsx watch src/main.ts",
     "start": "pm2 start ecosystem.config.prod.cjs"
   },
   "author": "",

@@ -14,7 +14,7 @@ down:
 
 # Rebuilds the images without using the cache
 build:
-	docker-compose build --no-cache
+	docker-compose build --progress=plain --no-cache
 
 # Shows the status of running services
 status:
