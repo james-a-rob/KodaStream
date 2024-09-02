@@ -43,13 +43,13 @@ This example combines two video clips into a looping live stream. As each clip p
     "type": "live",
     "scenes": [
         {
-            "location": "videos/test-clip-1.mp4",
+            "location": "videos/clip-1.mp4",
             "metadata": {
                 "text": "This is some overlaying text"
             }
         },
         {
-            "location": "videos/test-clip-2.mp4",
+            "location": "videos/clip-2.mp4",
             "metadata": {
                 "button-text": "Click me for more info",
                 "url": "https://google.com"
