@@ -28,7 +28,7 @@ Open-source tool for creating immersive and interactive video experiences.
 4. Run `make up` from the root of the project.
 5. Call the REST API to create new interactive content.
 
-### Example Request
+#### Example Request
 This example combines two video clips into a looping live stream. As each clip plays, client-side events containing the metadata are triggered. This metadata is used to build out interactivity, such as clickable links and buy buttons.
 
 **POST** `http://localhost:4000/events`
@@ -58,7 +58,7 @@ This example combines two video clips into a looping live stream. As each clip p
 }
 ```
 
-### Playing video
+#### Playing video
 The return of the POST request contains an .m3u8 playlist file in the url field. This file can be loaded into any HLS-compatible player. Each scene's metadata is added as timed metadata. Your HLS player will give you access to this data.
 
 A web-based example of playing a KodaStream interactive video can be found in frontend/demos/simple. Take a look at the KodaPlayer class and its onMetadataChange event to understand more about how client-side interactivity is added.
@@ -69,6 +69,6 @@ A web-based example of playing a KodaStream interactive video can be found in fr
 ## 👩‍🏫 Tutorials
 Learn how to create an interactive TV channel with our [getting started tutorial](docs/getting-started.md).
 
-## In action
+## 🤘 In action
 Sneakinpeace uses KodaStream to offer a 24/7 live shopping experience. Viewers can watch together, learn more about sneakers, and even purchase items without leaving the stream.
 <a href="https://sneakinpeace.com"><img src="sneak.gif" width="100%"></a>
