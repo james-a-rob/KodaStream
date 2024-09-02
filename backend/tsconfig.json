@@ -1,0 +1,19 @@
+{
+  "exclude": [
+    "node_modules",
+    "ffmpeg-experiments",
+    "events",
+    "test",
+    "dist"
+  ],
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es2020",
+    "moduleResolution": "Node",
+    "outDir": "./dist",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "sourceMap": true
+  }
+}

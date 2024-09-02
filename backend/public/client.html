@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>HLS Player</title>
+</head>
+
+<body>
+    <div class="header">
+
+    </div>
+
+    <video playsinline autoplay muted preload="true" id="video" height="auto" controls></video>
+    <div id="metadata"></div>
+    <div>Video</div>
+
+
+    <div class="overlay">
+        <div class="overlay--product-image-container">
+            <img class="overlay--product-image"
+                src="https://cdn-images.farfetch-contents.com/19/74/26/95/19742695_44204897_1000.jpg" />
+            <!-- <img class="overlay--product-image"
+                src="https://www.elago.com/cdn/shop/products/AP3RH-HANG-MT_Amazon_1296x.jpg?v=1625787359" /> -->
+
+            <!-- <img class="overlay--product-image"
+                src="https://soyouz2.deindeal.ch/api/img?p=products/2023/2/07248471-BD7F-49C2-82F0-B60ACD6FDEF4/14128898_1&st=11&v=1676301889" /> -->
+        </div>
+        <div class="overlay-info">
+            <div class="overlay--product-name">round-frame tinted sunglasses</div>
+            <div class="overlay--product-price">$331</div>
+            <div class="overlay--product-buy-button">Shop Now</div>
+        </div>
+
+    </div>
+
+    <style>
+        body {
+            background: grey;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .header {
+            background: white;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-logo {
+            width: 80px;
+
+        }
+
+        .overlay {
+            width: 300px;
+            background: white;
+            transition: opacity 1s ease-out;
+            border-radius: 12px;
+            position: absolute;
+            top: 80px;
+            right: 20px;
+
+        }
+
+        .overlay--product-price {
+            font-weight: 800;
+        }
+
+        .overlay-info {
+            background: white;
+            margin: 12px;
+            display: flex;
+            flex-direction: column;
+            line-height: 32px;
+        }
+
+        .overlay--product-image-container {
+            padding: 12px;
+        }
+
+        .overlay--product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .overlay--product-buy-button {
+            background: #6a6af2;
+            text-align: center;
+            color: white;
+            border-radius: 6px;
+        }
+
+        .visible {
+            opacity: 1;
+        }
+
+        .hidden {
+            opacity: 0;
+        }
+    </style>
+
+    <script src="hls-parser"></script>
+    <script src="hls"></script>
+    <script src="koda-player"></script>
+
+
+    <script>
+
+        const videoElement = document.getElementById('video');
+        const metadataContainer = document.getElementById('metadata')
+
+
+        const player = new KodaPlayer({
+            videoElement: videoElement,
+            videoSource: '/events/104/output.m3u8',
+            eventId: '104',
+            apiUrl: "http://localhost:4000",
+            sessionId: "1703778468",
+            onViewerCountChange: (data) => {
+                console.log(data);
+            },
+            onMetadataUpdate: (data) => {
+                const decodedJson = player.decodeJson(data)
+                metadataContainer.innerHTML = decodedJson.description;
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>

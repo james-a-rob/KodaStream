@@ -2,10 +2,8 @@
 Lets learn KodaStream by creating our own online TV Channel.
 
 ## Install
-Clone this repo and then run ```npm install``` from inside the ./core directory.
+Clone this repo and then run ```make up``` from inside the ./core directory.
 
-## Getting started
-```npm run start:dev```
 
 You now have two servers running locally on your machine.
 
