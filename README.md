@@ -5,9 +5,6 @@
 ### 📺 Interactive Video for Websites, Apps, and Smart TVs ✨
 
 Open-source tool for creating immersive and interactive video experiences.
-
-<a href="https://sneakinpeace.com"><img src="sneak.gif" width="100%"></a>
-
 </div>
 
 ## 👤 Use Cases
@@ -69,5 +66,9 @@ A web-based example of playing a KodaStream interactive video can be found in fr
 <img src="camera.png" width="100%">
 
 
-## 👩‍🏫 Tutorial
+## 👩‍🏫 Tutorials
 Learn how to create an interactive TV channel with our [getting started tutorial](docs/getting-started.md).
+
+## In action
+Sneakinpeace uses KodaStream to offer a 24/7 live shopping experience. Viewers can watch together, learn more about sneakers, and even purchase items without leaving the stream.
+<a href="https://sneakinpeace.com"><img src="sneak.gif" width="100%"></a>
