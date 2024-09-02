@@ -44,25 +44,29 @@ This example combines two video clips into a looping live stream. As each clip p
         {
             "location": "videos/clip-1.mp4",
             "metadata": {
-                "text": "This is some overlaying text"
+                "element-type":"link",
+                "link-text": "Click me for more info on this camera",
+                "url": "https://en.wikipedia.org/wiki/Instant_camera"
             }
         },
         {
             "location": "videos/clip-2.mp4",
             "metadata": {
-                "button-text": "Click me for more info",
-                "url": "https://google.com"
+                "element-type":"link",
+                "link-text": "Click me for more info on this ring",
+                "url": "https://en.wikipedia.org/wiki/Native_American_jewelry"
             }
         }
     ]
 }
 ```
 
-### View the Video
+### Playing video
 The return of the POST request contains an .m3u8 playlist file in the url field. This file can be loaded into any HLS-compatible player. Each scene's metadata is added as timed metadata. Your HLS player will give you access to this data.
 
 A web-based example of playing a KodaStream interactive video can be found in frontend/demos/simple. Take a look at the KodaPlayer class and its onMetadataChange event to understand more about how client-side interactivity is added.
 
+<img src="camera.png" width="100%">
 
 
 ## 👩‍🏫 Tutorial

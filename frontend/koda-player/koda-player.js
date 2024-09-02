@@ -1,4 +1,4 @@
-class KodaPlayer {
+export default class KodaPlayer {
 
     constructor(options) {
 
@@ -8,11 +8,18 @@ class KodaPlayer {
 
         this.apiUrl = options.apiUrl;
         this.eventId = options.eventId;
+        this.contentServerUrl = options.contentServerUrl;
         this.sessionId = options.sessionId;
 
 
-        this.setupSendViewerEvent(options.sessionId)
-        this.setupOnViewerCountChange(options.onViewerCountChange)
+        if (options.sessionId) {
+            this.setupSendViewerEvent(options.sessionId)
+
+        }
+        if (options.onViewerCountChang) {
+            this.setupOnViewerCountChange(options.onViewerCountChange)
+
+        }
 
         if (Hls.isSupported()) {
             this.setupWithHlsLib();
@@ -56,7 +63,7 @@ class KodaPlayer {
             }
         });
 
-        hls.loadSource(this.videoSource);
+        hls.loadSource(this.contentServerUrl + this.videoSource);
         hls.attachMedia(this.videoElement);
 
         hls.on(Hls.Events.FRAG_CHANGED, (data, frag) => {
@@ -166,6 +173,7 @@ class KodaPlayer {
         const sendViewerEvent = async () => {
             // fetch
             // check no cross origin issues
+
             const response = await fetch(this.apiUrl + "/events/" + this.eventId + "/log",
                 {
                     method: "POST",
