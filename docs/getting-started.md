@@ -1,5 +1,5 @@
 # Getting started
-Lets learn KodaSteam by creating our own online TV Channel.
+Lets learn KodaStream by creating our own online TV Channel.
 
 ## Install
 Clone this repo and then run ```make up``` from inside the ./core directory.
