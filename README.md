@@ -7,11 +7,10 @@
 Open-source tool for creating immersive and interactive video experiences.
 </div>
 
-## 👤 Use Cases
+## 👤 Example use cases
+- Interactive live streams
 - Shoppable videos
-- Online TV channels
-- Interactive video tours
-- Gamified experiences
+- Clickable product demos
 
 ## 🔥 Features
 - Time-based metadata: Synchronize video moments with rich user experiences.
@@ -59,7 +58,7 @@ This example combines two video clips into a looping live stream. As each clip p
 ```
 
 #### Playing video
-The return of the POST request contains an .m3u8 playlist file in the url field. This file can be loaded into any HLS-compatible player. Each scene's metadata is added as timed metadata. Your HLS player will give you access to this data.
+The response of the POST request contains an .m3u8 playlist file in the url field. This file can be loaded into any HLS-compatible player. Each scene's metadata is added as timed metadata. Your HLS player will give you access to this data.
 
 A web-based example of playing a KodaStream interactive video can be found in frontend/demos/simple. Take a look at the KodaPlayer class and its onMetadataChange event to understand more about how client-side interactivity is added.
 
