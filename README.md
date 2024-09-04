@@ -21,11 +21,21 @@ Open-source tool for creating immersive and interactive video experiences.
 - Web-based video creation UI (Coming Soon!)
 
 ## 🚀 Quick Start
-1. Ensure Docker is installed on your machine.
+### With Docker
+1. Ensure Docker is installed on your machine. 
 2. Clone this repo.
 3. Create a `videos` directory inside the `backend` folder. Add any videos you want to use here. Two example videos can be found in the `example-videos` directory.
-4. Run `make up` from the root of the project.
+4. Run `make up` from the root of the project. 
 5. Call the REST API to create new interactive content.
+
+### Alternativly, without Docker
+1. Ensure that FFmpeg and PostgreSQL are installed on your system.
+2. Clone this repo.
+3. Create a `videos` directory inside the `backend` folder. Add any videos you want to use here. Two example videos can be found in the `example-videos` directory.
+4. Navigate to the backend directory.
+5. Run `npm install` followed by `npm run start:dev`
+6. Call the REST API to create new interactive content.
+
 
 #### Example Request
 This example combines two video clips into a looping live stream. As each clip plays, client-side events containing the metadata are triggered. This metadata is used to build out interactivity, such as clickable links and buy buttons.
