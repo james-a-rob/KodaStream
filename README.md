@@ -79,7 +79,7 @@ A web-based example of playing a KodaStream interactive video can be found in fr
 Learn how to create an interactive TV channel with our [getting started tutorial](docs/getting-started.md).
 
 ## 🤘 In action
-#### Sneak in Peace
+#### Watch and shop
 [Sneakinpeace.com](https://www.sneakinpeace.com/) uses KodaStream to offer a 24/7 live shopping experience. Viewers can watch together, learn more about sneakers, and even purchase items without leaving the stream.
 <a href="https://sneakinpeace.com"><img src="sneak.gif" width="100%"></a>
 
