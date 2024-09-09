@@ -83,7 +83,4 @@ Learn how to create an interactive TV channel with our [getting started tutorial
 [Sneakinpeace.com](https://www.sneakinpeace.com/) uses KodaStream to offer a 24/7 live shopping experience. Viewers can watch together, learn more about sneakers, and even purchase items without leaving the stream.
 <a href="https://sneakinpeace.com"><img src="sneak.gif" width="100%"></a>
 
-#### Interactive job application
-A novel approach to job applications, built with KodaStream.
-[Watch here](https://job-application-zeta.vercel.app/eleven-labs)
 
