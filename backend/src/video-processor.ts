@@ -23,16 +23,9 @@ const process = (scene: Scene, event: Event) => {
         const newEventDirLocation = path.join(current, `../events/${event.id}`);
         const segmentLocation = path.join(current, `../events/${event.id}/file-${scene.id}-%03d.ts`);
         const outputLocation = path.join(current, `../events/${event.id}/output-initial.m3u8`);
-
-        fs.ensureDir(newEventDirLocation)
-        const ff = ffmpeg()
-
-
-        ff.addInput(sceneLocation)
-            .inputOptions(
-                '-re',
-            )
-            .addOptions([
+        const isLive = event.id === 34 ? true : false;
+        const ffmpegOptions = isLive ?
+            [
                 '-profile:v baseline',
                 '-level 3.0',
                 '-start_number 0',
@@ -44,7 +37,29 @@ const process = (scene: Scene, event: Event) => {
                 '-f hls',
                 '-g 25'
 
-            ]).output(outputLocation).on('end', () => {
+            ] :
+            [
+                '-profile:v baseline',
+                '-level 3.0',
+                '-start_number 0',
+                '-hls_time 6',
+                '-sc_threshold 0',
+                `-hls_segment_filename ${segmentLocation}`,
+                '-hls_flags program_date_time+append_list',
+                '-hls_playlist_type vod',
+                '-f hls',
+                '-g 25'
+
+            ]
+        fs.ensureDir(newEventDirLocation)
+        const ff = ffmpeg()
+
+
+        ff.addInput(sceneLocation)
+            .inputOptions(
+                '-re',
+            )
+            .addOptions(ffmpegOptions).output(outputLocation).on('end', () => {
                 resolve(true);
             }).on('start', (data) => {
                 // console.log('started', data)

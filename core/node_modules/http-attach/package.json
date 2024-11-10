@@ -1,0 +1,19 @@
+{
+  "name": "http-attach",
+  "author": "Zendesk, Inc.",
+  "contributors": ["jden <jason@denizac.org>"],
+  "version": "1.0.0",
+  "description": "write services that attach to existing httpServer instances",
+  "keywords": ["http", "attach", "server", "extend", "component", "service"],
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && mochi"
+  },
+  "repository": "git@github.com:zendesk/node-http-attach.git",
+  "license": "Apache-2.0",
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "mochi": "0.3.0",
+    "standard": "^4.0.1"
+  }
+}

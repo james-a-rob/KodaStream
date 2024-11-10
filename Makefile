@@ -2,7 +2,7 @@
 
 # Default target, builds and runs the Docker Compose setup
 up:
-	docker-compose up --build
+	docker-compose up -d --build
 
 # Stops the running containers without removing them
 stop:
