@@ -1,0 +1,7 @@
+api/node_modules
+backend/api/src/events
+api/videos
+api/dist
+api/.env
+api/events/*
+.DS_Store

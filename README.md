@@ -2,7 +2,7 @@
 
 ## KodaStream
 
-### 📺 Interactive video for websites, apps, and smart TVs ✨
+### 📺 Interactive video streams for websites, apps, and smart TVs ✨
 
 Open-source tool for creating immersive and interactive video experiences.
 </div>

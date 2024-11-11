@@ -1,9 +1,0 @@
-backend/api/node_modules
-website/api/node_modules
-backend/api/src/events
-backend/api/videos
-backend/api/dist
-backend/api/.env
-backend/api/events/*
-.DS_Store
-core/.DS_Store
