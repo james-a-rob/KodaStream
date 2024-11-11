@@ -23,7 +23,7 @@ Open-source tool for creating immersive and interactive video experiences.
 ## 🚀 Quick Start
 
 ### Option 1
-1. Ensure that FFmpeg, PostgreSQL, Redis and Mino are installed on your system.
+1. Ensure that FFmpeg, PostgreSQL, Redis are installed on your system.
 2. Clone this repo.
 3. Create a `videos` directory inside the `backend` folder. Add any videos you want to use here. Two example videos can be found in the `example-videos` directory.
 4. Setup environment variables

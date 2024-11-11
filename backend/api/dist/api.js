@@ -17,6 +17,9 @@ import { createLiveEvent, getLiveEvent, updateLiveEvent, log, getViewers } from 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+app.get('/status', (req, res) => {
+    res.status(200).send({ status: 'UP' });
+});
 app.post("/events", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (req.headers.accesskey !== process.env.APIKEY) {

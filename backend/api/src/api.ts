@@ -10,6 +10,11 @@ const app = express();
 app.use(bodyParser.json())
 app.use(cors());
 
+app.get('/status', (req: Request, res: Response) => {
+    res.status(200).send({ status: 'UP' });
+});
+
+
 app.post("/events", async (req: Request, res: Response) => {
     try {
         if (req.headers.accesskey !== process.env.APIKEY) {
