@@ -74,7 +74,6 @@ export const log = async (datetime: string, sessionId: string, eventId: string, 
     const log = {
         datetime,
         sessionId,
-        event: event,
         type: type,
         name: name,
         url: url

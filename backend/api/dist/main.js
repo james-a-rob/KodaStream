@@ -13,6 +13,7 @@ import apiApp from './api';
 import AppDataSource from './data-source';
 import { app as contentApp, hlsServerConfig } from './content-server';
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('IS STARTING');
     yield AppDataSource.initialize();
     apiApp.listen(4000, () => {
         console.log('api listening on port 4000');

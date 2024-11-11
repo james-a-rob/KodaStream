@@ -8,7 +8,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { Scene } from "./Scene";
 import { StreamStatus } from "../enums";
 let Event = class Event {
 };
@@ -29,11 +28,11 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Event.prototype, "loop", void 0);
 __decorate([
-    OneToMany(() => Scene, (scene) => scene.event, { cascade: true }),
+    OneToMany('Scene', 'event', { cascade: true }),
     __metadata("design:type", Array)
 ], Event.prototype, "scenes", void 0);
 __decorate([
-    OneToMany(() => Scene, (log) => log.event, { cascade: true }),
+    OneToMany('Log', 'event', { cascade: true }),
     __metadata("design:type", Array)
 ], Event.prototype, "logs", void 0);
 Event = __decorate([

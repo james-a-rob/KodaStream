@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
-import { Event } from "./Event";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation } from "typeorm"
+import type { Event } from "./Event";
 import { LogType } from "../enums";
 
 @Entity()
@@ -24,6 +24,6 @@ export class Log {
     type: LogType
 
 
-    @ManyToOne(() => Event, (event) => event.scenes)
-    event: Event
+    @ManyToOne('Event', 'logs')
+    event: Relation<Event>
 }

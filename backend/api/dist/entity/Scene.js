@@ -8,7 +8,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { Event } from "./Event";
 let Scene = class Scene {
 };
 __decorate([
@@ -24,8 +23,8 @@ __decorate([
     __metadata("design:type", String)
 ], Scene.prototype, "metadata", void 0);
 __decorate([
-    ManyToOne(() => Event, (event) => event.scenes),
-    __metadata("design:type", Event)
+    ManyToOne('Event', 'scenes'),
+    __metadata("design:type", Function)
 ], Scene.prototype, "event", void 0);
 Scene = __decorate([
     Entity()

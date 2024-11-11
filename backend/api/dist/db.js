@@ -66,7 +66,6 @@ export const log = (datetime, sessionId, eventId, type, name, url) => __awaiter(
     const log = {
         datetime,
         sessionId,
-        event: event,
         type: type,
         name: name,
         url: url

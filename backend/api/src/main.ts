@@ -5,6 +5,7 @@ import AppDataSource from './data-source';
 import { app as contentApp, hlsServerConfig } from './content-server';
 
 const start = async () => {
+    console.log('IS STARTING')
     await AppDataSource.initialize();
 
     apiApp.listen(4000, () => {

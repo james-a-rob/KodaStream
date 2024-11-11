@@ -8,31 +8,29 @@ const config = {
     },
     "dev": {
         type: "postgres",
-        host: 'db',
+        host: 'localhost',
         username: 'postgres',
-        password: 'password',
-        database: 'koda-db',
+        password: '1234',
+        database: 'kodastream-dev',
         port: 5432,
         dropSchema: false,
         synchronize: false,
         logging: false,
     },
     "prod": {
-        ssl: true,
-        "extra": {
-            "ssl": {
-                "rejectUnauthorized": false
-            }
+        ssl: {
+            rejectUnauthorized: true,
+            ca: process.env.CACERT,
         },
         type: "postgres",
         host: process.env.DB_HOST,
-        username: process.env.DB_USER,
-        password: process.env.DB_PASS,
+        port: parseInt(process.env.DB_PORT || '5432'),
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
-        port: 25060,
         dropSchema: false,
         synchronize: false,
-        logging: false,
+        logging: true,
     }
 };
 export default config;

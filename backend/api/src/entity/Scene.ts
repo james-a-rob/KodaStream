@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
-import { Event } from "./Event";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation } from "typeorm"
+import type { Event } from "./Event";
 
 @Entity()
 export class Scene {
@@ -13,6 +13,6 @@ export class Scene {
     @Column('text', { default: '' })
     metadata: string
 
-    @ManyToOne(() => Event, (event) => event.scenes)
+    @ManyToOne('Event', 'scenes')
     event: Event
 }

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { Scene } from "./Scene";
-import { Log } from "./Log";
+import type { Scene } from "./Scene";
+import type { Log } from "./Log";
 
 import { StreamStatus } from "../enums";
 
@@ -19,10 +19,10 @@ export class Event {
     @Column('boolean', { default: false })
     loop: boolean
 
-    @OneToMany(() => Scene, (scene) => scene.event, { cascade: true })
-    scenes: Scene[]
+    @OneToMany('Scene', 'event', { cascade: true })
+    scenes: Scene[];
 
-    @OneToMany(() => Scene, (log) => log.event, { cascade: true })
-    logs: Log[]
+    @OneToMany('Log', 'event', { cascade: true })
+    logs: Log[];
 
 }
