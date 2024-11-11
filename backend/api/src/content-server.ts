@@ -16,17 +16,17 @@ const current = currentPath.default;
 const app = express();
 app.use(cors());
 
-app.get('/', (req: Request, res: Response) => {
-    return res.status(200).sendFile(path.join(current, '../public/client.html'));
-});
+// app.get('/', (req: Request, res: Response) => {
+//     return res.status(200).sendFile(path.join(current, '../public/client.html'));
+// });
 
-app.get('/video-js', (req: Request, res: Response) => {
-    return res.status(200).sendFile(path.join(current, '../public/client-video-js.html'));
-});
+// app.get('/video-js', (req: Request, res: Response) => {
+//     return res.status(200).sendFile(path.join(current, '../public/client-video-js.html'));
+// });
 
-app.get('/video-js-file', (req: Request, res: Response) => {
-    return res.status(200).sendFile(path.join(current, '../public/video-js.js'));
-});
+// app.get('/video-js-file', (req: Request, res: Response) => {
+//     return res.status(200).sendFile(path.join(current, '../public/video-js.js'));
+// });
 
 
 app.get('/hls-parser', (req: Request, res: Response) => {

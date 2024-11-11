@@ -268,7 +268,7 @@ describe("live streaming", () => {
                 .set('Accept', 'application/json');
 
             expect(responseStart2.status).toEqual(400)
-            expect(responseStart2.text).toEqual("not possible to update event. Invalid stream status sent");
+            expect(responseStart2.text).toEqual("Not possible to update event. Invalid stream status sent");
         })
 
     })
