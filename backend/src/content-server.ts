@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { IncomingMessage } from 'http';
 
 import { v4 as uuidv4 } from 'uuid';
 import cors from 'cors';
@@ -6,6 +7,9 @@ import fs from 'fs-extra';
 import path from 'path';
 import HLS from 'hls-parser';
 import { getLiveEvent } from './db';
+import { Readable } from 'stream';
+
+import MinioClient from './services/file-storage';
 import * as currentPath from "./current-path.cjs";
 
 const current = currentPath.default;
@@ -38,6 +42,32 @@ app.get('/ios-demo', (req: Request, res: Response) => {
     return res.status(200).sendFile(path.join(current, '../public/client-ios.html'));
 });
 
+function removeEventsPrefix(filePath) {
+    return filePath.replace(/^\/?events\//, '');
+}
+
+const streamToString = (stream: Readable): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        let data = '';
+
+        // Handle the 'data' event to accumulate chunks into the data string
+        stream.on('data', (chunk: Buffer) => {
+            data += chunk.toString(); // Convert chunk to string and append it
+        });
+
+        // Handle the 'end' event when the stream has been fully consumed
+        stream.on('end', () => {
+            resolve(data); // Resolve the promise with the accumulated string
+        });
+
+        // Handle errors during the stream reading process
+        stream.on('error', (err) => {
+            reject(err); // Reject the promise in case of error
+        });
+    });
+};
+
+
 const hlsServerConfig = {
     provider: {
         exists: (req: Request, cb) => {
@@ -62,8 +92,13 @@ const hlsServerConfig = {
             if (!event) {
                 return cb(true, null);
             } else {
+                console.log('m3u8 path', removeEventsPrefix(req.url.replace("output", "output-initial")));
+                const m3u8DataStream = await MinioClient.getFileByPath("streams", removeEventsPrefix(req.url.replace("output", "output-initial")));
+                console.log(m3u8DataStream)
+                const m3u8Data = await streamToString(m3u8DataStream)
 
-                const m3u8Data = fs.readFileSync(path.join(current, `../${req.url.replace("output", "output-initial")}`));
+                // const m3u8Data = fs.readFileSync(path.join(current, `../${req.url.replace("output", "output-initial")}`));
+
 
 
                 const playlist = HLS.parse(m3u8Data.toString());
@@ -112,9 +147,12 @@ const hlsServerConfig = {
                 cb(null, stream);
             }
         },
-        getSegmentStream: (req: Request, cb) => {
-            console.log(req.url)
-            const stream = fs.createReadStream(path.join(current, `../${req.url}`));
+        getSegmentStream: async (req: Request, cb) => {
+            console.log(req.url);
+
+            // Read the file content into memory
+            const data = await MinioClient.getFileByPath("streams", removeEventsPrefix(req.url));
+            const stream = Readable.from(data);
             cb(null, stream);
         }
     }

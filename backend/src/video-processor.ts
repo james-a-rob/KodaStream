@@ -8,13 +8,13 @@ import { Scene } from "./entity/Scene";
 import { Event } from "./entity/Event";
 import { StreamStatus } from './enums';
 import { getLiveEvent } from "./db";
-// import MinioClient from "./services/file-storage";
+import MinioClient from "./services/file-storage";
+import chokidar from 'chokidar';
 
 import * as currentPath from "./current-path.cjs";
 
 const current = currentPath.default;
 
-console.log('pathToFfmpeg', pathToFfmpeg)
 ffmpeg.setFfmpegPath(pathToFfmpeg);
 
 const process = (scene: Scene, event: Event) => {
@@ -41,6 +41,20 @@ const process = (scene: Scene, event: Event) => {
         fs.ensureDir(newEventDirLocation)
         const ff = ffmpeg()
 
+        const watcher = chokidar.watch(newEventDirLocation, { persistent: true });
+
+        watcher.on('add', (filePath) => {
+            if (filePath.endsWith('.ts') || filePath.endsWith('.m3u8')) {
+                // console.log(`New file detected: ${filePath}`);
+                uploadToMinio(filePath, newEventDirLocation, event.id);
+            }
+        }).on('change', (filePath) => {
+            if (filePath.endsWith('.ts') || filePath.endsWith('.m3u8')) {
+                // console.log(`New file detected: ${filePath}`);
+                uploadToMinio(filePath, newEventDirLocation, event.id);
+            }
+        });
+
 
         ff.addInput(sceneLocation)
             .inputOptions(
@@ -60,6 +74,24 @@ const process = (scene: Scene, event: Event) => {
 
     });
 }
+
+const uploadToMinio = async (filePath: string, localDir: string, eventId: number) => {
+    const fileName = path.basename(filePath);
+    const fullFilePath = `${localDir}/${fileName}`;
+    const objectName = `${eventId}/${fileName}`;
+    try {
+        // Upload the file to Minio
+        await MinioClient.uploadFile('streams', fullFilePath, objectName);
+        console.log(`Uploaded ${fileName} to Minio`);
+
+        // Optionally, remove the local file after upload
+        // fs.removeSync(filePath);
+        console.log(`Removed local file: ${filePath}`);
+    } catch (err) {
+        console.error('Error uploading to Minio:', err);
+    }
+};
+
 // this needs to listen for event instead
 export const start = async (eventId: number) => {
     // clean up dir before start

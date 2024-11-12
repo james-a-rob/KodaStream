@@ -76,7 +76,7 @@ afterEach(async () => {
 
 
 describe('video processor', () => {
-    test("starts", async () => {
+    test("starts processing", async () => {
 
         const event = await createLiveEvent(eventWithScenesAndMetadata);
         const eventsLocation = path.join(__dirname, `../events/${event.id}`);

@@ -9,7 +9,7 @@
     "migrations:run": "NODE_ENV=dev tsx ./node_modules/typeorm/cli.js migration:run -d ./src/data-source.ts",
     "build": "npx tsc --build --verbose && cp ./src/current-path.cjs ./dist/current-path.cjs",
     "test:unit": "NODE_ENV=test jest --watch --testPathPattern=src",
-    "test:int": "APIKEY=dh2873hd8qwegiuf873wgf783w4 NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:int": "APIKEY=dh2873hd8qwegiuf873wgf783w4 NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js -t 'starts processing'",
     "start:dev": "APIKEY=dev-key NODE_ENV=dev tsx watch src/main.ts",
     "start:transcoder": "pm2 start ./transcoder/ecosystem.config.cjs  --no-daemon",
     "start": "pm2 start ecosystem.config.cjs  --no-daemon"
@@ -33,6 +33,7 @@
     "@videojs/http-streaming": "^2.16.2",
     "axios": "^1.4.0",
     "body-parser": "^1.20.2",
+    "chokidar": "^4.0.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "ffmpeg-static": "4.4.0",

@@ -1,7 +1,9 @@
 import { Client, PutObjectResult } from 'minio';
 import fs from 'fs';
+import { PassThrough } from 'stream';
 
-console.log('yoyoyyo')
+
+
 class MinioClient {
     private static instance: Client | null = null;
 
@@ -34,6 +36,19 @@ class MinioClient {
         });
     }
 
+    public static createReadStream(bucket: string, filePath: string): Promise<NodeJS.ReadableStream> {
+        const minioClient = MinioClient.getInstance();
+        return new Promise((resolve, reject) => {
+            // Get the file from MinIO as a stream
+            minioClient.getObject(bucket, filePath, (err, dataStream) => {
+                if (err) {
+                    return reject(`Error fetching file from MinIO: ${err}`);
+                }
+                resolve(dataStream);
+            });
+        });
+    }
+
     // Method to upload a file to a bucket
     public static async uploadFile(bucketName: string, filePath: string, objectName: string): Promise<PutObjectResult> {
         try {
@@ -52,6 +67,24 @@ class MinioClient {
             console.error('Error uploading file:', err);
             throw err;
         }
+    }
+
+    public static createWriteStream(outputLocation: string) {
+        console.log('creating write stream')
+        const minioClient = MinioClient.getInstance();
+
+        const passThroughStream = new PassThrough();
+
+        minioClient.putObject('streams', outputLocation, passThroughStream, (err, etag) => {
+            console.log('- -  - attempting to put')
+            if (err) {
+                console.error('Error uploading to Minio:', err);
+            } else {
+                console.log(`File uploaded successfully to Minio, ETag: ${etag}`);
+            }
+        });
+
+        return passThroughStream;
     }
 
     public static async listBuckets(): Promise<string[]> {

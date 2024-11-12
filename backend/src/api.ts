@@ -17,6 +17,7 @@ app.get('/status', (req: Request, res: Response) => {
 
 app.post("/events", async (req: Request, res: Response) => {
     try {
+        console.log('process.env.APIKEY', process.env.APIKEY);
         if (req.headers.accesskey !== process.env.APIKEY) {
             return res.status(403).json({ error: 'Access denied' });
         }
