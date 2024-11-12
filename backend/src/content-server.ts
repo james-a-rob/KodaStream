@@ -92,12 +92,8 @@ const hlsServerConfig = {
             if (!event) {
                 return cb(true, null);
             } else {
-                console.log('m3u8 path', removeEventsPrefix(req.url.replace("output", "output-initial")));
-                const m3u8DataStream = await MinioClient.getFileByPath("streams", removeEventsPrefix(req.url.replace("output", "output-initial")));
-                console.log(m3u8DataStream)
+                const m3u8DataStream = await MinioClient.getFileByPath("kodastream-streams", removeEventsPrefix(req.url.replace("output", "output-initial")));
                 const m3u8Data = await streamToString(m3u8DataStream)
-
-                // const m3u8Data = fs.readFileSync(path.join(current, `../${req.url.replace("output", "output-initial")}`));
 
 
 
@@ -148,10 +144,8 @@ const hlsServerConfig = {
             }
         },
         getSegmentStream: async (req: Request, cb) => {
-            console.log(req.url);
-
             // Read the file content into memory
-            const data = await MinioClient.getFileByPath("streams", removeEventsPrefix(req.url));
+            const data = await MinioClient.getFileByPath("kodastream-streams", removeEventsPrefix(req.url));
             const stream = Readable.from(data);
             cb(null, stream);
         }

@@ -3,14 +3,10 @@ import httpAttach from 'http-attach';
 import apiApp from './api';
 import AppDataSource from './data-source';
 import { app as contentApp, hlsServerConfig } from './content-server';
-import MinioClient from "./services/file-storage";
 
 
 const start = async () => {
-    console.log('IS STARTING')
-    const minio = MinioClient.getInstance();
-    const buckets = await minio.listBuckets();
-    console.log('buckets', buckets)
+
     await AppDataSource.initialize();
 
     apiApp.listen(4000, () => {
