@@ -1,7 +1,7 @@
-api/node_modules
-api/src/events
-api/videos
-api/dist
-api/.env
-api/events/*
+node_modules
+src/events
+videos
+dist
+.env
+events/*
 .DS_Store
