@@ -10,24 +10,19 @@ class FileStorage {
     private constructor() { }
 
     public static getInstance(): S3Client {
+        console.log(process.env.ACCESS_KEY_ID)
         if (!FileStorage.instance) {
             FileStorage.instance = new S3Client({
-                // region: 'eu-west-2',
-                // credentials: {
-                //     accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'AKIA2WIG7OB4NKCH4W6S',
-                //     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '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',
-                // },
-                // endpoint: process.env.AWS_S3_ENDPOINT || 'https://s3.eu-west-2.amazonaws.com',
 
                 // @ts-ignore
-                sslEnabled: false,
-                region: "eu-west-1",
+                sslEnabled: process.env.STORAGE_SSL_ON || false,
+                region: "eu-west-2",
 
                 credentials: {
-                    accessKeyId: "minioadmin",
-                    secretAccessKey: "minioadmin",
+                    accessKeyId: process.env.ACCESS_KEY_ID || 'minioadmin',
+                    secretAccessKey: process.env.SECRET_ACCESS_KEY || 'minioadmin',
                 },
-                endpoint: "http://127.0.0.1:9000",
+                endpoint: process.env.STORAGE_ENDPOINT || "http://127.0.0.1:9000",
             });
         }
         return FileStorage.instance;
