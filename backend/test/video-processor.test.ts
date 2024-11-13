@@ -77,7 +77,7 @@ afterEach(async () => {
 
 describe('video processor', () => {
     test("starts processing", async () => {
-
+        // add example videos to mino media dir
         const event = await createLiveEvent(eventWithScenesAndMetadata);
         const eventsLocation = path.join(__dirname, `../events/${event.id}`);
         fs.rmSync(eventsLocation, { recursive: true, force: true });

@@ -13,9 +13,7 @@ class FileStorage {
         console.log(process.env.ACCESS_KEY_ID)
         if (!FileStorage.instance) {
             FileStorage.instance = new S3Client({
-
-                // @ts-ignore
-                sslEnabled: process.env.STORAGE_SSL_ON || false,
+                retryMode: 'standard',
                 region: "eu-west-2",
 
                 credentials: {
@@ -23,6 +21,9 @@ class FileStorage {
                     secretAccessKey: process.env.SECRET_ACCESS_KEY || 'minioadmin',
                 },
                 endpoint: process.env.STORAGE_ENDPOINT || "http://127.0.0.1:9000",
+                // @ts-ignore
+                sslEnabled: process.env.STORAGE_SSL_ON || false,
+
             });
         }
         return FileStorage.instance;

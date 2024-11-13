@@ -4,7 +4,7 @@
 
 ### 📺 Open-source streaming studio ✨
 
-Combine prerecorded content in 24/7 live streams 
+Combine prerecorded content into 24/7 live streams 
 </div>
 
 
