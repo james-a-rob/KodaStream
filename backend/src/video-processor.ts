@@ -70,9 +70,6 @@ const uploadToMinio = async (filePath: string, localDir: string, eventId: number
         await MinioClient.uploadFile('kodastream-streams', fullFilePath, objectName);
         console.log(`Uploaded ${fileName} to Minio`);
 
-        // Optionally, remove the local file after upload
-        // fs.removeSync(filePath);
-        // console.log(`Removed local file: ${filePath}`);
     } catch (err) {
         console.error('Error uploading to Minio:', err);
     }
@@ -94,12 +91,12 @@ export const start = async (eventId: number) => {
 
     watcher.on('add', (filePath) => {
         if (filePath.endsWith('.ts') || filePath.endsWith('.m3u8')) {
-            console.log(`New file detected: ${filePath}`);
+            // console.log(`New file detected: ${filePath}`);
             uploadToMinio(filePath, eventDirLocation, eventId);
         }
     }).on('change', (filePath) => {
         if (filePath.endsWith('.ts') || filePath.endsWith('.m3u8')) {
-            console.log(`File updated: ${filePath}`);
+            // console.log(`File updated: ${filePath}`);
             uploadToMinio(filePath, eventDirLocation, eventId);
         }
     });

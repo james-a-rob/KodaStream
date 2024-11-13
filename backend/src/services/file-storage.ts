@@ -1,8 +1,9 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, ListBucketsCommand, PutObjectCommandInput, GetObjectCommandOutput, DeleteObjectsCommand, ListObjectsV2CommandOutput, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import fs from 'fs';
+import { Readable, PassThrough } from 'stream';
 
-import { Readable, PassThrough } from 'stream'; // Import the Node.js Readable stream
 
+// ensure this has been run - minio server /tmp/data
 class FileStorage {
     private static instance: S3Client | null = null;
 
