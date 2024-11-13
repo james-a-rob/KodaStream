@@ -79,7 +79,13 @@ const uploadToMinio = async (filePath: string, localDir: string, eventId: number
 export const start = async (eventId: number) => {
     // clean up dir before start
     const eventDirLocation = path.join(current, `../events/${eventId}`);
-    MinioClient.deleteAllFilesInDirectory('kodastream-streams', `${eventId}`)
+
+    try {
+        MinioClient.deleteAllFilesInDirectory('kodastream-streams', `${eventId}`)
+
+    } catch (e) {
+        console.log(`failed to delete directroy /${eventId}`)
+    }
 
     const pathExists = await fs.pathExists(eventDirLocation);
     if (pathExists) {
