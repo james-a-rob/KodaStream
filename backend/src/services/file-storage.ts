@@ -71,7 +71,6 @@ class FileStorage {
 
         try {
             await s3Client.send(new PutObjectCommand(uploadParams));
-            console.log(`File uploaded successfully to ${bucketName}/${objectName}`);
         } catch (err) {
             console.error('Error uploading file:', err);
             throw err;

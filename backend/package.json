@@ -11,9 +11,8 @@
     "test:unit": "NODE_ENV=test jest --watch --testPathPattern=src",
     "test:int": "APIKEY=dh2873hd8qwegiuf873wgf783w4 NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "start:dev": "APIKEY=dev-key NODE_ENV=dev tsx watch src/main.ts",
-    "start:api": "pm2 start api",
-    "start:content-server": "pm2 start content-server",
-    "start": "pm2 start ecosystem.config.cjs  --no-daemon"
+    "start": "pm2 start ecosystem.config.cjs  --no-daemon",
+    "start:all": "pm2 start src/content-server/ecosystem.content-server.config.cjs && pm2 start src/api/ecosystem.api.config.cjs"
   },
   "author": "",
   "license": "ISC",

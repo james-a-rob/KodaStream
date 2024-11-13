@@ -7,7 +7,7 @@ import { Event } from "../src/entity/Event";
 import { Scene } from "../src/entity/Scene";
 import { Log } from "../src/entity/Log";
 import { StreamStatus, LogType } from "../src/enums";
-import app from '../src/api';
+import app from '../src/api/api';
 import { describe } from "node:test";
 
 

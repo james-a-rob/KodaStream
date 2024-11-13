@@ -6,11 +6,11 @@ import cors from 'cors';
 import fs from 'fs-extra';
 import path from 'path';
 import HLS from 'hls-parser';
-import { getLiveEvent } from './db';
+import { getLiveEvent } from '../db';
 import { Readable } from 'stream';
 
-import MinioClient from './services/file-storage';
-import * as currentPath from "./current-path.cjs";
+import MinioClient from '../services/file-storage';
+import * as currentPath from "../current-path.cjs";
 
 const current = currentPath.default;
 
