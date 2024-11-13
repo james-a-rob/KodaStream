@@ -12,11 +12,11 @@ Combine prerecorded content in 24/7 live streams
 - Loop streams forever 
 - Multi-channel 
 - Attach timed metadata
-- Easy to use management UI
-- broadcast over HLS protocol 
+- User friendly management UI
+- Broadcast over HLS protocol 
 - Scales horizontally and vertically 
 - Copatible with CDNs
-- REST API for automation
+- Open API for automation
 
 
 ## 🚀 Quick Start
