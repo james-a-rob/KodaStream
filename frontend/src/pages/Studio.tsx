@@ -8,7 +8,7 @@ const Studio: React.FC = () => {
 
     return (
         <Container style={{ marginTop: '20px' }}>
-            <Typography variant="body1">Studio</Typography>
+            <Typography variant="h6">Studio</Typography>
 
             <Grid container spacing={2} sx={{ padding: 2 }}>
                 {/* Full-width Card */}

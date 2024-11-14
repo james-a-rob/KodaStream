@@ -41,7 +41,7 @@ const config: Config = {
         database: process.env.DB_NAME,
         dropSchema: false,
         synchronize: false,
-        logging: true,
+        logging: false,
     }
 }
 

@@ -4,10 +4,11 @@ import HLS from 'hls-parser';
 import { Request } from 'express';
 import fs from 'fs-extra';
 import path from 'path';
-import { hlsServerConfig } from "../src/content-server";
+import { hlsServerConfig } from "../src/content-server/content-server";
 import AppDataSource from '../src/data-source';
 import { createLiveEvent } from '../src/db';
 import { StreamStatus } from "../src/enums";
+import FileStorage from "../src/services/file-storage";
 
 beforeEach(async () => {
     await AppDataSource.initialize();
@@ -50,11 +51,10 @@ describe('content server config', () => {
         const event = await createLiveEvent(eventWithScenesAndMetadata);
 
         const locationOfMockVideoContent = path.join(__dirname, `./mock-video-content/short`);
-        const locationOfVideoContent = path.join(__dirname, `../events/${event.id}`);
-        // fs.rmSync(locationOfVideoContent, { recursive: true, force: true });
+        const locationOfVideoContent = `${event.id}`;
 
-        fs.ensureDirSync(locationOfVideoContent);
-        fs.copySync(locationOfMockVideoContent, locationOfVideoContent);
+        await FileStorage.uploadFile('kodastream-streams', `${locationOfMockVideoContent}/output-initial.m3u8`, `${locationOfVideoContent}/output-initial.m3u8`);
+
 
 
         // add m3u8 and ts file in diretory jusing response event id
@@ -63,19 +63,23 @@ describe('content server config', () => {
         const fakeRequest = {
             url: '/events/1/output.m3u8'
         } as Request;
-        const cb = async (error, stream) => {
-            // check arguments
 
-            const m3u8Data = fs.readFileSync(stream.path);
-            const playlist = HLS.parse(m3u8Data.toString());
-            const expectedMetadata = encodeURIComponent(JSON.stringify({
-                "name": "Nike",
-                "scene-id": event.scenes[0].id
-            }));
-            expect(playlist.source.includes(expectedMetadata)).toBe(true);
-            expect(error).toBe(null);
-            expect(stream.path).toBe(outputPath);
-            stream.close();
+        const cb = async (error, stream) => {
+            console.log('stream', stream.toString())
+            let m3u8Data = '';
+            stream.on('data', (chunk) => {
+                m3u8Data += chunk.toString();
+            });
+            stream.on('end', () => {
+                const playlist = HLS.parse(m3u8Data.toString());
+                const expectedMetadata = encodeURIComponent(JSON.stringify({
+                    "name": "Nike",
+                    "scene-id": event.scenes[0].id
+                }));
+                expect(playlist.source.includes(expectedMetadata)).toBe(true);
+                expect(error).toBe(null);
+            });
+
         }
         waitForFileExists(outputPath)
         await hlsServerConfig.provider.getManifestStream(fakeRequest, cb);

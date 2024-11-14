@@ -3,13 +3,12 @@ import { IncomingMessage } from 'http';
 
 import { v4 as uuidv4 } from 'uuid';
 import cors from 'cors';
-import fs from 'fs-extra';
 import path from 'path';
 import HLS from 'hls-parser';
 import { getLiveEvent } from '../db';
 import { Readable } from 'stream';
 
-import MinioClient from '../services/file-storage';
+import FileStorage from '../services/file-storage';
 import * as currentPath from "../current-path.cjs";
 
 const current = currentPath.default;
@@ -70,19 +69,27 @@ const streamToString = (stream: Readable): Promise<string> => {
 
 const hlsServerConfig = {
     provider: {
-        exists: (req: Request, cb) => {
+        exists: async (req: Request, cb) => {
             const ext = req.url.split('.').pop();
 
             if (ext !== 'm3u8' && ext !== 'ts') {
                 return cb(null, true);
             }
 
-            fs.access(path.join(current, `../${req.url.replace("output", "output-initial")}`), fs.constants.F_OK, function (err) {
-                if (err) {
-                    return cb(null, false);
-                }
+            // update to use s3
+            const filePath = removeEventsPrefix(`${req.url.replace("output", "output-initial")}`);
+
+            console.log('filePath', filePath);
+
+            try {
+                await FileStorage.getFileByPath("kodastream-streams", filePath);
                 cb(null, true);
-            });
+
+            } catch (e) {
+                console.info('file not found')
+                cb(null, false);
+
+            }
         },
         getManifestStream: async (req: Request, cb) => {
             //remove sync calls
@@ -92,7 +99,7 @@ const hlsServerConfig = {
             if (!event) {
                 return cb(true, null);
             } else {
-                const m3u8DataStream = await MinioClient.getFileByPath("kodastream-streams", removeEventsPrefix(req.url.replace("output", "output-initial")));
+                const m3u8DataStream = await FileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url.replace("output", "output-initial")));
                 const m3u8Data = await streamToString(m3u8DataStream)
 
 
@@ -122,30 +129,15 @@ const hlsServerConfig = {
                     }
 
                 });
-
-
-                const outputPath = path.join(current, `../events/${eventId}/output.m3u8`);
-                try {
-                    fs.writeFileSync(outputPath, HLS.stringify(playlist));
-
-                } catch (e) {
-                    console.log("write failed", e);
-                }
-
-                let stream;
-                try {
-                    stream = await fs.createReadStream(outputPath);
-
-                } catch (e) {
-                    console.log("read failed")
-                }
+                const newPlaylist = HLS.stringify(playlist);
+                const stream = Readable.from([newPlaylist]);
 
                 cb(null, stream);
             }
         },
         getSegmentStream: async (req: Request, cb) => {
             // Read the file content into memory
-            const data = await MinioClient.getFileByPath("kodastream-streams", removeEventsPrefix(req.url));
+            const data = await FileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url));
             const stream = Readable.from(data);
             cb(null, stream);
         }

@@ -20,29 +20,21 @@ const PlayList: React.FC<PlayListProps> = ({ data }) => {
 
     return (
         <div>
-            <Box
-                sx={{
-                    height: 400,
-                    bgcolor: 'white',
-                    boxShadow: 3,
-                    marginTop: '20px',
-                    borderRadius: 2,
-                    padding: 2,
-                }}
-            >
-                <DataGrid
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 5,
-                            },
+
+            <DataGrid
+                initialState={{
+                    pagination: {
+                        paginationModel: {
+                            pageSize: 5,
                         },
-                    }}
-                    pageSizeOptions={[5, 10, 20]}
-                    rows={data}
-                    columns={columns}
-                />
-            </Box>
+                    },
+                }}
+                sx={{ height: 400 }}
+                pageSizeOptions={[5, 10, 20]}
+                rows={data}
+                columns={columns}
+            />
+
         </div>
     );
 };

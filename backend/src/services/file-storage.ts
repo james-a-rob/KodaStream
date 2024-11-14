@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, GetObjectCommand, ListBucketsCommand, PutObjectCommandInput, GetObjectCommandOutput, DeleteObjectsCommand, ListObjectsV2CommandOutput, ListObjectsV2Command } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, GetObjectCommand, ListBucketsCommand, HeadObjectCommandInput, HeadObjectCommand, PutObjectCommandInput, GetObjectCommandOutput, DeleteObjectsCommand, ListObjectsV2CommandOutput, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import fs from 'fs';
 import { Readable, PassThrough } from 'stream';
 
@@ -146,6 +146,7 @@ class FileStorage {
             throw err;
         }
     }
+
 }
 
 export default FileStorage;
