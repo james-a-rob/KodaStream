@@ -1,6 +1,8 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, ListBucketsCommand, HeadObjectCommandInput, HeadObjectCommand, PutObjectCommandInput, GetObjectCommandOutput, DeleteObjectsCommand, ListObjectsV2CommandOutput, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import fs from 'fs';
+import os from 'os';
 import { Readable, PassThrough } from 'stream';
+import path from 'path';
 
 
 // ensure this has been run - minio server /tmp/data
@@ -29,7 +31,30 @@ class FileStorage {
         return FileStorage.instance;
     }
 
-    // Updated method to return a Readable stream from S3
+    public static async getFileAndSave(bucket: string, filePath: string): Promise<string> {
+        try {
+            // Fetch the file stream from S3
+            const fileStream = await FileStorage.getFileByPath(bucket, filePath);
+
+            // Create a temp folder and file path to save the file
+            const tempFolder = os.tmpdir();  // Get the system's temp directory
+            const outputFilePath = path.join(tempFolder, path.basename(filePath));  // Save the file with the same name as in S3
+
+            // Save the file stream to disk
+            await FileStorage.saveStreamToFile(fileStream, outputFilePath);
+
+            console.log(`File saved successfully at ${outputFilePath}`);
+
+            // Return the file path where it was saved
+            return outputFilePath;
+
+        } catch (err) {
+            console.error(`Error in downloading or saving file from storage: ${err}`);
+            throw err;
+        }
+    }
+
+    // Helper method to get a file from S3 as a readable stream
     public static async getFileByPath(bucket: string, filePath: string): Promise<Readable> {
         const s3Client = FileStorage.getInstance();
         const getObjectParams = {
@@ -39,15 +64,38 @@ class FileStorage {
 
         try {
             const { Body } = await s3Client.send(new GetObjectCommand(getObjectParams));
+
             if (Body instanceof Readable) {
-                return Body; // Return the Body as a Readable stream
+                return Body;
+            } else if (Buffer.isBuffer(Body)) {
+                const stream = new Readable();
+                stream.push(Body);
+                stream.push(null);  // End the stream
+                return stream;
             } else {
-                throw new Error('The object Body is not a readable stream.');
+                throw new Error('The object Body is neither a readable stream nor a Buffer.');
             }
         } catch (err) {
-            console.error(`Error fetching file from S3: ${err}`);
+            console.error(`Error fetching ${filePath} from ${bucket}: ${err}`);
             throw err;
         }
+    }
+
+    // Helper method to save a readable stream to a file on disk
+    public static async saveStreamToFile(inputStream: Readable, outputPath: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const writeStream = fs.createWriteStream(outputPath);
+
+            inputStream.pipe(writeStream);
+
+            writeStream.on('finish', () => {
+                resolve();
+            });
+
+            writeStream.on('error', (err) => {
+                reject(`Error writing stream to file: ${err}`);
+            });
+        });
     }
 
     // Method to upload a file to an S3 bucket

@@ -8,7 +8,7 @@ import { Scene } from "./entity/Scene";
 import { Event } from "./entity/Event";
 import { StreamStatus } from './enums';
 import { getLiveEvent } from "./db";
-import MinioClient from "./services/file-storage";
+import FileStorage from "./services/file-storage";
 import chokidar from 'chokidar';
 
 import * as currentPath from "./current-path.cjs";
@@ -18,9 +18,11 @@ const current = currentPath.default;
 ffmpeg.setFfmpegPath(pathToFfmpeg);
 
 const process = (scene: Scene, event: Event) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
-        const sceneLocation = path.join(current, `../${scene.location}`);
+        const sceneLocation = scene.location;
+        // const sceneLocation = path.join(current, `../${scene.location}`);
+
         const newEventDirLocation = path.join(current, `../events/${event.id}`);
         const segmentLocation = path.join(current, `../events/${event.id}/file-${scene.id}-%03d.ts`);
         const outputLocation = path.join(current, `../events/${event.id}/output-initial.m3u8`);
@@ -42,11 +44,14 @@ const process = (scene: Scene, event: Event) => {
         const ff = ffmpeg()
 
 
-        ff.addInput(sceneLocation)
+        const fileLocation = await FileStorage.getFileAndSave('kodastream-media', sceneLocation);
+
+        ff.input(fileLocation)
             .inputOptions(
                 '-re',
             )
-            .addOptions(ffmpegOptions).output(outputLocation).on('end', () => {
+            .addOptions(ffmpegOptions)
+            .output(outputLocation).on('end', () => {
                 resolve(true);
             }).on('start', (data) => {
                 // console.log('started', data)
@@ -61,17 +66,17 @@ const process = (scene: Scene, event: Event) => {
     });
 }
 
-const uploadToMinio = async (filePath: string, localDir: string, eventId: number) => {
+const uploadToStorage = async (filePath: string, localDir: string, eventId: number) => {
     const fileName = path.basename(filePath);
     const fullFilePath = `${localDir}/${fileName}`;
     const objectName = `${eventId}/${fileName}`;
     try {
-        // Upload the file to Minio
-        await MinioClient.uploadFile('kodastream-streams', fullFilePath, objectName);
-        console.log(`Uploaded ${fileName} to Minio`);
+        // Upload the file
+        await FileStorage.uploadFile('kodastream-streams', fullFilePath, objectName);
+        console.log(`Uploaded ${fileName} to storage`);
 
     } catch (err) {
-        console.error('Error uploading to Minio:', err);
+        console.error('Error uploading to storage:', err);
     }
 };
 
@@ -81,7 +86,7 @@ export const start = async (eventId: number) => {
     const eventDirLocation = path.join(current, `../events/${eventId}`);
 
     try {
-        MinioClient.deleteAllFilesInDirectory('kodastream-streams', `${eventId}`)
+        FileStorage.deleteAllFilesInDirectory('kodastream-streams', `${eventId}`)
 
     } catch (e) {
         console.log(`failed to delete directroy /${eventId}`)
@@ -98,12 +103,12 @@ export const start = async (eventId: number) => {
     watcher.on('add', (filePath) => {
         if (filePath.endsWith('.ts') || filePath.endsWith('.m3u8')) {
             // console.log(`New file detected: ${filePath}`);
-            uploadToMinio(filePath, eventDirLocation, eventId);
+            uploadToStorage(filePath, eventDirLocation, eventId);
         }
     }).on('change', (filePath) => {
         if (filePath.endsWith('.ts') || filePath.endsWith('.m3u8')) {
             // console.log(`File updated: ${filePath}`);
-            uploadToMinio(filePath, eventDirLocation, eventId);
+            uploadToStorage(filePath, eventDirLocation, eventId);
         }
     });
 

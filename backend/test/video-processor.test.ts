@@ -21,11 +21,11 @@ const eventWithScenesAndMetadata = {
     status: StreamStatus.Started,
     scenes: [
         {
-            location: 'videos/test-vids/short-test.mp4',
+            location: 'example-videos/short-test.mp4',
             metadata: 'Nike',
         },
         {
-            location: 'videos/test-vids/short-test.mp4',
+            location: 'example-videos/short-test.mp4',
             metadata: 'Nike2',
         }
     ]
@@ -35,16 +35,16 @@ const updatedEventWithScenesAndMetadata = {
     scenes: [
         {
             id: 1,
-            location: 'videos/test-vids/short-test.mp4',
+            location: 'example-videos/short-test.mp4',
             metadata: 'Nike',
         },
         {
             id: 2,
-            location: 'videos/test-vids/short-test.mp4',
+            location: 'example-videos/short-test.mp4',
             metadata: 'Nike2',
         },
         {
-            location: 'videos/test-vids/short-test.mp4',
+            location: 'example-videos/short-test.mp4',
             metadata: 'Nike3',
         }
     ]
@@ -56,7 +56,7 @@ const eventWithScenesAndMetadataAndLoop = {
     status: StreamStatus.Started,
     scenes: [
         {
-            location: 'videos/test-vids/short-test.mp4',
+            location: 'example-videos/short-test.mp4',
             metadata: 'data1',
         }
     ]
