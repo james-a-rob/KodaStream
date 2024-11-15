@@ -53,7 +53,7 @@ describe('content server config', () => {
         const locationOfMockVideoContent = path.join(__dirname, `./mock-video-content/short`);
         const locationOfVideoContent = `${event.id}`;
 
-        await FileStorage.uploadFile('kodastream-streams', `${locationOfMockVideoContent}/output-initial.m3u8`, `${locationOfVideoContent}/output-initial.m3u8`);
+        await new FileStorage().uploadFile('kodastream-streams', `${locationOfMockVideoContent}/output-initial.m3u8`, `${locationOfVideoContent}/output-initial.m3u8`);
 
 
 

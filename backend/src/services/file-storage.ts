@@ -45,11 +45,14 @@ class FileStorage {
 
     public async getFileAndSave(bucket: string, filePath: string): Promise<string> {
         try {
-            const fileStream = await this.getFileByPath(bucket, filePath);
+            // Get the temporary file path after downloading the file from S3
+            const tempFilePath = await this.getFileByPath(bucket, filePath);
+
             const tempFolder = os.tmpdir();
             const outputFilePath = path.join(tempFolder, path.basename(filePath));
 
-            // await this.saveStreamToFile(fileStream, outputFilePath);
+            // Move the downloaded file to the desired output path
+            await this.moveFile(tempFilePath, outputFilePath);
 
             logger.info('File saved successfully', { outputFilePath });
             return outputFilePath;
@@ -57,6 +60,20 @@ class FileStorage {
             logger.error('Error downloading or saving file from storage', { error: err.message });
             throw err;
         }
+    }
+
+    // Helper method to move the file from temp location to output location
+    private async moveFile(sourcePath: string, destPath: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            fs.rename(sourcePath, destPath, (err) => {
+                if (err) {
+                    logger.error('Error moving file', { sourcePath, destPath, error: err.message });
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
     }
 
     public async getFileByPath(bucket: string, filePath: string): Promise<string> {

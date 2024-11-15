@@ -109,7 +109,6 @@ const hlsServerConfig = {
 
 
                 const filePath = await fileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url.replace("output", "output-initial")));
-                // const readStream = fs.createReadStream('/Users/jamesrobertson/Code/KodaStream/backend/events/205/output-initial.m3u8');
                 const m3u8DataStream = fs.createReadStream(filePath);
 
 
@@ -148,8 +147,6 @@ const hlsServerConfig = {
                 logger.info('content-server: Manifest processed successfully', { eventId });
 
                 cb(null, stream);
-                // cb(null, readStream)
-                // cb(null, m3u8DataStream);
 
             } catch (err) {
                 logger.error('content-server: Error processing manifest', { eventId, error: err });
@@ -157,7 +154,6 @@ const hlsServerConfig = {
             }
         },
         getSegmentStream: async (req: Request, cb) => {
-            // cb(true, null)
             try {
                 const filePath = await fileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url));
                 const stream = fs.createReadStream(filePath);
