@@ -83,7 +83,7 @@ const hlsServerConfig = {
 
             const filePath = removeEventsPrefix(req.url.replace("output", "output-initial"));
 
-            cb(null, true);
+            // cb(null, true);
 
 
             try {
@@ -145,8 +145,6 @@ const hlsServerConfig = {
                 const stream = Readable.from(newPlaylist);
 
                 logger.info('content-server: Manifest processed successfully', { eventId });
-                console.log('stream', stream)
-                console.log('m3u8DataStream', m3u8DataStream)
 
                 cb(null, stream);
                 // cb(null, readStream)

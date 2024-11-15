@@ -111,20 +111,32 @@ class FileStorage {
             logger.error(errorMsg);
             throw new Error(errorMsg);
         }
+        try {
+            await this.getFileByPath(bucketName, objectName)
 
+            logger.info('Sucesfully got file before update', { bucketName, objectName });
+
+        } catch (error) {
+            logger.warn('Failed to get file before attempting update', { bucketName, objectName, error: error.message });
+        }
         try {
             await this.deleteFile(bucketName, objectName);
+            logger.info('Sucesfully deleted file', { bucketName, objectName });
+
         } catch (deleteErr) {
             logger.warn('File did not exist in S3 or could not be deleted', { bucketName, objectName, error: deleteErr.message });
         }
 
         const fileStream = fs.createReadStream(filePath);
+        logger.info('Created read stream', { bucketName, objectName });
+
         const uploadParams: PutObjectCommandInput = {
             Bucket: bucketName,
             Key: objectName,
             Body: fileStream,
             CacheControl: 'no-store'
         };
+        logger.info('Attempting file upload', { bucketName, objectName });
 
         try {
             const response = await this.s3Client.send(new PutObjectCommand(uploadParams));
@@ -133,6 +145,8 @@ class FileStorage {
             logger.error('Error uploading file to S3', { bucketName, objectName, error: err.message });
             throw err;
         } finally {
+            logger.info('File stream closed', { bucketName, objectName });
+
             fileStream.close();
         }
     }
