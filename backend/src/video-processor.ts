@@ -37,12 +37,12 @@ const process = (scene: Scene, event: Event) => {
 
         try {
             await fs.ensureDir(newEventDirLocation);
-            const fileLocation = await fileStorage.getFileAndSave('kodastream-media', sceneLocation);
+            const inputFileLocation = await fileStorage.getFileAndSave('kodastream-media', sceneLocation);
 
-            logger.info('video-processor: Starting ffmpeg process', { sceneId: scene.id, eventId: event.id });
+            logger.info('video-processor: Starting ffmpeg process', { sceneId: scene.id, eventId: event.id, inputFileLocation });
 
             const ff = ffmpeg();
-            ff.input(fileLocation)
+            ff.input(inputFileLocation)
                 .inputOptions('-re')
                 .addOptions(ffmpegOptions)
                 .output(outputLocation)
