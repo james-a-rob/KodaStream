@@ -7,8 +7,12 @@
 Combine prerecorded content into 24/7 live streams 
 </div>
 
+<img src="screenshot-ui.png" width="100%">
+
+
 
 ## 🔥 Features
+- Playlist curation
 - Loop streams forever 
 - Multi-channel 
 - Attach timed metadata

@@ -18,7 +18,7 @@ const App: React.FC = () => {
       <Header title="KodaStream" />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/studio" element={<Studio />} />
+        <Route path="/studio/:id" element={<Studio />} />
         <Route path="/media" element={<Media />} />
 
       </Routes>
