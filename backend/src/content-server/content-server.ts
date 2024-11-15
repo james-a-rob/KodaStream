@@ -108,8 +108,9 @@ const hlsServerConfig = {
                 }
 
 
-                const m3u8DataStream = await fileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url.replace("output", "output-initial")));
+                const filePath = await fileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url.replace("output", "output-initial")));
                 // const readStream = fs.createReadStream('/Users/jamesrobertson/Code/KodaStream/backend/events/205/output-initial.m3u8');
+                const m3u8DataStream = fs.createReadStream(filePath);
 
 
                 logger.info('content-server: Initial m3u8 file pulled from storage', { eventId });
@@ -158,9 +159,10 @@ const hlsServerConfig = {
         getSegmentStream: async (req: Request, cb) => {
             // cb(true, null)
             try {
-                const data = await fileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url));
-                const stream = Readable.from(data);
-                const readStream = fs.createReadStream(`/Users/jamesrobertson/Code/KodaStream/backend${req.url}`);
+                const filePath = await fileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url));
+                const stream = fs.createReadStream(filePath);
+
+                // const stream = Readable.from(data);
 
                 logger.info('content-server: Segment stream fetched successfully', { url: req.url });
                 // cb(null, readStream);

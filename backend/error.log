@@ -1656,3 +1656,70 @@
 {"bucketName":"kodastream-streams","error":"A timeout occurred while trying to lock a resource, please reduce your request rate","level":"error","message":"Error deleting file from S3","objectName":"231/file-237-000.ts","timestamp":"2024-11-15T15:20:10.995Z"}
 {"bucketName":"kodastream-streams","error":"A timeout occurred while trying to lock a resource, please reduce your request rate","level":"error","message":"Error deleting file from S3","objectName":"231/file-237-001.ts","timestamp":"2024-11-15T15:20:16.251Z"}
 {"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"231/output-initial.m3u8","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:20:16.252Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"233/videos/file-239-000.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:24:21.407Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"233/playlists/output-239.m3u8","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:24:21.410Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"233/videos/file-239-001.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:24:27.646Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"233/videos/file-239-002.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:24:33.891Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"233/videos/file-239-003.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:24:39.108Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"233/videos/file-239-004.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:24:45.355Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"233/videos/file-239-005.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:24:51.625Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"233/videos/file-239-006.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:24:57.875Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"233/videos/file-239-007.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:25:04.146Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"233/videos/file-239-008.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:25:09.347Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"233/videos/file-239-009.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:25:15.616Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"234/videos/240/file-240-000.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:27:28.147Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"234/playlists/output-240.m3u8","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:27:28.150Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"234/videos/240/file-240-001.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:27:34.399Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"234/videos/240/file-240-002.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:27:40.635Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"234/videos/240/file-240-003.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:27:45.867Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"234/videos/240/file-240-004.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:27:52.115Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"234/videos/240/file-240-005.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:27:58.390Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"234/videos/240/file-240-006.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:28:04.645Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"234/videos/240/file-240-007.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:28:10.893Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"234/videos/240/file-240-008.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:28:16.096Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"234/videos/240/file-240-009.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:28:22.366Z"}
+{"error":"fileStorage.getFileAndSave is not a function","eventId":235,"level":"error","message":"video-processor: Error during FFmpeg processing","sceneId":241,"timestamp":"2024-11-15T15:32:04.347Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"236/file-242-000.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:32:27.841Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"236/output-initial.m3u8","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:32:27.879Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"236/file-242-001.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:32:34.076Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"236/file-242-002.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:32:40.336Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"236/file-242-003.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:32:45.546Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"236/file-242-004.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:32:51.800Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"236/file-242-005.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:32:58.381Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"236/file-242-006.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:33:04.313Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"236/file-242-007.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:33:10.583Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"236/file-242-008.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:33:15.782Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"236/file-242-009.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:33:22.053Z"}
+{"error":{},"eventId":"236","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:05.887Z"}
+{"error":{},"eventId":"236","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:05.905Z"}
+{"error":{},"eventId":"236","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:06.942Z"}
+{"error":{},"eventId":"236","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:06.974Z"}
+{"error":{},"eventId":"230","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:17.698Z"}
+{"error":{},"eventId":"230","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:17.701Z"}
+{"error":{},"eventId":"230","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:18.966Z"}
+{"error":{},"eventId":"230","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:18.998Z"}
+{"error":{},"eventId":"236","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:28.500Z"}
+{"error":{},"eventId":"236","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:28.569Z"}
+{"error":{},"eventId":"236","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:28.639Z"}
+{"error":{},"eventId":"236","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:28.697Z"}
+{"error":{},"eventId":"236","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:29.731Z"}
+{"error":{},"eventId":"236","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:34:29.747Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/file-243-000.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:38:02.262Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/output-initial.m3u8","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:38:02.307Z"}
+{"error":{},"eventId":"237","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:38:04.242Z"}
+{"error":{},"eventId":"237","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:38:04.338Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/file-243-001.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:38:08.505Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/file-243-002.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:38:14.803Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/file-243-002.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:38:14.816Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/file-243-003.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:38:19.978Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/file-243-004.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:38:26.210Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/file-243-005.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:38:32.483Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/file-243-006.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:38:38.731Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/file-243-007.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:38:45.003Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/file-243-008.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:38:50.192Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/file-243-009.ts","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:38:56.476Z"}
+{"error":{},"eventId":"237","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:39:33.761Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/output-initial.m3u8","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:41:17.516Z"}
+{"bucket":"kodastream-streams","error":"The specified key does not exist.","filePath":"237/output-initial.m3u8","level":"error","message":"Error fetching file from S3","timestamp":"2024-11-15T15:41:17.525Z"}
+{"error":{"$fault":"client","$metadata":{"attempts":1,"extendedRequestId":"dd9025bab4ad464b049177c95eb6ebf374d3b3fd1af9251148b658df7ac2e3e8","httpStatusCode":404,"requestId":"18082E95C4690B38","totalRetryDelay":0},"BucketName":"kodastream-streams","Code":"NoSuchKey","HostId":"dd9025bab4ad464b049177c95eb6ebf374d3b3fd1af9251148b658df7ac2e3e8","Key":"237/output-initial.m3u8","RequestId":"18082E95C4690B38","Resource":"/kodastream-streams/237/output-initial.m3u8","message":"The specified key does not exist.","name":"NoSuchKey"},"eventId":"237","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:41:17.525Z"}
+{"error":{},"eventId":"237","level":"error","message":"content-server: Error processing manifest","timestamp":"2024-11-15T15:41:17.931Z"}

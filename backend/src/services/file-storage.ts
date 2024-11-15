@@ -10,8 +10,10 @@ import {
     DeleteObjectsCommand,
     ListObjectsV2CommandOutput,
     ListObjectsV2Command,
-    DeleteObjectCommand
+    DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
+import { tmpdir } from 'os';
+
 import fs from 'fs';
 import os from 'os';
 import { ConfiguredRetryStrategy } from "@smithy/util-retry";
@@ -47,7 +49,7 @@ class FileStorage {
             const tempFolder = os.tmpdir();
             const outputFilePath = path.join(tempFolder, path.basename(filePath));
 
-            await this.saveStreamToFile(fileStream, outputFilePath);
+            // await this.saveStreamToFile(fileStream, outputFilePath);
 
             logger.info('File saved successfully', { outputFilePath });
             return outputFilePath;
@@ -57,15 +59,20 @@ class FileStorage {
         }
     }
 
-    public async getFileByPath(bucket: string, filePath: string): Promise<Readable> {
+    public async getFileByPath(bucket: string, filePath: string): Promise<string> {
+        const tempFilePath = path.join(tmpdir(), 'temp-file');
         const getObjectParams = { Bucket: bucket, Key: filePath };
 
         try {
             const { Body } = await this.s3Client.send(new GetObjectCommand(getObjectParams));
             if (Body instanceof Readable) {
-                return Body;
-            } else {
-                throw new Error('The object Body is not a readable stream.');
+                await new Promise((resolve, reject) => {
+                    const writeStream = fs.createWriteStream(tempFilePath);
+                    Body.pipe(writeStream);
+                    writeStream.on('finish', resolve);
+                    writeStream.on('error', reject);
+                });
+                return tempFilePath;
             }
         } catch (err) {
             logger.error('Error fetching file from S3', { bucket, filePath, error: err.message });
