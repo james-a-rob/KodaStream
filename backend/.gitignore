@@ -5,3 +5,5 @@ dist
 .env
 events/*
 .DS_Store
+app.log
+error.log
