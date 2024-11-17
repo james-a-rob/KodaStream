@@ -73,24 +73,38 @@ const streamToString = (stream: Readable): Promise<string> => {
 
 const hlsServerConfig = {
     provider: {
-        exists: async (req: Request, cb) => {
-            const ext = req.url.split('.').pop();
-            logger.debug('content-server: Checking existence of file', { url: req.url });
-
-            if (ext !== 'm3u8' && ext !== 'ts') {
-                return cb(null, true);
-            }
-
-            const filePath = removeEventsPrefix(req.url.replace("output", "output-initial"));
-
-            // dont think this is a good check
+        exists: async (req: Request, cb: (err: Error | null, exists: boolean) => void) => {
             try {
-                await fileStorage.getFileByPath("kodastream-streams", filePath);
-                logger.info('content-server: File exists in S3', { filePath });
-                cb(null, true);
-            } catch (e) {
-                logger.warn('content-server: File not found in S3', { filePath, error: e.message });
-                cb(null, false);
+                const ext = path.extname(req.url).slice(1);
+                logger.debug('content-server: Checking existence of file', { url: req.url, ext });
+
+                // Allow non-HLS file types without storage check
+                if (!['m3u8', 'ts'].includes(ext)) {
+                    logger.info('content-server: Non-HLS file, skipping existence check', { url: req.url });
+                    return cb(null, true);
+                }
+
+                if (!req.url) {
+                    logger.error('content-server: Invalid request URL for file check');
+                    return cb(new Error('Invalid URL'), false);
+                }
+
+                const filePath = removeEventsPrefix(req.url.replace('output', 'output-initial'));
+                logger.debug('content-server: Transformed file path for storage check', { filePath });
+
+                // Attempt to retrieve the file
+                await fileStorage.getFileByPath('kodastream-streams', filePath);
+                logger.info('content-server: File exists in storage', { filePath });
+
+                cb(null, true); // File exists
+            } catch (err: any) {
+                if (err.code === 'NoSuchKey' || err.message.includes('not found')) {
+                    logger.warn('content-server: File not found in storage', { url: req.url, error: err.message });
+                    cb(null, false); // File does not exist
+                } else {
+                    logger.error('content-server: Unexpected error during file check', { url: req.url, error: err.message });
+                    cb(err, false); // Propagate unexpected errors
+                }
             }
         },
         getManifestStream: async (req: Request, cb) => {
