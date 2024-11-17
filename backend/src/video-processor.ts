@@ -23,7 +23,7 @@ const process = (scene: Scene, event: Event) => {
         const segmentLocation = path.join(current, `../events/${event.id}/file-${scene.id}-%03d.ts`);
         const outputLocation = path.join(current, `../events/${event.id}/output-initial.m3u8`);
         const ffmpegOptions = [
-            '-profile:v baseline',
+            '-profile:v baseline', // Basic H.264 profile for compatibility
             '-level 3.0',
             '-start_number 0',
             '-hls_time 6',
@@ -32,7 +32,13 @@ const process = (scene: Scene, event: Event) => {
             '-hls_flags program_date_time+append_list+omit_endlist+independent_segments+discont_start',
             '-hls_wrap 10',
             '-f hls',
-            '-g 25'
+            '-g 25', // GOP size (Group of Pictures)
+            '-b:v 800k', // Set video bitrate to 800 kbps
+            '-maxrate 800k', // Limit max bitrate
+            '-bufsize 1600k', // Set buffer size
+            '-b:a 96k', // Set audio bitrate to 96 kbps
+            '-vf scale=-2:360', // Resize video to height 360px, maintaining aspect ratio
+            '-preset veryfast', // Use a faster preset to reduce CPU load (or adjust based on your needs)
         ];
 
         try {
