@@ -18,8 +18,6 @@ const Studio: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const previewLink = `/preview/${id}`;
 
-    // Ref for video container to measure height
-    const videoRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const getData = async () => {
@@ -42,11 +40,6 @@ const Studio: React.FC = () => {
         getData();
     }, [id]);
 
-    useEffect(() => {
-        if (videoRef.current) {
-            setVideoHeight(videoRef.current.offsetHeight); // Set height of video component on mount
-        }
-    }, [eventData]);  // Recalculate on eventData change
 
     const handleGoLive = async () => {
         eventData.status = "started";
@@ -126,7 +119,7 @@ const Studio: React.FC = () => {
 
                 {/* Total Viewers */}
                 <Grid item xs={4}>
-                    <Card variant="outlined" style={{ height: videoHeight }}>
+                    <Card variant="outlined" style={{ height: '200px' }}>
                         <CardContent
                             style={{
                                 display: 'flex',
@@ -160,7 +153,7 @@ const Studio: React.FC = () => {
 
                 {/* Average Session Length */}
                 <Grid item xs={4}>
-                    <Card variant="outlined" style={{ height: videoHeight }}>
+                    <Card variant="outlined" style={{ height: '200px' }}>
                         <CardContent
                             style={{
                                 display: 'flex',
@@ -194,9 +187,9 @@ const Studio: React.FC = () => {
 
                 {/* Stream Status */}
                 <Grid item xs={4}>
-                    <Card variant="outlined">
-                        <div ref={videoRef}>
-                            <Preview id={eventData.id} />
+                    <Card variant="outlined" style={{ height: '200px' }}>
+                        <div>
+                            {eventData?.status === "started" && <Preview id={eventData.id} />}
                         </div>
                     </Card>
                 </Grid>
