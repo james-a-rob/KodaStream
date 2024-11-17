@@ -8,6 +8,7 @@ const GlobalStyles: React.FC = () => (
                 margin: 0; 
                 padding: 0; 
             }
+                
         `}
     />
 );

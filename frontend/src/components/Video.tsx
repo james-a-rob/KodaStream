@@ -1,17 +1,14 @@
-
 import React from 'react';
 // import Overlay from './overlay'
 import KodaPlayer from '../koda-player/koda-player';
 
-
 export default function Video({ id }) {
-    const VIDEO_ID = id
+    const VIDEO_ID = id;
     const videoRef = React.useRef(null);
-    const [currentClipsMetaData, setCurrentClipsMetaData] = React.useState(null)
+    const [currentClipsMetaData, setCurrentClipsMetaData] = React.useState(null);
 
     React.useEffect(() => {
-        //setup koda player
-
+        // Setup Koda player
         const player = new KodaPlayer({
             videoElement: videoRef.current,
             videoSource: `/events/${VIDEO_ID}/output.m3u8`,
@@ -21,13 +18,11 @@ export default function Video({ id }) {
             sessionId: "1703778468",
             onMetadataUpdate: (data) => {
                 const decodedJson = player.decodeJson(data);
-
                 setCurrentClipsMetaData(decodedJson);
-                console.log('metadatachange')
-
+                console.log('metadatachange');
             }
         });
-    }, [])
+    }, [VIDEO_ID]);
 
     const playVideo = () => {
         videoRef.current.play();
@@ -37,15 +32,28 @@ export default function Video({ id }) {
         videoRef.current.pause();
     };
 
-
     return (
-        <div className="video-container" >
-            {/* <Overlay currentClipsMetaData={currentClipsMetaData} /> */}
-            {/* <video className="video" src="https://www.w3schools.com/html/mov_bbb.mp4" controls/> */}
-            < video className="video" ref={videoRef} width="100%" controls />
-
-
+        <div className="video-container" style={{
+            position: "relative",
+            width: "100%",
+            paddingTop: "56.25%" // 16:9 aspect ratio (9/16 = 0.5625)
+        }}>
+            {/* The wrapper's height is based on the width, maintaining a 16:9 ratio */}
+            <video
+                autoPlay
+                muted
+                ref={videoRef}
+                className="video"
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover", // Ensures the video covers the entire container without distortion
+                }}
+                controls
+            />
         </div>
-
     );
 }

@@ -1,48 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Grid, Card, CardContent, Typography, Button, Link, Tooltip, Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
-
 import { OpenInNew } from '@mui/icons-material';
 import MediaList from '../components/MediaList';
 import PlayList from '../components/PlayList';
 import { fetchData, postData } from '../services/api';
-
-
+import Preview from '../components/Video';
 
 const Studio: React.FC = () => {
     const [eventData, setEventData] = useState<[]>([]);
     const [mediaData, setMediaData] = useState<[]>([]);
     const [analyticsData, setAnalyticsData] = useState<[]>([]);
     const [playlist, setPlaylist] = useState<[]>([]);
-
-
-
     const [loading, setLoading] = useState<boolean>(true);
-    const { id } = useParams<{ id: string }>();
+    const [videoHeight, setVideoHeight] = useState<number>(0);  // State for storing video height
 
+    const { id } = useParams<{ id: string }>();
     const previewLink = `/preview/${id}`;
 
-
-    console.log('eventData', eventData);
-    console.log('mediaData', mediaData);
-    console.log('analyticsData', analyticsData);
-    console.log('updatedPlaylist', setPlaylist)
-
+    // Ref for video container to measure height
+    const videoRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const getData = async () => {
             try {
-                console.log('url in', `event/${id}`)
                 const eventResult = await fetchData<[]>(`events/${id}`);
                 const mediaResult = await fetchData<[]>(`media`);
                 const analyticsResult = await fetchData<[]>(`events/${id}/analytics`);
 
-
                 setEventData(eventResult.data);
                 setMediaData(mediaResult.data);
                 setAnalyticsData(analyticsResult.data);
-                setPlaylist(eventResult.data.scenes)
-
+                setPlaylist(eventResult.data.scenes);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -51,7 +40,13 @@ const Studio: React.FC = () => {
         };
 
         getData();
-    }, []);
+    }, [id]);
+
+    useEffect(() => {
+        if (videoRef.current) {
+            setVideoHeight(videoRef.current.offsetHeight); // Set height of video component on mount
+        }
+    }, [eventData]);  // Recalculate on eventData change
 
     const handleGoLive = async () => {
         eventData.status = "started";
@@ -60,11 +55,8 @@ const Studio: React.FC = () => {
         try {
             const eventResult = await postData<[], []>(`events/${id}`, eventData);
             setEventData(eventResult.data);
-            console.log(result);
         } catch (error) {
             console.error(error);
-        } finally {
-            console.log('error saving')
         }
     };
 
@@ -74,26 +66,18 @@ const Studio: React.FC = () => {
         try {
             const eventResult = await postData<[], []>(`events/${id}`, eventData);
             setEventData(eventResult.data);
-
-            console.log(result);
         } catch (error) {
             console.error(error);
-        } finally {
-            console.log('error saving')
         }
     };
 
     const addItemToPlaylist = async (item) => {
         const updatedPlaylist = [...playlist, item];
-        const mock = {
-            id: 262,
-            location: "example-videos/clip-1.mp4",
-            metadata: "{\"id\":\"260\",\"title\":\"test data\"}"
-        }
         setPlaylist(updatedPlaylist);
     };
 
     if (loading) return <p>Loading...</p>;
+
     return (
         <Container style={{ marginTop: '20px' }}>
             <Typography variant="h6">Studio</Typography>
@@ -116,7 +100,7 @@ const Studio: React.FC = () => {
                                     onClick={handleStopStream}
                                     variant="contained"
                                     color="secondary"
-                                    style={{ marginRight: '16px' }} // Horizontal spacing between buttons
+                                    style={{ marginRight: '16px' }}
                                 >
                                     End Stream
                                 </Button>
@@ -125,12 +109,11 @@ const Studio: React.FC = () => {
                                     onClick={handleGoLive}
                                     variant="contained"
                                     color="primary"
-                                    style={{ marginRight: '16px' }} // Horizontal spacing between buttons
+                                    style={{ marginRight: '16px' }}
                                 >
                                     Go Live
                                 </Button>
 
-                                {/* Stream Preview Link with an Icon */}
                                 <Tooltip title="Open stream preview in a new tab" arrow>
                                     <Link href={previewLink} target="_blank" rel="noopener" style={{ display: 'flex', alignItems: 'center' }}>
                                         <OpenInNew fontSize="large" color="primary" />
@@ -140,14 +123,35 @@ const Studio: React.FC = () => {
                         </CardContent>
                     </Card>
                 </Grid>
+
                 {/* Total Viewers */}
                 <Grid item xs={4}>
-                    <Card variant="outlined">
-                        <CardContent>
+                    <Card variant="outlined" style={{ height: videoHeight }}>
+                        <CardContent
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'flex-start',  // Keep title at the top-left
+                                height: '100%',
+                            }}
+                        >
+                            {/* Title aligned to the left at the top */}
                             <Typography variant="h5" component="div" gutterBottom>
                                 Total Viewers
                             </Typography>
-                            <Typography variant="h6" color="textPrimary">
+
+                            {/* Value centered in remaining space */}
+                            <Typography
+                                variant="h2"
+                                color="textPrimary"
+                                style={{
+                                    fontSize: '2rem',  // Large font size for the value
+                                    fontWeight: 'bold',
+                                    textAlign: 'center',
+                                    flexGrow: 1, // Ensures the value stays centered
+                                    marginTop: '30px', // Push the number to the center vertically
+                                }}
+                            >
                                 {analyticsData?.totalViewers}
                             </Typography>
                         </CardContent>
@@ -156,12 +160,32 @@ const Studio: React.FC = () => {
 
                 {/* Average Session Length */}
                 <Grid item xs={4}>
-                    <Card variant="outlined">
-                        <CardContent>
+                    <Card variant="outlined" style={{ height: videoHeight }}>
+                        <CardContent
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'flex-start',  // Keep title at the top-left
+                                height: '100%',
+                            }}
+                        >
+                            {/* Title aligned to the left at the top */}
                             <Typography variant="h5" component="div" gutterBottom>
                                 Avg Session Length
                             </Typography>
-                            <Typography variant="h6" color="textPrimary">
+
+                            {/* Value centered in remaining space */}
+                            <Typography
+                                variant="h2"
+                                color="textPrimary"
+                                style={{
+                                    fontSize: '2rem',  // Large font size for the value
+                                    fontWeight: 'bold',
+                                    textAlign: 'center',
+                                    flexGrow: 1, // Ensures the value stays centered
+                                    marginTop: '30px', // Push the number to the center vertically
+                                }}
+                            >
                                 {analyticsData?.averageSessionLength} mins
                             </Typography>
                         </CardContent>
@@ -171,14 +195,9 @@ const Studio: React.FC = () => {
                 {/* Stream Status */}
                 <Grid item xs={4}>
                     <Card variant="outlined">
-                        <CardContent>
-                            <Typography variant="h5" component="div" gutterBottom>
-                                Engagment Rate
-                            </Typography>
-                            <Typography variant="h6" color="textPrimary">
-                                {analyticsData?.engagementRate}%
-                            </Typography>
-                        </CardContent>
+                        <div ref={videoRef}>
+                            <Preview id={eventData.id} />
+                        </div>
                     </Card>
                 </Grid>
 
