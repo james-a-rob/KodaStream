@@ -4,7 +4,7 @@
 
 ### 📺 Open-source streaming studio ✨
 
-Combine prerecorded content into 24/7 live streams 
+Curate video content into enaging live streams 
 </div>
 
 <img src="screenshot-ui.png" width="100%">
@@ -14,13 +14,22 @@ Combine prerecorded content into 24/7 live streams
 ## 🔥 Features
 - Playlist curation
 - Loop streams forever 
-- Multi-channel 
 - Attach timed metadata
+- Countdown to go live
+- Scheduled start time
+- Prestream image thumbnails
 - User friendly management UI
+- Stream analytics
 - Broadcast over HLS protocol 
 - Scales horizontally and vertically 
-- Copatible with CDNs
+- Copatible with popular CDNs
 - Open API for automation
+
+## Coming soon
+- Chat
+- Reactions
+- Easy embed
+- Beautiful social shares
 
 
 ## 🚀 Quick Start
