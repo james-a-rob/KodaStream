@@ -83,9 +83,7 @@ const hlsServerConfig = {
 
             const filePath = removeEventsPrefix(req.url.replace("output", "output-initial"));
 
-            // cb(null, true);
-
-
+            // dont think this is a good check
             try {
                 await fileStorage.getFileByPath("kodastream-streams", filePath);
                 logger.info('content-server: File exists in S3', { filePath });

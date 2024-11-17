@@ -15,21 +15,23 @@ Curate video content into enaging live streams
 - Playlist curation
 - Loop streams forever 
 - Attach timed metadata
-- Countdown to go live
-- Scheduled start time
-- Prestream image thumbnails
 - User friendly management UI
 - Stream analytics
 - Broadcast over HLS protocol 
 - Scales horizontally and vertically 
 - Copatible with popular CDNs
 - Open API for automation
+- Chromeless video player for branded customizations
 
 ## Coming soon
 - Chat
 - Reactions
+- Countdown to go live
+- Scheduled start time
+- Prestream image thumbnails
 - Easy embed
 - Beautiful social shares
+- Restream to multiple platforms
 
 
 ## 🚀 Quick Start

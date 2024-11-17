@@ -135,21 +135,6 @@ class FileStorage {
             logger.error(errorMsg);
             throw new Error(errorMsg);
         }
-        try {
-            await this.getFileByPath(bucketName, objectName)
-
-            logger.info('Sucesfully got file before update', { bucketName, objectName });
-
-        } catch (error) {
-            logger.warn('Failed to get file before attempting update', { bucketName, objectName, error: error.message });
-        }
-        try {
-            await this.deleteFile(bucketName, objectName);
-            logger.info('Sucesfully deleted file', { bucketName, objectName });
-
-        } catch (deleteErr) {
-            logger.warn('File did not exist in S3 or could not be deleted', { bucketName, objectName, error: deleteErr.message });
-        }
 
         const fileStream = fs.createReadStream(filePath);
         logger.info('Created read stream', { bucketName, objectName });
