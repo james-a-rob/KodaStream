@@ -1,7 +1,9 @@
+// import * as Hls from './hls';
+import './parser';
+
 export default class KodaPlayer {
 
     constructor(options) {
-
         this.options = options;
         this.videoElement = options.videoElement;
         this.videoSource = options.videoSource;

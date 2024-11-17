@@ -5,133 +5,142 @@ import bodyParser from 'body-parser';
 import { start } from '../video-processor';
 import { checkIfAttempingEventRestart, checkIfStatusUpdateisValid } from '../helpers/event-validation';
 import { createLiveEvent, getLiveEvent, updateLiveEvent, log, getViewers } from '../db';
+import { apiResponse } from '../helpers/api-response';
 
 const app = express();
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/status', (req: Request, res: Response) => {
-    res.status(200).send({ status: 'UP' });
+    res.status(200).json(apiResponse(true, 'Service is up'));
 });
 
-
-app.post("/events", async (req: Request, res: Response) => {
+app.post('/events', async (req: Request, res: Response) => {
     try {
         if (req.headers.accesskey !== process.env.APIKEY) {
-            return res.status(403).json({ error: 'Access denied' });
+            return res.status(403).json(apiResponse(false, 'Access denied'));
         }
 
         if (!req.body.scenes) {
-            return res.status(400).json({ error: 'Invalid request' });
+            return res.status(400).json(apiResponse(false, 'Invalid request: scenes are required'));
         }
 
         req.body.scenes.forEach((scene, index) => {
-            if (scene.metadata && typeof scene.metadata !== "string") {
-                const stringMetadata = JSON.stringify(scene.metadata);
-                req.body.scenes[index].metadata = stringMetadata;
+            if (scene.metadata && typeof scene.metadata !== 'string') {
+                req.body.scenes[index].metadata = JSON.stringify(scene.metadata);
             }
         });
 
         const event = await createLiveEvent(req.body);
-        start(event.id); // Ensure status is started
-        res.json(event);
+        start(event.id);
+        res.status(201).json(apiResponse(true, 'Event created successfully', event));
     } catch (err) {
         console.error('Error in POST /events:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json(apiResponse(false, 'Internal server error', null, err.message));
     }
 });
 
-app.put("/events/:id", async (req: Request, res: Response) => {
+app.put('/events/:id', async (req: Request, res: Response) => {
     try {
         if (req.headers.accesskey !== process.env.APIKEY) {
-            return res.status(403).json({ error: 'Access denied' });
+            return res.status(403).json(apiResponse(false, 'Access denied'));
         }
 
         const currentEvent = await getLiveEvent(req.params.id);
         if (!currentEvent) {
-            return res.status(404).json({ error: 'Event not found' });
+            return res.status(404).json(apiResponse(false, 'Event not found'));
         }
 
-        const updatedEvents = await updateLiveEvent(req.params.id, req.body);
-        const statusUpdateisValid = checkIfStatusUpdateisValid(currentEvent.status, req.body.status);
-
-        if (!statusUpdateisValid) {
-            return res.status(400).send("Not possible to update event. Invalid stream status sent");
+        if (!checkIfStatusUpdateisValid(currentEvent.status, req.body.status)) {
+            return res.status(400).json(apiResponse(false, 'Invalid stream status update'));
         }
 
-        const shouldRestart = checkIfAttempingEventRestart(currentEvent.status, req.body.status);
-        if (shouldRestart) {
+        const updatedEvent = await updateLiveEvent(req.params.id, req.body);
+        if (checkIfAttempingEventRestart(currentEvent.status, req.body.status)) {
             start(currentEvent.id);
         }
 
-        res.setHeader('Content-Type', 'application/json');
-        res.send(updatedEvents);
+        res.status(200).json(apiResponse(true, 'Event updated successfully', updatedEvent));
     } catch (err) {
         console.error('Error in PUT /events/:id:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json(apiResponse(false, 'Internal server error', null, err.message));
     }
 });
 
-app.get("/events/:id", async (req: Request, res: Response) => {
+app.get('/events/:id', async (req: Request, res: Response) => {
     try {
         const event = await getLiveEvent(req.params.id);
         if (!event) {
-            return res.status(404).json({ error: 'Event not found' });
+            return res.status(404).json(apiResponse(false, 'Event not found'));
         }
 
-        res.setHeader('Content-Type', 'application/json');
-        res.send(event);
+        res.status(200).json(apiResponse(true, 'Event retrieved successfully', event));
     } catch (err) {
         console.error('Error in GET /events/:id:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json(apiResponse(false, 'Internal server error', null, err.message));
     }
 });
 
-app.post("/events/:id/log", async (req: Request, res: Response) => {
+app.post('/events/:id/log', async (req: Request, res: Response) => {
     try {
-        if (!req.body.sessionId) {
-            return res.status(400).json({ error: 'Invalid request' });
+        const { sessionId, type, name, url } = req.body;
+        if (!sessionId || !type) {
+            return res.status(400).json(apiResponse(false, 'Invalid request: sessionId and type are required'));
         }
 
-        if (!req.body.type) {
-            return res.status(400).json({ error: 'Invalid request. No type' });
-        }
+        const logEvent = await log(
+            moment.utc().format('YYYY-MM-DD[T]HH:mm:ss.SSS[Z]'),
+            sessionId,
+            req.params.id,
+            type,
+            name,
+            url
+        );
 
-        const utcMoment = moment.utc();
-        const logEvent = await log(utcMoment.format('YYYY-MM-DD[T]HH:mm:ss.SSS[Z]'), req.body.sessionId, req.params.id, req.body.type, req.body.name, req.body.url);
-
-        res.setHeader(`Access-Control-Allow-Origin`, `*`);
-        res.setHeader(`Access-Control-Allow-Methods`, `GET,PUT,POST,DELETE`);
-        res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-        res.setHeader('Content-Type', 'application/json');
-        res.send(logEvent);
+        res.status(201).json(apiResponse(true, 'Log event created successfully', logEvent));
     } catch (err) {
         console.error('Error in POST /events/:id/log:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json(apiResponse(false, 'Internal server error', null, err.message));
     }
 });
 
-app.get("/events/:id/views", async (req: Request, res: Response) => {
+app.get('/events/:id/analytics', async (req: Request, res: Response) => {
+    try {
+        const analytics = { totalViewers: 1200, averageSessionLength: 35, engagementRate: 8 };
+        res.status(200).json(apiResponse(true, 'Analytics retrieved successfully', analytics));
+    } catch (err) {
+        console.error('Error in GET /events/:id/analytics:', err);
+        res.status(500).json(apiResponse(false, 'Internal server error', null, err.message));
+    }
+});
+
+app.get('/events/:id/views', async (req: Request, res: Response) => {
     try {
         const viewers = await getViewers(req.params.id);
         if (!viewers) {
-            return res.status(404).json({ error: 'Viewers not found' });
+            return res.status(404).json(apiResponse(false, 'No viewers found'));
         }
 
-        res.setHeader(`Access-Control-Allow-Origin`, `*`);
-        res.setHeader(`Access-Control-Allow-Methods`, `GET,PUT,POST,DELETE`);
-        res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-        res.setHeader('Content-Type', 'application/json');
-        res.send(viewers);
+        res.status(200).json(apiResponse(true, 'Viewers retrieved successfully', viewers));
     } catch (err) {
         console.error('Error in GET /events/:id/views:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json(apiResponse(false, 'Internal server error', null, err.message));
     }
 });
 
-app.post("/videos", async (req: Request, res: Response) => {
-    // Add your video endpoint logic here (if required)
-    res.status(501).json({ error: 'Not implemented' });
+app.get('/media', (req: Request, res: Response) => {
+    try {
+        const media = [{ id: '1', location: 'example-videos/clip-1.mp4' }, { id: '2', location: 'example-videos/clip-2.mp4' }, { id: '3', location: 'example-videos/short-test.mp4' }, { id: '4', location: '19-09-2024/ferragamo-coffee.mp4' }]
+
+        res.status(200).json(apiResponse(true, 'Media retrieved successfully', media));
+    } catch (err) {
+        console.error('Error in GET /media:', err);
+        res.status(500).json(apiResponse(false, 'Internal server error', null, err.message));
+    }
+});
+
+app.post('/videos', (req: Request, res: Response) => {
+    res.status(501).json(apiResponse(false, 'Not implemented'));
 });
 
 export default app;

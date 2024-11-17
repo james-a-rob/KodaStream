@@ -6,18 +6,16 @@ type MediaListProps = {
     data: any
 }
 
-const MediaList: React.FC<MediaListProps> = ({ data }) => {
+const MediaList: React.FC<MediaListProps> = ({ data, addItemToPlaylist }) => {
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 140 },
-        { field: 'name', headerName: 'Name', width: 140 },
+        { field: 'id', headerName: 'ID', width: 20 },
+        { field: 'location', headerName: 'Location', width: 220 },
     ];
-
 
 
     return (
         <div>
-
             <DataGrid
                 initialState={{
                     pagination: {
@@ -30,6 +28,9 @@ const MediaList: React.FC<MediaListProps> = ({ data }) => {
                 pageSizeOptions={[5, 10, 20]}
                 rows={data}
                 columns={columns}
+                onRowClick={(params) => {
+                    addItemToPlaylist(params.row)
+                }}
             />
 
         </div>

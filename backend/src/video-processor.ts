@@ -99,6 +99,8 @@ export const start = async (eventId: number) => {
         logger.info('video-processor: Cleared local event directory', { eventDirLocation });
     }
 
+    logger.info('video-processor: Setting up watch', { eventDirLocation });
+
     const watcher = chokidar.watch(eventDirLocation, { persistent: true, ignoreInitial: true });
 
     watcher

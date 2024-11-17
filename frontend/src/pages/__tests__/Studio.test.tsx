@@ -9,9 +9,9 @@ import * as api from '../../services/api';
 vi.spyOn(api, 'fetchData').mockImplementation((url) => {
     console.log('url', url)
     switch (url) {
-        case 'event/1':
-            return Promise.resolve({ data: { id: '1', name: 'Live Stream 1', status: 'stopped' } });
-        case 'event/1/analytics':
+        case 'events/1':
+            return Promise.resolve({ data: { id: '1', name: 'Live Stream 1', status: 'stopped', scenes: [{ id: '1', location: 'video-live.mp4' }] } });
+        case 'events/1/analytics':
             return Promise.resolve({ data: { totalViewers: 1200, averageSessionLength: 35, engagementRate: 8 } });
         case 'media':
             return Promise.resolve({ data: [{ id: '1', name: 'video.mp4' }] });
@@ -28,7 +28,7 @@ vi.mock('react-router-dom', async () => {
     };
 });
 
-describe('User list component', () => {
+describe('Studio', () => {
     test('renders loading text initially', () => {
         render(<Studio />);
         expect(screen.getByText(/loading/i)).toBeInTheDocument();
@@ -49,6 +49,8 @@ describe('User list component', () => {
         expect(screen.getByText('1200')).toBeInTheDocument();
         expect(screen.getByText('8%')).toBeInTheDocument();
         expect(screen.getByText('video.mp4')).toBeInTheDocument();
+        expect(screen.getByText('video-live.mp4')).toBeInTheDocument();
+
 
 
 

@@ -16,7 +16,15 @@ export const fetchData = async <T>(path: string): Promise<T> => {
 
 export const postData = async <T, R>(path: string, data: T): Promise<R> => {
     try {
-        const response = await axios.post<R>(`${API_BASE_URL}/${path}`, data);
+        const response = await axios.put<R>(
+            `${API_BASE_URL}/${path}`,
+            data,
+            {
+                headers: {
+                    accessKey: 'dev-key',
+                },
+            }
+        );
         return response.data;
     } catch (error) {
         console.error('Error posting data:', error);
