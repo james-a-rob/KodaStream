@@ -13,8 +13,9 @@ A headless streaming platform built for monetization.
 
 
 ## 🔥 Features
-- Playlist curation
+- Live playlist curation
 - Loop streams forever 
+- VOD content
 - Attach timed metadata
 - User friendly management UI
 - Stream analytics
@@ -25,8 +26,7 @@ A headless streaming platform built for monetization.
 - Chromeless video player for branded customizations
 
 ## Coming soon
-- Chat
-- Reactions
+- Live chat and reactions
 - Countdown to go live
 - Scheduled start time
 - Additional monetization features including memberships.
