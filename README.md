@@ -4,7 +4,8 @@
 
 ### 📺 Open-source streaming platform ✨
 
-Headless streaming platform focused on monetization.
+A headless streaming platform built for monetization.
+
 </div>
 
 <img src="screenshot-ui.png" width="100%">
