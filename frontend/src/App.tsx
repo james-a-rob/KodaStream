@@ -24,6 +24,7 @@ const App: React.FC = () => {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/studio" element={<Home />} />
         <Route path="/studio/:id" element={<Studio />} />
         <Route path="/preview/:id" element={<Preview />} />
         <Route path="/media" element={<Media />} />

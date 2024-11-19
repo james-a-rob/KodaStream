@@ -2,9 +2,9 @@
 
 ## KodaStream
 
-### 📺 Open-source streaming studio ✨
+### 📺 Open-source streaming platform ✨
 
-Curate video content into enaging live streams 
+Headless streaming platform focused on monetization.
 </div>
 
 <img src="screenshot-ui.png" width="100%">
@@ -28,6 +28,7 @@ Curate video content into enaging live streams
 - Reactions
 - Countdown to go live
 - Scheduled start time
+- Additional monetization features including memberships.
 - Prestream image thumbnails
 - Easy embed
 - Beautiful social shares
