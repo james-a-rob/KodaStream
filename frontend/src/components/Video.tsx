@@ -6,6 +6,8 @@ export default function Video({ id }) {
     const VIDEO_ID = id;
     const videoRef = React.useRef(null);
     const [currentClipsMetaData, setCurrentClipsMetaData] = React.useState(null);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    const CONTENT_BASE_URL = import.meta.env.VITE_CONTENT_BASE_URL;
 
     React.useEffect(() => {
         // Setup Koda player
@@ -13,8 +15,8 @@ export default function Video({ id }) {
             videoElement: videoRef.current,
             videoSource: `/events/${VIDEO_ID}/output.m3u8`,
             eventId: VIDEO_ID,
-            apiUrl: "http://localhost:4000",
-            contentServerUrl: "http://localhost:3000",
+            apiUrl: API_BASE_URL,
+            contentServerUrl: CONTENT_BASE_URL,
             sessionId: "1703778468",
             onMetadataUpdate: (data) => {
                 const decodedJson = player.decodeJson(data);
