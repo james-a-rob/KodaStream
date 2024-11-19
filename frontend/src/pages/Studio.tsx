@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Card, CardContent, Typography, Button, Link, Tooltip, Container } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Button, Link, Tooltip, Container, IconButton } from '@mui/material';
+import ClearAllIcon from '@mui/icons-material/ClearAll';
 import { useParams } from 'react-router-dom';
 import { OpenInNew } from '@mui/icons-material';
 import MediaList from '../components/MediaList';
@@ -18,7 +19,7 @@ const Studio: React.FC = () => {
     const [eventData, setEventData] = useState<Record<string, unknown> | null>(null);
     const [mediaData, setMediaData] = useState<Record<string, unknown> | null>(null);
     const [analyticsData, setAnalyticsData] = useState<Record<string, unknown> | null>(null);
-    const [playlist, setPlaylist] = useState<Record<string, unknown> | null>(null);
+    const [playlist, setPlaylist] = useState<Record<string, unknown> | []>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     const { id } = useParams<{ id: string }>();
@@ -86,6 +87,10 @@ const Studio: React.FC = () => {
     const deleteItemFromPlaylists = (id: number) => {
         setPlaylist((prevRows) => prevRows.filter((row) => row.id !== id));
 
+    }
+
+    const clearPlaylist = () => {
+        setPlaylist([])
     }
 
     if (loading) return <p>Loading...</p>;
@@ -227,18 +232,32 @@ const Studio: React.FC = () => {
                     </Card>
                 </Grid>
 
+
                 <Grid item xs={12} md={8}>
                     <Card>
                         <CardContent>
-                            <Typography variant="h6" component="div">
-                                Playlist
-                            </Typography>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Typography variant="h6" component="div">
+                                    Playlist
+                                </Typography>
+                                <IconButton
+                                    aria-label="clear all"
+                                    onClick={() => clearPlaylist()} // Clear all items
+                                    size="small"
+                                    color="error"
+                                >
+                                    <Tooltip title="Clear All">
+                                        <ClearAllIcon />
+                                    </Tooltip>
+                                </IconButton>
+                            </div>
                             <Typography variant="body2">
                                 <PlayList data={playlist} deleteItemFromPlaylists={deleteItemFromPlaylists} />
                             </Typography>
                         </CardContent>
                     </Card>
                 </Grid>
+
             </Grid>
         </Container>
     );
