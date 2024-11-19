@@ -83,6 +83,11 @@ const Studio: React.FC = () => {
         setPlaylist(updatedPlaylist);
     };
 
+    const deleteItemFromPlaylists = (id: number) => {
+        setPlaylist((prevRows) => prevRows.filter((row) => row.id !== id));
+
+    }
+
     if (loading) return <p>Loading...</p>;
 
 
@@ -229,7 +234,7 @@ const Studio: React.FC = () => {
                                 Playlist
                             </Typography>
                             <Typography variant="body2">
-                                <PlayList data={playlist} />
+                                <PlayList data={playlist} deleteItemFromPlaylists={deleteItemFromPlaylists} />
                             </Typography>
                         </CardContent>
                     </Card>

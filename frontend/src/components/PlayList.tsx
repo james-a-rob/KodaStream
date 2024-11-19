@@ -8,17 +8,13 @@ type MediaListProps = {
     data: any[];
 };
 
-const MediaList: React.FC<MediaListProps> = ({ data }) => {
+const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists }) => {
     const [rows, setRows] = useState(data);
     const [draggingRowId, setDraggingRowId] = useState<number | null>(null);
 
     useEffect(() => {
         setRows(data);
     }, [data]);
-
-    const handleDelete = (id: number) => {
-        setRows((prevRows) => prevRows.filter((row) => row.id !== id));
-    };
 
     const columns: GridColDef[] = [
         {
@@ -48,7 +44,7 @@ const MediaList: React.FC<MediaListProps> = ({ data }) => {
             sortable: false,
             renderCell: (params) => (
                 <IconButton
-                    onClick={() => handleDelete(params.id as number)}
+                    onClick={() => deleteItemFromPlaylists(params.id as number)}
                     size="small"
                     aria-label="delete"
                 >
@@ -96,4 +92,4 @@ const MediaList: React.FC<MediaListProps> = ({ data }) => {
     );
 };
 
-export default MediaList;
+export default PlayList;
