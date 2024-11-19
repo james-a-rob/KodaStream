@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Card, CardContent, Typography, Button, Link, Tooltip, Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { OpenInNew } from '@mui/icons-material';
@@ -7,13 +7,19 @@ import PlayList from '../components/PlayList';
 import { fetchData, postData } from '../services/api';
 import Preview from '../components/Video';
 
+
+type ApiDataResponse = {
+    data: Record<string, unknown>
+}
+
+type ApiRequest = Record<string, unknown>
+
 const Studio: React.FC = () => {
-    const [eventData, setEventData] = useState<[]>([]);
-    const [mediaData, setMediaData] = useState<[]>([]);
-    const [analyticsData, setAnalyticsData] = useState<[]>([]);
-    const [playlist, setPlaylist] = useState<[]>([]);
+    const [eventData, setEventData] = useState<Record<string, unknown> | null>(null);
+    const [mediaData, setMediaData] = useState<Record<string, unknown> | null>(null);
+    const [analyticsData, setAnalyticsData] = useState<Record<string, unknown> | null>(null);
+    const [playlist, setPlaylist] = useState<Record<string, unknown> | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const [videoHeight, setVideoHeight] = useState<number>(0);  // State for storing video height
 
     const { id } = useParams<{ id: string }>();
     const previewLink = `/preview/${id}`;
@@ -22,14 +28,16 @@ const Studio: React.FC = () => {
     useEffect(() => {
         const getData = async () => {
             try {
-                const eventResult = await fetchData<[]>(`events/${id}`);
-                const mediaResult = await fetchData<[]>(`media`);
-                const analyticsResult = await fetchData<[]>(`events/${id}/analytics`);
+                const eventResult = await fetchData<ApiDataResponse>(`events/${id}`);
+                const mediaResult = await fetchData<ApiDataResponse>(`media`);
+                const analyticsResult = await fetchData<ApiDataResponse>(`events/${id}/analytics`);
+                if (eventResult && mediaResult && analyticsResult && eventResult.data.scenes) {
+                    setEventData(eventResult.data);
+                    setMediaData(mediaResult.data);
+                    setAnalyticsData(analyticsResult.data);
+                    setPlaylist(eventResult.data.scenes);
+                }
 
-                setEventData(eventResult.data);
-                setMediaData(mediaResult.data);
-                setAnalyticsData(analyticsResult.data);
-                setPlaylist(eventResult.data.scenes);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -42,26 +50,32 @@ const Studio: React.FC = () => {
 
 
     const handleGoLive = async () => {
-        eventData.status = "started";
-        eventData.scenes = playlist;
+        if (eventData) {
+            eventData.status = "started";
+            eventData.scenes = playlist;
 
-        try {
-            const eventResult = await postData<[], []>(`events/${id}`, eventData);
-            setEventData(eventResult.data);
-        } catch (error) {
-            console.error(error);
+            try {
+                const eventResult = await postData<ApiRequest, ApiDataResponse>(`events/${id}`, eventData);
+                setEventData(eventResult.data);
+            } catch (error) {
+                console.error(error);
+            }
         }
+
     };
 
     const handleStopStream = async () => {
-        eventData.status = "stopped";
-        eventData.scenes = playlist;
-        try {
-            const eventResult = await postData<[], []>(`events/${id}`, eventData);
-            setEventData(eventResult.data);
-        } catch (error) {
-            console.error(error);
+        if (eventData && eventData) {
+            eventData.status = "stopped";
+            eventData.scenes = playlist;
+            try {
+                const eventResult = await postData<ApiRequest, ApiDataResponse>(`events/${id}`, eventData);
+                setEventData(eventResult.data);
+            } catch (error) {
+                console.error(error);
+            }
         }
+
     };
 
     const addItemToPlaylist = async (item) => {
@@ -70,6 +84,8 @@ const Studio: React.FC = () => {
     };
 
     if (loading) return <p>Loading...</p>;
+
+
 
     return (
         <Container style={{ marginTop: '20px' }}>

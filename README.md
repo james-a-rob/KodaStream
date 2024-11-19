@@ -32,6 +32,7 @@ Curate video content into enaging live streams
 - Easy embed
 - Beautiful social shares
 - Restream to multiple platforms
+- Instream QR codes
 
 
 ## 🚀 Quick Start
