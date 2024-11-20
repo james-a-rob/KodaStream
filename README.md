@@ -15,8 +15,8 @@ A headless streaming platform built for monetization.
 ## 🔥 Features
 - Live playlist curation
 - Loop streams forever 
-- VOD content
-- Attach timed metadata
+- VOD 
+- Timed overlays
 - User friendly management UI
 - Stream analytics
 - Broadcast over HLS protocol 

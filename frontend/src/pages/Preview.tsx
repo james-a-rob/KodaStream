@@ -1,11 +1,12 @@
 import React from 'react';
-import { Typography, Container } from '@mui/material';
-import Preview from '../components/Video';
+import { useParams } from 'react-router-dom';
+import Video from '../components/Video';
 
-const Home: React.FC = () => {
+const Preview: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
     return (
-        <Preview id={"1"} />
+        <Video id={id} />
     );
 };
 
-export default Home;
+export default Preview;

@@ -215,6 +215,43 @@ class FileStorage {
             throw err;
         }
     }
+
+    public async listAllFilesInBucket(bucket: string): Promise<{ id: string, location: string }[]> {
+        logger.info('Fetching all files from bucket', { bucket });
+
+        const fileList: { id: string, location: string }[] = [];
+
+        try {
+            let continuationToken: string | undefined = undefined;
+            do {
+                const listParams = {
+                    Bucket: bucket,
+                    ContinuationToken: continuationToken,
+                };
+
+                const data: ListObjectsV2CommandOutput = await this.s3Client.send(new ListObjectsV2Command(listParams));
+
+                if (data.Contents) {
+                    data.Contents.forEach((file) => {
+                        if (file.Key) {
+                            fileList.push({
+                                id: file.Key,
+                                location: file.Key,
+                            });
+                        }
+                    });
+                }
+
+                continuationToken = data.NextContinuationToken;
+            } while (continuationToken);
+
+            logger.info('Files listed successfully', { bucket, fileCount: fileList.length });
+            return fileList;
+        } catch (err) {
+            logger.error('Error listing files in bucket', { bucket, error: err.message });
+            throw err;
+        }
+    }
 }
 
 export default FileStorage;

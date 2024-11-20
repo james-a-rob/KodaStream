@@ -79,7 +79,7 @@ const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists }) =
     };
 
     return (
-        <Box sx={{ height: 400, width: '100%' }}>
+        <Box sx={{ height: 500, width: '100%' }}>
             <DataGrid
                 rows={rows}
                 columns={columns}

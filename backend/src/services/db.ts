@@ -1,10 +1,10 @@
 import "reflect-metadata";
 import moment from 'moment';
-import AppDataSource from './data-source';
-import { Event } from "./entity/Event";
-import { Scene } from "./entity/Scene";
-import { Log } from "./entity/Log";
-import { StreamStatus, LogType } from "./enums";
+import AppDataSource from '../data-source';
+import { Event } from "../entity/Event";
+import { Scene } from "../entity/Scene";
+import { Log } from "../entity/Log";
+import { StreamStatus, LogType } from "../enums";
 
 
 export const createLiveEvent = async (liveEvent): Promise<Event> => {
@@ -48,6 +48,7 @@ export const getLiveEvent = async (id: string): Promise<Event> => {
 }
 
 export const updateLiveEvent = async (id: string, liveEvent): Promise<Event> => {
+
     const eventRepository = AppDataSource.getRepository(Event)
 
     const event = await eventRepository.findOne({
@@ -109,4 +110,18 @@ export const getViewers = async (eventId: string) => {
     }
 }
 
+export const getAllLiveEvents = async (): Promise<Event[]> => {
+    const eventRepository = AppDataSource.getRepository(Event);
 
+    const liveEvents = await eventRepository.find({
+        relations: {
+            scenes: true,
+        },
+        order: {
+            id: "DESC",
+        }
+
+    });
+
+    return liveEvents;
+};

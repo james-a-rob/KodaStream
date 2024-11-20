@@ -4,8 +4,11 @@ import moment from 'moment';
 import bodyParser from 'body-parser';
 import { start } from '../video-processor';
 import { checkIfAttempingEventRestart, checkIfStatusUpdateisValid } from '../helpers/event-validation';
-import { createLiveEvent, getLiveEvent, updateLiveEvent, log, getViewers } from '../db';
+import { createLiveEvent, getLiveEvent, updateLiveEvent, getAllLiveEvents, log, getViewers } from '../services/db';
+import FileStorage from '../services/file-storage';
 import { apiResponse } from '../helpers/api-response';
+
+const fileStorage = new FileStorage();
 
 const app = express();
 app.use(bodyParser.json());
@@ -81,6 +84,18 @@ app.get('/events/:id', async (req: Request, res: Response) => {
     }
 });
 
+app.get('/events', async (req: Request, res: Response) => {
+    try {
+        const events = await getAllLiveEvents();
+
+        res.status(200).json(apiResponse(true, 'Events retrieved successfully', events));
+    } catch (err) {
+        console.error('Error in GET /events:', err);
+        res.status(500).json(apiResponse(false, 'Internal server error', null, err.message));
+    }
+});
+
+
 app.post('/events/:id/log', async (req: Request, res: Response) => {
     try {
         const { sessionId, type, name, url } = req.body;
@@ -128,19 +143,15 @@ app.get('/events/:id/views', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/media', (req: Request, res: Response) => {
+app.get('/media', async (req: Request, res: Response) => {
     try {
-        const media = [{ id: '1', location: 'example-videos/clip-1.mp4' }, { id: '2', location: 'example-videos/clip-2.mp4' }, { id: '3', location: 'example-videos/short-test.mp4' }, { id: '4', location: '19-09-2024/ferragamo-coffee.mp4' }]
-
+        // const media = [{ id: '1', location: 'example-videos/clip-1.mp4' }, { id: '2', location: 'example-videos/clip-2.mp4' }, { id: '3', location: 'example-videos/short-test.mp4' }, { id: '4', location: '19-09-2024/ferragamo-coffee.mp4' }]
+        const media = await fileStorage.listAllFilesInBucket("kodastream-media");
         res.status(200).json(apiResponse(true, 'Media retrieved successfully', media));
     } catch (err) {
         console.error('Error in GET /media:', err);
         res.status(500).json(apiResponse(false, 'Internal server error', null, err.message));
     }
-});
-
-app.post('/videos', (req: Request, res: Response) => {
-    res.status(501).json(apiResponse(false, 'Not implemented'));
 });
 
 export default app;

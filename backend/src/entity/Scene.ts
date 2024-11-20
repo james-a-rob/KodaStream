@@ -10,7 +10,7 @@ export class Scene {
     @Column('text')
     location: string
 
-    @Column('text', { default: '' })
+    @Column('text', { nullable: true })
     metadata: string
 
     @ManyToOne('Event', 'scenes')

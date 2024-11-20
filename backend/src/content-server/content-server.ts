@@ -6,7 +6,7 @@ import HLS from 'hls-parser';
 import { Readable } from 'stream';
 import fs from 'fs';
 import Logger from '../services/logger';
-import { getLiveEvent } from '../db';
+import { getLiveEvent } from '../services/db';
 import FileStorage from '../services/file-storage';
 import * as currentPath from "../current-path.cjs";
 
@@ -136,17 +136,23 @@ const hlsServerConfig = {
                     const scene = event.scenes.find((dbValue) => dbValue.id.toString() === idFromSegmentFile);
 
                     if (scene) {
+                        // Parse metadata only if it is defined and non-empty
+                        let customAttributes = undefined;
+                        if (scene.metadata) {
+                            customAttributes = {
+                                'X-CUSTOM-KEY': encodeURIComponent(JSON.stringify({
+                                    ...JSON.parse(scene.metadata),
+                                    "scene-id": scene.id
+                                }))
+                            };
+                        }
+
                         segment.dateRange = {
                             id: `${uuidv4()}`,
                             classId: `video-${scene.id}`,
                             start: new Date("1970-01-01T00:00:00.001Z"),
                             duration: segment.duration,
-                            attributes: {
-                                'X-CUSTOM-KEY': encodeURIComponent(JSON.stringify({
-                                    ...JSON.parse(scene.metadata),
-                                    "scene-id": scene.id
-                                }))
-                            }
+                            attributes: customAttributes
                         };
                     }
                 });

@@ -7,13 +7,12 @@ type StreamListProps = {
     data: any
 }
 
-const EventList: React.FC<StreamListProps> = ({ data }) => {
+const EventList: React.FC<StreamListProps> = ({ data, handleRowClick }) => {
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'firstName', headerName: 'First Name', width: 150 },
-        { field: 'lastName', headerName: 'Last Name', width: 200 },
-        { field: 'age', headerName: 'Age', width: 100 },
+        { field: 'status', headerName: 'Status', width: 150 },
+        { field: 'url', headerName: 'url', width: 200 }
     ];
 
 
@@ -22,15 +21,18 @@ const EventList: React.FC<StreamListProps> = ({ data }) => {
         <div>
 
             <DataGrid
+                onRowClick={(params) => {
+                    handleRowClick(params.row.id)
+                }}
                 initialState={{
                     pagination: {
                         paginationModel: {
-                            pageSize: 5,
+                            pageSize: 20,
                         },
                     },
                 }}
                 pageSizeOptions={[5, 10, 20]}
-                sx={{ height: 400 }}
+                sx={{ height: 500 }}
                 rows={data}
                 columns={columns}
             />

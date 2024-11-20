@@ -5,7 +5,7 @@ import pathToFfmpeg from 'ffmpeg-static';
 import { Scene } from "./entity/Scene";
 import { Event } from "./entity/Event";
 import { StreamStatus } from './enums';
-import { getLiveEvent } from "./db";
+import { getLiveEvent } from "./services/db";
 import FileStorage from "./services/file-storage";
 import chokidar from 'chokidar';
 import * as currentPath from "./current-path.cjs";

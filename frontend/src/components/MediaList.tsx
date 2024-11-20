@@ -9,8 +9,9 @@ type MediaListProps = {
 const MediaList: React.FC<MediaListProps> = ({ data, addItemToPlaylist }) => {
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 20 },
-        { field: 'location', headerName: 'Location', width: 220 },
+        { field: 'id', headerName: 'id', width: 300, },
+        { field: 'location', headerName: 'location', width: 300 },
+
     ];
 
 
@@ -20,11 +21,11 @@ const MediaList: React.FC<MediaListProps> = ({ data, addItemToPlaylist }) => {
                 initialState={{
                     pagination: {
                         paginationModel: {
-                            pageSize: 5,
+                            pageSize: 10,
                         },
                     },
                 }}
-                sx={{ height: 400 }}
+                sx={{ height: 500 }}
                 pageSizeOptions={[5, 10, 20]}
                 rows={data}
                 columns={columns}

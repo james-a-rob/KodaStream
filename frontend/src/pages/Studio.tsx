@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { OpenInNew } from '@mui/icons-material';
 import MediaList from '../components/MediaList';
 import PlayList from '../components/PlayList';
-import { fetchData, postData } from '../services/api';
+import { fetchData, putData } from '../services/api';
 import Preview from '../components/Video';
 
 
@@ -54,9 +54,10 @@ const Studio: React.FC = () => {
         if (eventData) {
             eventData.status = "started";
             eventData.scenes = playlist;
+            eventData.scenes = playlist.map(({ metadata, location }) => ({ metadata, location }));
 
             try {
-                const eventResult = await postData<ApiRequest, ApiDataResponse>(`events/${id}`, eventData);
+                const eventResult = await putData<ApiRequest, ApiDataResponse>(`events/${id}`, eventData);
                 setEventData(eventResult.data);
             } catch (error) {
                 console.error(error);
@@ -69,8 +70,10 @@ const Studio: React.FC = () => {
         if (eventData && eventData) {
             eventData.status = "stopped";
             eventData.scenes = playlist;
+            eventData.scenes = playlist.map(({ metadata, location }) => ({ metadata, location }));
+
             try {
-                const eventResult = await postData<ApiRequest, ApiDataResponse>(`events/${id}`, eventData);
+                const eventResult = await putData<ApiRequest, ApiDataResponse>(`events/${id}`, eventData);
                 setEventData(eventResult.data);
             } catch (error) {
                 console.error(error);
@@ -80,6 +83,7 @@ const Studio: React.FC = () => {
     };
 
     const addItemToPlaylist = async (item) => {
+        item.metadata = { "test": "data" };
         const updatedPlaylist = [...playlist, item];
         setPlaylist(updatedPlaylist);
     };

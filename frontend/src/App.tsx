@@ -3,6 +3,8 @@ import { Routes, Route, useLocation } from 'react-router-dom'; // useLocation fo
 
 import Header from './components/Header';
 import Home from './pages/Home';
+import StudioList from './pages/StudioList';
+
 import Studio from './pages/Studio';
 import Media from './pages/Media';
 import Preview from './pages/Preview';
@@ -24,7 +26,7 @@ const App: React.FC = () => {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/studio" element={<Home />} />
+        <Route path="/studio" element={<StudioList />} />
         <Route path="/studio/:id" element={<Studio />} />
         <Route path="/preview/:id" element={<Preview />} />
         <Route path="/media" element={<Media />} />
