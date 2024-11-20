@@ -4,7 +4,7 @@ import moment from 'moment';
 import bodyParser from 'body-parser';
 import { start } from '../video-processor';
 import { checkIfAttempingEventRestart, checkIfStatusUpdateisValid } from '../helpers/event-validation';
-import { createLiveEvent, getLiveEvent, updateLiveEvent, getAllLiveEvents, log, getViewers } from '../services/db';
+import { createLiveEvent, getLiveEvent, updateLiveEvent, getAllLiveEvents, log, getViewers, getAverageSessionLength } from '../services/db';
 import FileStorage from '../services/file-storage';
 import { apiResponse } from '../helpers/api-response';
 
@@ -121,7 +121,11 @@ app.post('/events/:id/log', async (req: Request, res: Response) => {
 
 app.get('/events/:id/analytics', async (req: Request, res: Response) => {
     try {
-        const analytics = { totalViewers: 1200, averageSessionLength: 35, engagementRate: 8 };
+        // query for totalViewer
+        // query for average session length
+        const analyticsResult = await getAverageSessionLength(req.params.id);
+
+        const analytics = { totalViewers: analyticsResult.total_visitors, averageSessionLength: analyticsResult.avg_view_length_seconds };
         res.status(200).json(apiResponse(true, 'Analytics retrieved successfully', analytics));
     } catch (err) {
         console.error('Error in GET /events/:id/analytics:', err);

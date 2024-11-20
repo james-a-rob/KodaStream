@@ -209,7 +209,7 @@ const Studio: React.FC = () => {
                                     marginTop: '30px', // Push the number to the center vertically
                                 }}
                             >
-                                {analyticsData?.averageSessionLength} mins
+                                {analyticsData?.averageSessionLength || 0} secs
                             </Typography>
                         </CardContent>
                     </Card>
@@ -219,7 +219,7 @@ const Studio: React.FC = () => {
                 <Grid item xs={4}>
                     <Card variant="outlined" style={{ height: '200px' }}>
                         <div>
-                            {eventData?.status === "started" && <Preview id={eventData.id} />}
+                            {eventData?.status === "started" && <Preview id={eventData.id} sessionId="testing-session-id" />}
                         </div>
                     </Card>
                 </Grid>

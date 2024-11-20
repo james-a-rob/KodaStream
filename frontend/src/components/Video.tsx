@@ -1,8 +1,17 @@
 import React from 'react';
-// import Overlay from './overlay'
 import KodaPlayer from '../koda-player/koda-player';
 
-export default function Video({ id }) {
+const generateGUID = () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+        const random = (Math.random() * 16) | 0;
+        const value = char === 'x' ? random : (random & 0x3) | 0x8;
+        return value.toString(16);
+    });
+};
+
+const sessionGuid = generateGUID();
+
+export default function Video({ id, sessionId }) {
     const VIDEO_ID = id;
     const videoRef = React.useRef(null);
     const [currentClipsMetaData, setCurrentClipsMetaData] = React.useState(null);
@@ -17,7 +26,7 @@ export default function Video({ id }) {
             eventId: VIDEO_ID,
             apiUrl: API_BASE_URL,
             contentServerUrl: CONTENT_BASE_URL,
-            sessionId: "1703778468",
+            sessionId: sessionId || sessionGuid,
             onMetadataUpdate: (data) => {
                 const decodedJson = player.decodeJson(data);
                 setCurrentClipsMetaData(decodedJson);

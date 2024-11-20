@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import moment from 'moment';
 import AppDataSource from '../data-source';
+import { averageSessionLengthQuery } from "../api/queries/stream-key-analytics";
 import { Event } from "../entity/Event";
 import { Scene } from "../entity/Scene";
 import { Log } from "../entity/Log";
@@ -75,6 +76,7 @@ export const log = async (datetime: string, sessionId: string, eventId: string, 
         datetime,
         sessionId,
         type: type,
+        event,
         name: name,
         url: url
     };
@@ -82,6 +84,15 @@ export const log = async (datetime: string, sessionId: string, eventId: string, 
 
     const savedLog = await logRepository.save(log);
     return savedLog;
+
+}
+
+export const getAverageSessionLength = async (eventId: string) => {
+    const logRepository = AppDataSource.getRepository(Log);
+
+    const result = await logRepository.manager.query(averageSessionLengthQuery, [eventId]);
+
+    return result[0];
 
 }
 
