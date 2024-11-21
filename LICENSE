@@ -1,21 +1,45 @@
-MIT License
+GNU AFFERO GENERAL PUBLIC LICENSE
+Version 3, 19 November 2007
 
-Copyright (c) 2024 James Robertson
+Copyright (C) <year> <your name or organization>
+Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+  This license is designed to ensure that users who interact with the software over a network also have access to the source code.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+  The GNU Affero General Public License is a free software license, which guarantees end users the freedom to run, study, share, and modify the software. By using this software, you accept the conditions of this license.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+  In addition to the terms of the GNU General Public License, the AGPL includes one additional requirement: If you modify and deploy this software over a network, you must also make the source code of the modified version available to users of that network service.
+
+Preamble
+
+The GNU Affero General Public License is a free software license published by the Free Software Foundation. It is a modified version of the GNU General Public License (GPL), designed to close the "application service provider" loophole, which allows modified versions of the software to be used over a network without sharing the source code with the users of that service.
+
+The AGPL was created to ensure that users who interact with software over a network (e.g., via a web application) also have access to the software's source code. It is particularly suited for applications deployed as web services.
+
+Terms and Conditions
+
+1. You may use, modify, and distribute the software, provided that you meet the following conditions:
+   
+   a. **Source Code**: You must make the source code available to anyone who receives a copy of the software, either by including the source code with the distribution or by providing a written offer to make it available.
+
+   b. **Modified Versions**: If you modify the software and distribute or use it over a network, you must make the modified source code available to users of the modified version.
+
+2. You must provide a prominent notice stating that you have modified the software and indicating the date of the modification.
+
+3. You may not impose any further restrictions on the rights granted by the license.
+
+4. When you convey the software, you must include a copy of this license.
+
+5. **No Warranty**: The software is provided "as-is," without any warranty, express or implied. You assume all risks related to using the software.
+
+6. If you use the software in a networked environment, you must ensure that the source code for any modifications is available to the users of the software, and you must make this source code available under the terms of this license.
+
+  END OF TERMS AND CONDITIONS
+
+How to Apply This License
+
+To apply the AGPL-3.0 to your project, include this entire license text in the LICENSE file and include a reference to it in your project's documentation, typically in the `README.md` file.
+
+If you use this software as a library or as part of another project, you should also include a prominent notice stating that your project is licensed under AGPL-3.0, along with a copy of this license.
+
+2024 KodaStream
