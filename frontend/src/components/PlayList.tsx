@@ -8,13 +8,14 @@ type MediaListProps = {
     data: any[];
 };
 
-const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists }) => {
+const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists, onRowUpdate }) => {
     const [rows, setRows] = useState(data);
     const [draggingRowId, setDraggingRowId] = useState<number | null>(null);
 
     useEffect(() => {
         setRows(data);
     }, [data]);
+
 
     const columns: GridColDef[] = [
         {
@@ -35,8 +36,25 @@ const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists }) =
                 </IconButton>
             ),
         },
-        { field: 'id', headerName: 'ID', width: 140, sortable: false },
-        { field: 'location', headerName: 'Location', sortable: false, width: 300 },
+        { field: 'id', headerName: 'ID', width: 100, sortable: false },
+        { field: 'location', headerName: 'Location', sortable: false, width: 200 },
+        {
+            field: 'metadata', headerName: 'Metadata', sortable: false, editable: true, width: 400,
+            renderCell: (params) => (
+                <div
+                    variant="outlined"
+                    multiline
+                    fullWidth
+                    size="small"
+                    maxRows={40}
+                    value={params.row.metadata}
+
+
+                >{params.row.metadata}</div>
+            ),
+
+        },
+
         {
             field: 'delete',
             headerName: '',
@@ -82,10 +100,10 @@ const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists }) =
         <Box sx={{ height: 500, width: '100%' }}>
             <DataGrid
                 rows={rows}
+                processRowUpdate={(newRow) => onRowUpdate(newRow)}
                 columns={columns}
                 disableColumnFilter
                 disableColumnMenu
-                disableSelectionOnClick
                 pageSize={5}
             />
         </Box>

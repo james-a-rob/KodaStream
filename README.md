@@ -27,7 +27,7 @@ A headless streaming platform built for monetization.
 - Open API for automation
 - Chromeless video player for branded customizations
 
-## Coming soon
+## Roadmap
 - Live chat and reactions
 - Countdown to go live
 - Scheduled start time

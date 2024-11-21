@@ -83,7 +83,7 @@ const Studio: React.FC = () => {
     };
 
     const addItemToPlaylist = async (item) => {
-        item.metadata = { "test": "data" };
+        item.metadata = JSON.stringify({ "test": "data" });
         const updatedPlaylist = [...playlist, item];
         setPlaylist(updatedPlaylist);
     };
@@ -96,6 +96,21 @@ const Studio: React.FC = () => {
     const clearPlaylist = () => {
         setPlaylist([])
     }
+
+    const handleMetadataChange = (newRow: Record) => {
+        try {
+            JSON.parse(newRow.metadata);
+        } catch (e) {
+            alert("Invalid JSON")
+            return;
+        }
+        const updatedPlaylist = playlist.map(item =>
+            item.id === newRow.id ? { ...item, ...newRow } : item
+        );
+        setPlaylist(updatedPlaylist)
+
+
+    };
 
     if (loading) return <p>Loading...</p>;
 
@@ -256,7 +271,7 @@ const Studio: React.FC = () => {
                                 </IconButton>
                             </div>
                             <Typography variant="body2">
-                                <PlayList data={playlist} deleteItemFromPlaylists={deleteItemFromPlaylists} />
+                                <PlayList data={playlist} deleteItemFromPlaylists={deleteItemFromPlaylists} onRowUpdate={handleMetadataChange} />
                             </Typography>
                         </CardContent>
                     </Card>

@@ -230,7 +230,6 @@ class FileStorage {
                 };
 
                 const data: ListObjectsV2CommandOutput = await this.s3Client.send(new ListObjectsV2Command(listParams));
-
                 if (data.Contents) {
                     data.Contents.forEach((file) => {
                         if (file.Key) {

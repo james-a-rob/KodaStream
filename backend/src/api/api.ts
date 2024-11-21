@@ -149,8 +149,8 @@ app.get('/events/:id/views', async (req: Request, res: Response) => {
 
 app.get('/media', async (req: Request, res: Response) => {
     try {
-        // const media = [{ id: '1', location: 'example-videos/clip-1.mp4' }, { id: '2', location: 'example-videos/clip-2.mp4' }, { id: '3', location: 'example-videos/short-test.mp4' }, { id: '4', location: '19-09-2024/ferragamo-coffee.mp4' }]
         const media = await fileStorage.listAllFilesInBucket("kodastream-media");
+
         res.status(200).json(apiResponse(true, 'Media retrieved successfully', media));
     } catch (err) {
         console.error('Error in GET /media:', err);
