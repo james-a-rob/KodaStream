@@ -158,7 +158,6 @@ class FileStorage {
                 CacheControl: 'no-store',
             };
             logger.info('Attempting file upload', { bucketName, objectName });
-            logger.error('REPORTING FILE BEFORE UPLAD', { bucketName, objectName, fileContentLength: fileContent.length });
 
             try {
                 // Upload the file to S3

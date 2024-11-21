@@ -224,12 +224,14 @@ const hlsServerConfig = {
         getSegmentStream: async (req: Request, cb) => {
             try {
                 const filePath = await fileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url));
-                const stream = fs.createReadStream(filePath);
 
-                // const stream = Readable.from(data);
+                // Read the entire file into memory synchronously
+                const data = fs.readFileSync(filePath);
+
+                // Create a readable stream from the file content
+                const stream = Readable.from(data);
 
                 logger.info('content-server: Segment stream fetched successfully', { url: req.url });
-                // cb(null, readStream);
 
                 cb(null, stream);
             } catch (err) {
@@ -237,6 +239,7 @@ const hlsServerConfig = {
                 cb(true, null);
             }
         }
+
     }
 };
 

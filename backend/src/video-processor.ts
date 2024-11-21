@@ -60,7 +60,7 @@ const process = (scene: Scene, event: Event) => {
                     logger.info('video-processor: FFmpeg process started', { sceneId: scene.id, eventId: event.id });
                 })
                 .on('progress', (data) => {
-                    logger.debug('video-processor: FFmpeg progress update', { progress: data });
+                    logger.silly('video-processor: FFmpeg progress update', { progress: data });
                 })
                 .on('error', (err, stdout, stderr) => {
                     logger.error('video-processor: FFmpeg process error', { error: err.message, stdout, stderr });
