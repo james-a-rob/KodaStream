@@ -135,22 +135,14 @@ const hlsServerConfig = {
                 }
 
                 // Create a stream for the m3u8 file
-                let m3u8DataStream;
+                let m3u8Data;
                 try {
-                    m3u8DataStream = fs.createReadStream(filePath);
+                    m3u8Data = fs.readFileSync(filePath).toString();
                 } catch (err) {
                     logger.error('content-server: Error reading m3u8 file from disk', { filePath, error: err.message });
                     return cb(true, null); // Return if there's an error reading the file
                 }
 
-                // Convert the stream to a string
-                let m3u8Data;
-                try {
-                    m3u8Data = await streamToString(m3u8DataStream);
-                } catch (err) {
-                    logger.error('content-server: Error converting m3u8 stream to string', { eventId, error: err.message });
-                    return cb(true, null); // Return if there's an error converting the stream to a string
-                }
 
                 // Check if m3u8 data is empty or undefined
                 if (!m3u8Data) {
@@ -163,7 +155,7 @@ const hlsServerConfig = {
                 try {
                     playlist = HLS.parse(m3u8Data);
                 } catch (err) {
-                    logger.error('content-server: Error parsing m3u8 data', { eventId, error: err.message, m3u8DataLength: m3u8Data.length });
+                    logger.error('content-server: Error parsing m3u8 data', { eventId, error: err.message, m3u8DataLength: m3u8Data.length, m3u8DataType: typeof m3u8Data });
                     return cb(true, null); // Return if there's an error parsing the m3u8 data
                 }
                 logger.info('content-server: m3u8 file parsed and ready for modification', { eventId });

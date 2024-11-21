@@ -77,21 +77,29 @@ class FileStorage {
     }
 
     public async getFileByPath(bucket: string, filePath: string): Promise<string> {
-        const tempFilePath = path.join(tmpdir(), 'temp-file');
         const getObjectParams = { Bucket: bucket, Key: filePath };
 
         try {
             const { Body } = await this.s3Client.send(new GetObjectCommand(getObjectParams));
+
             if (Body instanceof Readable) {
-                await new Promise((resolve, reject) => {
-                    const writeStream = fs.createWriteStream(tempFilePath);
-                    Body.pipe(writeStream);
-                    writeStream.on('finish', resolve);
-                    writeStream.on('error', reject);
-                });
-                return tempFilePath;
+                // Convert the Readable stream into a Buffer
+                const chunks: Buffer[] = [];
+                for await (const chunk of Body) {
+                    chunks.push(chunk);
+                }
+                const fileContentBuffer = Buffer.concat(chunks);
+
+                // Write the file to a temporary location synchronously
+                const tempFilePath = path.join(tmpdir(), 'temp-file');
+                fs.writeFileSync(tempFilePath, fileContentBuffer);
+
+                logger.info('File fetched and saved locally', { bucket, filePath });
+                return tempFilePath; // Return the path of the temporary file
+            } else {
+                throw new Error('Unexpected body type received from S3');
             }
-        } catch (err) {
+        } catch (err: any) {
             logger.error('Error fetching file from S3', { bucket, filePath, error: err.message });
             throw err;
         }
@@ -136,54 +144,38 @@ class FileStorage {
             throw new Error(errorMsg); // Early exit if file doesn't exist
         }
 
-        let fileStream: fs.ReadStream | null = null;
+        let fileContent: Buffer | null = null;
 
         try {
-            // Create a read stream from the file
-            fileStream = fs.createReadStream(filePath);
-            logger.info('Created read stream', { bucketName, objectName });
+            // Read the file content into memory
+            fileContent = fs.readFileSync(filePath);
+            logger.info('File read into memory', { bucketName, objectName });
 
             const uploadParams: PutObjectCommandInput = {
                 Bucket: bucketName,
                 Key: objectName,
-                Body: fileStream,
+                Body: fileContent,
                 CacheControl: 'no-store',
             };
             logger.info('Attempting file upload', { bucketName, objectName });
+            logger.error('REPORTING FILE BEFORE UPLAD', { bucketName, objectName, fileContentLength: fileContent.length });
 
             try {
                 // Upload the file to S3
                 const response = await this.s3Client.send(new PutObjectCommand(uploadParams));
                 logger.info('File uploaded successfully', { bucketName, objectName, response });
-            } catch (err) {
+            } catch (err: any) {
                 logger.error('Error uploading file to S3', { bucketName, objectName, error: err.message });
                 throw err; // Rethrow the error to propagate it
             }
-
         } catch (err: any) {
-            // Catch any errors during file path check or stream creation
+            // Catch any errors during file read or upload
             logger.error('Error during file processing', { bucketName, objectName, error: err.message });
-
-            // Ensure the stream is closed properly in case of failure
-            if (fileStream) {
-                try {
-                    fileStream.destroy(); // Cleanly close the stream in error state
-                    logger.info('File stream destroyed due to error', { bucketName, objectName });
-                } catch (streamErr) {
-                    logger.error('Error closing file stream', { bucketName, objectName, error: streamErr.message });
-                }
-            }
-
-            throw err; // Rethrow the original error to allow higher-level handling
+            throw err; // Rethrow the error to allow higher-level handling
         } finally {
-            // Ensure stream is closed properly even if no errors occurred
-            if (fileStream) {
-                try {
-                    fileStream.close(); // Ensure the stream is closed after the operation
-                    logger.info('File stream closed successfully', { bucketName, objectName });
-                } catch (err) {
-                    logger.error('Error closing file stream', { bucketName, objectName, error: err.message });
-                }
+            // Clean-up logic can go here if needed (e.g., temporary files)
+            if (fileContent) {
+                logger.info('File content processed successfully', { bucketName, objectName });
             }
         }
     }
