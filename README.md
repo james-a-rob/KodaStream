@@ -17,6 +17,7 @@ A headless streaming platform built for monetization.
 - Simulated live
 - Playlist curation
 - VOD 
+- Content schedule
 - Loop live streams forever 
 - Timed overlays
 - User friendly management UI
@@ -24,7 +25,7 @@ A headless streaming platform built for monetization.
 - Broadcast over HLS protocol 
 - Scales horizontally and vertically 
 - Copatible with popular CDNs
-- Open API for automation
+- REST API
 - Chromeless video player for branded customizations
 
 ## Roadmap
