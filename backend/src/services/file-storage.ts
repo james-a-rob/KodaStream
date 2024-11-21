@@ -133,30 +133,58 @@ class FileStorage {
         if (!fs.existsSync(filePath)) {
             const errorMsg = `File not found at path: ${filePath}`;
             logger.error(errorMsg);
-            throw new Error(errorMsg);
+            throw new Error(errorMsg); // Early exit if file doesn't exist
         }
 
-        const fileStream = fs.createReadStream(filePath);
-        logger.info('Created read stream', { bucketName, objectName });
-
-        const uploadParams: PutObjectCommandInput = {
-            Bucket: bucketName,
-            Key: objectName,
-            Body: fileStream,
-            CacheControl: 'no-store'
-        };
-        logger.info('Attempting file upload', { bucketName, objectName });
+        let fileStream: fs.ReadStream | null = null;
 
         try {
-            const response = await this.s3Client.send(new PutObjectCommand(uploadParams));
-            logger.info('File uploaded successfully', { bucketName, objectName, response });
-        } catch (err) {
-            logger.error('Error uploading file to S3', { bucketName, objectName, error: err.message });
-            throw err;
-        } finally {
-            logger.info('File stream closed', { bucketName, objectName });
+            // Create a read stream from the file
+            fileStream = fs.createReadStream(filePath);
+            logger.info('Created read stream', { bucketName, objectName });
 
-            fileStream.close();
+            const uploadParams: PutObjectCommandInput = {
+                Bucket: bucketName,
+                Key: objectName,
+                Body: fileStream,
+                CacheControl: 'no-store',
+            };
+            logger.info('Attempting file upload', { bucketName, objectName });
+
+            try {
+                // Upload the file to S3
+                const response = await this.s3Client.send(new PutObjectCommand(uploadParams));
+                logger.info('File uploaded successfully', { bucketName, objectName, response });
+            } catch (err) {
+                logger.error('Error uploading file to S3', { bucketName, objectName, error: err.message });
+                throw err; // Rethrow the error to propagate it
+            }
+
+        } catch (err: any) {
+            // Catch any errors during file path check or stream creation
+            logger.error('Error during file processing', { bucketName, objectName, error: err.message });
+
+            // Ensure the stream is closed properly in case of failure
+            if (fileStream) {
+                try {
+                    fileStream.destroy(); // Cleanly close the stream in error state
+                    logger.info('File stream destroyed due to error', { bucketName, objectName });
+                } catch (streamErr) {
+                    logger.error('Error closing file stream', { bucketName, objectName, error: streamErr.message });
+                }
+            }
+
+            throw err; // Rethrow the original error to allow higher-level handling
+        } finally {
+            // Ensure stream is closed properly even if no errors occurred
+            if (fileStream) {
+                try {
+                    fileStream.close(); // Ensure the stream is closed after the operation
+                    logger.info('File stream closed successfully', { bucketName, objectName });
+                } catch (err) {
+                    logger.error('Error closing file stream', { bucketName, objectName, error: err.message });
+                }
+            }
         }
     }
 
