@@ -24,22 +24,24 @@ const process = (scene: Scene, event: Event) => {
         const segmentLocation = path.join(current, `../events/${event.id}/file-${scene.id}-%03d.ts`);
         const outputLocation = path.join(current, `../events/${event.id}/output-initial.m3u8`);
         const ffmpegOptions = [
-            '-profile:v baseline', // Basic H.264 profile for compatibility
-            '-level 3.0',
-            '-start_number 0',
-            '-hls_time 6',
-            '-sc_threshold 0',
-            `-hls_segment_filename ${segmentLocation}`,
+            '-profile:v baseline', // H.264 baseline profile for compatibility
+            '-level 3.0',          // Level 3.0 for broader compatibility
+            '-start_number 0',     // Start numbering HLS segments from 0
+            '-hls_time 6',         // Set HLS segment duration to 6 seconds
+            '-sc_threshold 0',     // Disable scene change detection for consistent GOPs
+            `-hls_segment_filename ${segmentLocation}`, // HLS segment file naming
             '-hls_flags program_date_time+append_list+omit_endlist+independent_segments+discont_start',
-            '-hls_wrap 10',
-            '-f hls',
-            '-g 25', // GOP size (Group of Pictures)
-            '-b:v 800k', // Set video bitrate to 800 kbps
-            '-maxrate 800k', // Limit max bitrate
-            '-bufsize 1600k', // Set buffer size
-            '-b:a 96k', // Set audio bitrate to 96 kbps
-            '-vf scale=-2:360', // Resize video to height 360px, maintaining aspect ratio
-            '-preset veryfast', // Use a faster preset to reduce CPU load (or adjust based on your needs)
+            '-hls_wrap 10',        // Wrap playlist after 10 segments
+            '-f hls',              // Set output format to HLS
+            '-g 50',               // Set GOP size (double the framerate, e.g., 25fps x 2)
+            '-b:v 800k',           // Video bitrate of 800 kbps
+            '-maxrate 800k',       // Limit max bitrate to 800 kbps
+            '-bufsize 1600k',      // Set buffer size to twice the max bitrate
+            '-b:a 96k',            // Audio bitrate of 96 kbps
+            '-ar 44100',           // Audio sample rate of 44.1 kHz
+            '-vf scale=-2:360',    // Scale video to 360p height (width auto-calculated)
+            '-preset veryfast',    // Fast encoding preset
+            '-movflags +faststart' // Optimize MP4 for streaming
         ];
 
         try {
