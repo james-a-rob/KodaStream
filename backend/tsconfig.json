@@ -2,6 +2,7 @@
   "exclude": [
     "node_modules",
     "ffmpeg-experiments",
+    "load-test",
     "events",
     "test",
     "dist"
