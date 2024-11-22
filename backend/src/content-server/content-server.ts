@@ -106,21 +106,12 @@ const hlsServerConfig = {
                     return cb(true, null); // Return if there's an error fetching the event
                 }
 
-                // Get the file path from file storage
-                let filePath;
-                try {
-                    filePath = await fileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url.replace("output", "output-initial")));
-                } catch (err) {
-                    logger.error('content-server: Error fetching file from storage', { eventId, url: req.url, error: err.message });
-                    return cb(true, null); // Return if there's an error fetching the file
-                }
-
                 // Create a stream for the m3u8 file
                 let m3u8Data;
                 try {
-                    m3u8Data = fs.readFileSync(filePath).toString();
+                    m3u8Data = await fileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url.replace("output", "output-initial")));
                 } catch (err) {
-                    logger.error('content-server: Error reading m3u8 file from disk', { filePath, error: err.message });
+                    logger.error('content-server: Error reading m3u8 file from disk', { error: err.message });
                     return cb(true, null); // Return if there's an error reading the file
                 }
 
@@ -134,7 +125,7 @@ const hlsServerConfig = {
                 // Parse the m3u8 data into a playlist
                 let playlist;
                 try {
-                    playlist = HLS.parse(m3u8Data);
+                    playlist = HLS.parse(m3u8Data.toString());
                 } catch (err) {
                     logger.error('content-server: Error parsing m3u8 data', { eventId, error: err, m3u8DataLength: m3u8Data.length, m3u8DataType: typeof m3u8Data });
                     return cb(true, null); // Return if there's an error parsing the m3u8 data
@@ -204,13 +195,11 @@ const hlsServerConfig = {
         },
         getSegmentStream: async (req: Request, cb) => {
             try {
-                const filePath = await fileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url));
+                const fileBuffer = await fileStorage.getFileByPath("kodastream-streams", removeEventsPrefix(req.url));
 
-                // Read the entire file into memory synchronously
-                const data = fs.readFileSync(filePath);
 
                 // Create a readable stream from the file content
-                const stream = Readable.from(data);
+                const stream = Readable.from(fileBuffer);
 
                 logger.info('content-server: Segment stream fetched successfully', { url: req.url });
 

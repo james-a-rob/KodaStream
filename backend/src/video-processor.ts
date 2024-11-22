@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import ffmpeg from 'fluent-ffmpeg';
 import pathToFfmpeg from 'ffmpeg-static';
+
 import { Scene } from "./entity/Scene";
 import { Event } from "./entity/Event";
 import { StreamStatus } from './enums';
@@ -43,17 +44,25 @@ const process = (scene: Scene, event: Event) => {
 
         try {
             await fs.ensureDir(newEventDirLocation);
-            const inputFileLocation = await fileStorage.getFileAndSave('kodastream-media', sceneLocation);
+            const tempFilePath = path.join(`temp-file-${Date.now()}.mp4`);
 
-            logger.info('video-processor: Starting ffmpeg process', { sceneId: scene.id, eventId: event.id, inputFileLocation });
+            // Write the string to the file
+
+            console.log(`File saved to: ${tempFilePath}`);
+            const fileContentString = await fileStorage.getFileAndSave('kodastream-media', sceneLocation);
+            await fs.promises.writeFile(tempFilePath, fileContentString);
+
+
+            logger.info('video-processor: Starting ffmpeg process', { sceneId: scene.id, eventId: event.id, tempFilePath });
 
             const ff = ffmpeg();
-            ff.input(inputFileLocation)
+            ff.input(tempFilePath)
                 .inputOptions('-re')
                 .addOptions(ffmpegOptions)
                 .output(outputLocation)
-                .on('end', () => {
+                .on('end', async () => {
                     logger.info('video-processor: FFmpeg process completed', { sceneId: scene.id, eventId: event.id });
+                    await fs.promises.unlink(tempFilePath);
                     resolve(true);
                 })
                 .on('start', () => {
@@ -62,7 +71,8 @@ const process = (scene: Scene, event: Event) => {
                 .on('progress', (data) => {
                     logger.silly('video-processor: FFmpeg progress update', { progress: data });
                 })
-                .on('error', (err, stdout, stderr) => {
+                .on('error', async (err, stdout, stderr) => {
+                    await fs.promises.unlink(tempFilePath);
                     logger.error('video-processor: FFmpeg process error', { error: err.message, stdout, stderr });
                     reject(err);
                 })

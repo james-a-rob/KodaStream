@@ -7,3 +7,4 @@ events/*
 .DS_Store
 app.log
 error.log
+temp-file-*

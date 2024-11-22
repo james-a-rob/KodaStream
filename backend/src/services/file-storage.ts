@@ -46,16 +46,11 @@ class FileStorage {
     public async getFileAndSave(bucket: string, filePath: string): Promise<string> {
         try {
             // Get the temporary file path after downloading the file from S3
-            const tempFilePath = await this.getFileByPath(bucket, filePath);
+            const file = await this.getFileByPath(bucket, filePath);
 
-            const tempFolder = os.tmpdir();
-            const outputFilePath = path.join(tempFolder, path.basename(filePath));
 
-            // Move the downloaded file to the desired output path
-            await this.moveFile(tempFilePath, outputFilePath);
-
-            logger.info('File saved successfully', { outputFilePath });
-            return outputFilePath;
+            logger.info('File saved successfully', { fileLength: file.length });
+            return file;
         } catch (err) {
             logger.error('Error downloading or saving file from storage', { error: err.message });
             throw err;
@@ -76,10 +71,8 @@ class FileStorage {
         });
     }
 
-    public async getFileByPath(bucket: string, filePath: string): Promise<string> {
+    public async getFileByPath(bucket: string, filePath: string): Promise<Buffer> {
         const getObjectParams = { Bucket: bucket, Key: filePath };
-        const tempFilePath = path.join(tmpdir(), 'temp-file');
-
 
         try {
             const { Body } = await this.s3Client.send(new GetObjectCommand(getObjectParams));
@@ -92,16 +85,16 @@ class FileStorage {
                 }
                 const fileContentBuffer = Buffer.concat(chunks);
 
-                // Write the file to a temporary location synchronously
-                fs.writeFileSync(tempFilePath, fileContentBuffer);
+                // Convert the buffer to a string (assuming UTF-8 encoding)
+                const fileContentString = fileContentBuffer;
 
-                logger.info('File fetched and saved locally', { bucket, filePath });
-                return tempFilePath; // Return the path of the temporary file
+                logger.info('File fetched and converted to string', { bucket, filePath });
+                return fileContentString; // Return the file content as a string
             } else {
                 throw new Error('Unexpected body type received from S3');
             }
         } catch (err: any) {
-            logger.error('Error fetching file from S3', { bucket, filePath, error: err.message, tempFilePath });
+            logger.error('Error fetching file from S3', { bucket, filePath, error: err.message });
             throw err;
         }
     }
