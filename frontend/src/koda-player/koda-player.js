@@ -59,6 +59,9 @@ export default class KodaPlayer {
 
     setupWithHlsLib() {
         const hls = new Hls({
+            liveSyncDuration: 6,          // Maintain a 3-second delay behind the live edge
+            liveMaxLatencyDuration: 10,
+            liveBackBufferLength: 15,     // Retain only 15 seconds of back buffer
             capLevelToPlayerSize: true, // Limit max buffer size to player size
             maxMaxBufferLength: 30,   // Maximum number of seconds to keep in the buffer
             maxBufferLength: 30,      // Set max buffer length in seconds
