@@ -59,6 +59,13 @@ export default class KodaPlayer {
 
     setupWithHlsLib() {
         const hls = new Hls({
+            capLevelToPlayerSize: true, // Limit max buffer size to player size
+            maxMaxBufferLength: 30,   // Maximum number of seconds to keep in the buffer
+            maxBufferLength: 30,      // Set max buffer length in seconds
+            maxBufferSize: 60 * 1000 * 1000, // Max buffer size in bytes
+            lowBufferWatchdogPeriod: 3, // Time in seconds to check for low buffer
+            highBufferWatchdogPeriod: 5, // Time in seconds to check for high buffer
+            debug: true,              // Enable debug to log buffer-related events
             renderTextTracksNatively: false,
             xhrSetup: function (xhr, url) {
                 xhr.setRequestHeader('Access-Control-Allow-Headers', '*')
