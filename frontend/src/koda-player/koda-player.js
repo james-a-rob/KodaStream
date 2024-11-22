@@ -65,6 +65,13 @@ export default class KodaPlayer {
             }
         });
 
+        // Log detailed HLS.js events
+        Object.keys(Hls.Events).forEach((eventName) => {
+            hls.on(Hls.Events[eventName], (event, data) => {
+                console.log(`[Hls.js Event] ${eventName}:`, data);
+            });
+        });
+
         hls.loadSource(this.contentServerUrl + this.videoSource);
         hls.attachMedia(this.videoElement);
 
