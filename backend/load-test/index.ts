@@ -1,13 +1,13 @@
-import { loadTest } from 'loadtest';
+import { loadTest, LoadTestOptions, LoadTestResult } from 'loadtest';
 
-const options = {
-    // url: 'https://squid-app-e84i3.ondigitalocean.app/content/events/65/output.m3u8',
-    url: 'https://squid-app-e84i3.ondigitalocean.app/content/events/65/file-789-000.ts',
+// Define the load test options with types
+const options: LoadTestOptions = {
+    url: 'https://squid-app-e84i3.ondigitalocean.app/content/events/65/file-789-000.ts', // Replace with your URL
 
     maxRequests: 100, // Number of requests to send
     concurrency: 20, // Number of concurrent requests
     method: 'GET', // HTTP method
-    statusCallback: (error, result, latency) => {
+    statusCallback: (error: Error | null, result: { requestIndex: number; statusCode: number }, latency: { meanLatencyMs: number; maxLatencyMs: number; minLatencyMs: number }) => {
         if (error) {
             console.error('Request error:', error.message);
         } else {
@@ -17,8 +17,11 @@ const options = {
     },
 };
 
+// Starting the load test
 console.log('Starting load test...');
-loadTest(options, (error, result) => {
+
+// Run the load test with callback
+loadTest(options, (error: Error | null, result: LoadTestResult) => {
     if (error) {
         console.error('Error during load test:', error.message);
     } else {
