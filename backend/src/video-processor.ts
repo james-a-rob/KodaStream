@@ -27,7 +27,7 @@ const process = (scene: Scene, event: Event) => {
             '-profile:v baseline', // H.264 baseline profile for compatibility
             '-level 3.0',          // Level 3.0 for broader compatibility
             '-start_number 0',     // Start numbering HLS segments from 0
-            '-hls_time 6',         // Set HLS segment duration to 6 seconds
+            '-hls_time 10',         // Set HLS segment duration to 10 seconds
             '-sc_threshold 0',     // Disable scene change detection for consistent GOPs
             `-hls_segment_filename ${segmentLocation}`, // HLS segment file naming
             '-hls_flags program_date_time+append_list+omit_endlist+independent_segments+discont_start',

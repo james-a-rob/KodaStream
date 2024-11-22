@@ -2,10 +2,10 @@ import { loadTest, LoadTestOptions, LoadTestResult } from 'loadtest';
 
 // Define the load test options with types
 const options: LoadTestOptions = {
-    url: 'https://squid-app-e84i3.ondigitalocean.app/content/events/65/file-863-002.ts', // Replace with your URL
+    url: 'http://localhost:3000/events/274/file-1613-007.ts', // Replace with your URL
 
-    maxRequests: 100, // Number of requests to send
-    concurrency: 5, // Number of concurrent requests
+    maxRequests: 1000, // Number of requests to send
+    concurrency: 50, // Number of concurrent requests
     method: 'GET', // HTTP method
     statusCallback: (error: Error | null, result: { requestIndex: number; statusCode: number }, latency: { meanLatencyMs: number; maxLatencyMs: number; minLatencyMs: number }) => {
         if (error) {
