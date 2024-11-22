@@ -29,7 +29,7 @@ class FileStorage {
     constructor() {
         this.s3Client = new S3Client({
             retryStrategy: new ConfiguredRetryStrategy(
-                1, // max attempts.
+                5, // max attempts.
                 (attempt: number) => 100 + attempt * 1000 // backoff function.
             ),
             region: "eu-west-2",
