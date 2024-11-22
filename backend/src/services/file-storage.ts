@@ -78,6 +78,8 @@ class FileStorage {
 
     public async getFileByPath(bucket: string, filePath: string): Promise<string> {
         const getObjectParams = { Bucket: bucket, Key: filePath };
+        const tempFilePath = path.join(tmpdir(), 'temp-file');
+
 
         try {
             const { Body } = await this.s3Client.send(new GetObjectCommand(getObjectParams));
@@ -91,7 +93,6 @@ class FileStorage {
                 const fileContentBuffer = Buffer.concat(chunks);
 
                 // Write the file to a temporary location synchronously
-                const tempFilePath = path.join(tmpdir(), 'temp-file');
                 fs.writeFileSync(tempFilePath, fileContentBuffer);
 
                 logger.info('File fetched and saved locally', { bucket, filePath });
@@ -100,7 +101,7 @@ class FileStorage {
                 throw new Error('Unexpected body type received from S3');
             }
         } catch (err: any) {
-            logger.error('Error fetching file from S3', { bucket, filePath, error: err.message });
+            logger.error('Error fetching file from S3', { bucket, filePath, error: err.message, tempFilePath });
             throw err;
         }
     }
