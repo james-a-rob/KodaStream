@@ -52,25 +52,6 @@ function removeEventsPrefix(filePath: string): string {
     return filePath.replace(/^\/?events\//, '');
 }
 
-const streamToString = (stream: Readable): Promise<string> => {
-    return new Promise((resolve, reject) => {
-        let data = '';
-
-        stream.on('data', (chunk: Buffer) => {
-            data += chunk.toString();
-        });
-
-        stream.on('end', () => {
-            resolve(data);
-        });
-
-        stream.on('error', (err) => {
-            logger.error('content-server: Error reading stream', { error: err.message });
-            reject(err);
-        });
-    });
-};
-
 const hlsServerConfig = {
     provider: {
         exists: async (req: Request, cb: (err: Error | null, exists: boolean) => void) => {
@@ -102,7 +83,7 @@ const hlsServerConfig = {
                     logger.warn('content-server: File not found in storage', { url: req.url, error: err.message });
                     cb(null, false); // File does not exist
                 } else {
-                    logger.error('content-server: Unexpected error during file check', { url: req.url, error: err.message });
+                    logger.error('content-server: Unexpected error during file check', { url: req.url, error: err });
                     cb(err, false); // Propagate unexpected errors
                 }
             }
@@ -155,7 +136,7 @@ const hlsServerConfig = {
                 try {
                     playlist = HLS.parse(m3u8Data);
                 } catch (err) {
-                    logger.error('content-server: Error parsing m3u8 data', { eventId, error: err.message, m3u8DataLength: m3u8Data.length, m3u8DataType: typeof m3u8Data });
+                    logger.error('content-server: Error parsing m3u8 data', { eventId, error: err, m3u8DataLength: m3u8Data.length, m3u8DataType: typeof m3u8Data });
                     return cb(true, null); // Return if there's an error parsing the m3u8 data
                 }
                 logger.info('content-server: m3u8 file parsed and ready for modification', { eventId });
