@@ -43,7 +43,7 @@ class FileStorage {
         });
     }
 
-    public async getFileAndSave(bucket: string, filePath: string): Promise<string> {
+    public async getFileAndSave(bucket: string, filePath: string): Promise<Buffer> {
         try {
             // Get the temporary file path after downloading the file from S3
             const file = await this.getFileByPath(bucket, filePath);
