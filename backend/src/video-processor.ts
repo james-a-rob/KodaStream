@@ -85,7 +85,7 @@ const uploadToStorage = async (filePath: string, localDir: string, eventId: numb
         await fileStorage.uploadFile('kodastream-streams', fullFilePath, objectName);
         logger.info('video-processor: Uploaded file to storage', { fileName, eventId });
     } catch (err) {
-        logger.error('video-processor: Error uploading to storage', { filePath, eventId, error: err.message });
+        logger.error('video-processor: Error uploading to storage', { filePath, eventId, error: err });
     }
 };
 
