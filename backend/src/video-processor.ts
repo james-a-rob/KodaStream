@@ -166,7 +166,6 @@ export const start = async (eventId: number) => {
         if (sceneToStream) {
 
             const videoProcess = await process(sceneToStream, uptoDateLiveEvent);
-            videoProcess.kill();
         }
 
         const nextScene = uptoDateLiveEvent.scenes.find((scene) => scene.id === firstScene.id + sceneIteration + 1);
