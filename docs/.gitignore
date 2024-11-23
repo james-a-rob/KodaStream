@@ -1,6 +1,6 @@
 # deps
 /node_modules
-
+/dist
 # generated content
 .contentlayer
 .content-collections
