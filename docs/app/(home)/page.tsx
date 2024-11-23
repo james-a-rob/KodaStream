@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function HomePage() {
   return (
@@ -9,7 +10,7 @@ export default function HomePage() {
           Build Your Own Streaming Platform with Ease
         </h1>
         <p className="mb-6 text-lg text-gray-600">
-          Create a fully customized streaming experience tailored to your needs. Our headless API gives you the flexibility to build your own platform — whether it's for on-demand video, live streaming, or more.
+          Create a fully customized streaming experience tailored to your needs. Our headless API gives you the flexibility to build your own platform — whether its for on-demand video, live streaming, or more.
         </p>
         <Link
           href="/docs"
@@ -22,21 +23,21 @@ export default function HomePage() {
       {/* Features Section */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12 max-w-6xl">
         <div className="flex flex-col items-center text-center p-6 border rounded-md shadow-sm">
-          <img src="https://via.placeholder.com/150" alt="Content Management" className="mb-4 w-24 h-24 object-cover rounded-full" />
+          <Image src="https://via.placeholder.com/150" alt="Content Management" className="mb-4 w-24 h-24 object-cover rounded-full" />
           <h3 className="text-xl font-semibold text-gray-800">Customizable Content Management</h3>
           <p className="text-gray-600">
             Easily upload, organize, and manage your media content with powerful tools that put you in control.
           </p>
         </div>
         <div className="flex flex-col items-center text-center p-6 border rounded-md shadow-sm">
-          <img src="https://via.placeholder.com/150" alt="Live Streaming" className="mb-4 w-24 h-24 object-cover rounded-full" />
+          <Image src="https://via.placeholder.com/150" alt="Live Streaming" className="mb-4 w-24 h-24 object-cover rounded-full" />
           <h3 className="text-xl font-semibold text-gray-800">Seamless Live Streaming</h3>
           <p className="text-gray-600">
             Set up high-quality live streams with ease, perfect for events, webinars, or broadcasting content in real-time.
           </p>
         </div>
         <div className="flex flex-col items-center text-center p-6 border rounded-md shadow-sm">
-          <img src="https://via.placeholder.com/150" alt="Scalable Infrastructure" className="mb-4 w-24 h-24 object-cover rounded-full" />
+          <Image src="https://via.placeholder.com/150" alt="Scalable Infrastructure" className="mb-4 w-24 h-24 object-cover rounded-full" />
           <h3 className="text-xl font-semibold text-gray-800">Scalable Infrastructure</h3>
           <p className="text-gray-600">
             Scale your platform effortlessly to accommodate millions of users with robust infrastructure and CDN support.
@@ -48,7 +49,7 @@ export default function HomePage() {
       <section className="mb-12 max-w-3xl">
         <h2 className="mb-6 text-3xl font-semibold text-gray-900">How It Works</h2>
         <p className="mb-6 text-lg text-gray-600">
-          Our headless API is designed to be flexible, allowing you to customize everything from the back end to the front end. Here's how you can get started:
+          Our headless API is designed to be flexible, allowing you to customize everything from the back end to the front end. Heres how you can get started:
         </p>
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1 text-center p-6 border rounded-md shadow-sm">
