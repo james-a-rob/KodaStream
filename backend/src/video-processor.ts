@@ -51,8 +51,6 @@ const process = (scene: Scene, event: Event) => {
             const tempFilePath = path.join(`temp-file-${Date.now()}.mp4`);
 
             // Write the string to the file
-
-            console.log(`File saved to: ${tempFilePath}`);
             const fileContentString = await fileStorage.getFileAndSave('kodastream-media', sceneLocation);
             await fs.promises.writeFile(tempFilePath, fileContentString);
 
@@ -106,7 +104,6 @@ const uploadToStorage = async (filePath: string, localDir: string, eventId: numb
 };
 
 export const start = async (eventId: number) => {
-    logger.error('video-processor: kicked off');
 
     const eventDirLocation = path.join(current, `../events/${eventId}`);
 
@@ -125,18 +122,23 @@ export const start = async (eventId: number) => {
 
     logger.info('video-processor: Setting up watch', { eventDirLocation });
 
-    const watcher = chokidar.watch(eventDirLocation, { persistent: true, ignoreInitial: true });
+    const watcher = chokidar.watch(eventDirLocation, {
+        persistent: true, ignoreInitial: true, awaitWriteFinish: { stabilityThreshold: 500, pollInterval: 100 },
+    });
+
 
     watcher
         .on('add', (filePath) => {
             if (filePath.endsWith('.ts') || filePath.endsWith('.m3u8')) {
-                logger.info('video-processor: New file detected', { filePath });
+                const fileSize = fs.statSync(filePath).size; // Get the file size in bytes
+                logger.info('video-processor: New file detected', { filePath, fileSize });
                 uploadToStorage(filePath, eventDirLocation, eventId);
             }
         })
         .on('change', (filePath) => {
             if (filePath.endsWith('.ts') || filePath.endsWith('.m3u8')) {
-                logger.info('video-processor: File updated', { filePath });
+                const fileSize = fs.statSync(filePath).size; // Get the file size in bytes
+                logger.info('video-processor: File updated', { filePath, fileSize });
                 uploadToStorage(filePath, eventDirLocation, eventId);
             }
         });
@@ -162,7 +164,6 @@ export const start = async (eventId: number) => {
         const sceneToStream = uptoDateLiveEvent.scenes.find((scene) => scene.id === firstScene.id + sceneIteration);
 
         if (sceneToStream) {
-            logger.error('video-processor: scene processing started', { sceneToStream: sceneToStream });
 
             const videoProcess = await process(sceneToStream, uptoDateLiveEvent);
             videoProcess.kill();

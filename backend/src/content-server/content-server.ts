@@ -208,6 +208,9 @@ const hlsServerConfig = {
                 logger.error('content-server: Error fetching segment stream', { url: req.url, error: err.message });
                 cb(true, null);
             }
+            // console.log(req.url)
+            // const stream = fs.createReadStream(path.join('/Users/jamesrobertson/Code/KodaStream/backend/events', `../${req.url}`));
+            // cb(null, stream);
         }
 
     }

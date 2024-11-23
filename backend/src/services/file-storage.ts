@@ -73,23 +73,27 @@ class FileStorage {
 
     public async getFileByPath(bucket: string, filePath: string): Promise<Buffer> {
         const getObjectParams = { Bucket: bucket, Key: filePath };
-
         try {
             const { Body } = await this.s3Client.send(new GetObjectCommand(getObjectParams));
 
             if (Body instanceof Readable) {
-                // Convert the Readable stream into a Buffer
+                // Instead of using async chunking, we use the .on() method to read synchronously
                 const chunks: Buffer[] = [];
-                for await (const chunk of Body) {
+                Body.on('data', (chunk: Buffer) => {
                     chunks.push(chunk);
-                }
+                });
+
+                // Wait for the end of the stream
+                await new Promise<void>((resolve, reject) => {
+                    Body.on('end', () => resolve()); // Resolve when the stream ends
+                    Body.on('error', (err) => reject(err)); // Reject on stream error
+                });
+
+                // Once the stream ends, concatenate the chunks into a single Buffer
                 const fileContentBuffer = Buffer.concat(chunks);
 
-                // Convert the buffer to a string (assuming UTF-8 encoding)
-                const fileContentString = fileContentBuffer;
-
-                logger.info('File fetched and converted to string', { bucket, filePath });
-                return fileContentString; // Return the file content as a string
+                logger.info('File fetched successfully from S3', { bucket, filePath });
+                return fileContentBuffer;
             } else {
                 throw new Error('Unexpected body type received from S3');
             }
