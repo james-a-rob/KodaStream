@@ -9,7 +9,7 @@ class Logger {
 
     private static createLogger(): winston.Logger {
         return winston.createLogger({
-            level: 'debug',
+            level: 'error',
             format: winston.format.combine(
                 winston.format.timestamp(),
                 winston.format.json()

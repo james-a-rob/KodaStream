@@ -29,6 +29,8 @@ const process = (scene: Scene, event: Event) => {
             '-start_number 0',             // Start numbering HLS segments from 0
             '-hls_time 10',                // Set HLS segment duration to 10 seconds
             '-sc_threshold 0',             // Disable scene change detection for consistent GOPs
+            '-r', '25',                    // Normalize FPS to 25 (or another desired frame rate)
+
             `-hls_segment_filename ${segmentLocation}`, // HLS segment file naming
             '-hls_flags program_date_time+append_list+omit_endlist+independent_segments+discont_start',
             '-hls_wrap 10',                // Wrap playlist after 10 segments
@@ -57,6 +59,8 @@ const process = (scene: Scene, event: Event) => {
 
             logger.info('video-processor: Starting ffmpeg process', { sceneId: scene.id, eventId: event.id, tempFilePath });
 
+
+
             const ff = ffmpeg();
             ff.input(tempFilePath)
                 .inputOptions('-re')
@@ -65,7 +69,7 @@ const process = (scene: Scene, event: Event) => {
                 .on('end', async () => {
                     logger.info('video-processor: FFmpeg process completed', { sceneId: scene.id, eventId: event.id });
                     await fs.promises.unlink(tempFilePath);
-                    resolve(true);
+                    resolve(ff);
                 })
                 .on('start', () => {
                     logger.info('video-processor: FFmpeg process started', { sceneId: scene.id, eventId: event.id });
@@ -102,6 +106,8 @@ const uploadToStorage = async (filePath: string, localDir: string, eventId: numb
 };
 
 export const start = async (eventId: number) => {
+    logger.error('video-processor: kicked off');
+
     const eventDirLocation = path.join(current, `../events/${eventId}`);
 
     try {
@@ -156,7 +162,10 @@ export const start = async (eventId: number) => {
         const sceneToStream = uptoDateLiveEvent.scenes.find((scene) => scene.id === firstScene.id + sceneIteration);
 
         if (sceneToStream) {
-            await process(sceneToStream, uptoDateLiveEvent);
+            logger.error('video-processor: scene processing started', { sceneToStream: sceneToStream });
+
+            const videoProcess = await process(sceneToStream, uptoDateLiveEvent);
+            videoProcess.kill();
         }
 
         const nextScene = uptoDateLiveEvent.scenes.find((scene) => scene.id === firstScene.id + sceneIteration + 1);
