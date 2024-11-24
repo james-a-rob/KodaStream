@@ -57,20 +57,6 @@ class FileStorage {
         }
     }
 
-    // Helper method to move the file from temp location to output location
-    private async moveFile(sourcePath: string, destPath: string): Promise<void> {
-        return new Promise((resolve, reject) => {
-            fs.rename(sourcePath, destPath, (err) => {
-                if (err) {
-                    logger.error('Error moving file', { sourcePath, destPath, error: err.message });
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        });
-    }
-
     public async getFileByPath(bucket: string, filePath: string): Promise<Buffer> {
         const getObjectParams = { Bucket: bucket, Key: filePath };
         try {

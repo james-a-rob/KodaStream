@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Card, CardContent, Typography, Button, Link, Tooltip, Container, IconButton } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Button, Link, Tooltip, Container, IconButton, TextField, ToggleButton, ToggleButtonGroup, } from '@mui/material';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import { useParams } from 'react-router-dom';
 import { OpenInNew } from '@mui/icons-material';
@@ -17,9 +17,13 @@ type ApiRequest = Record<string, unknown>
 
 const Studio: React.FC = () => {
     const [eventData, setEventData] = useState<Record<string, unknown> | null>(null);
+    const [unchangedEventData, setUnchangedEventData] = useState<Record<string, unknown> | null>(null);
+
     const [mediaData, setMediaData] = useState<Record<string, unknown> | null>(null);
     const [analyticsData, setAnalyticsData] = useState<Record<string, unknown> | null>(null);
     const [playlist, setPlaylist] = useState<Record<string, unknown> | []>([]);
+    const [unchangedPlaylist, setUnchangedPlaylist] = useState<Record<string, unknown> | null>(null);
+
     const [loading, setLoading] = useState<boolean>(true);
 
     const { id } = useParams<{ id: string }>();
@@ -34,9 +38,11 @@ const Studio: React.FC = () => {
                 const analyticsResult = await fetchData<ApiDataResponse>(`events/${id}/analytics`);
                 if (eventResult && mediaResult && analyticsResult && eventResult.data.scenes) {
                     setEventData(eventResult.data);
+                    setUnchangedEventData(eventResult.data)
                     setMediaData(mediaResult.data);
                     setAnalyticsData(analyticsResult.data);
                     setPlaylist(eventResult.data.scenes);
+                    setUnchangedPlaylist(eventResult.data.scenes)
                 }
 
             } catch (error) {
@@ -59,6 +65,9 @@ const Studio: React.FC = () => {
             try {
                 const eventResult = await putData<ApiRequest, ApiDataResponse>(`events/${id}`, eventData);
                 setEventData(eventResult.data);
+                setUnchangedEventData(eventResult.data);
+
+
             } catch (error) {
                 console.error(error);
             }
@@ -75,6 +84,8 @@ const Studio: React.FC = () => {
             try {
                 const eventResult = await putData<ApiRequest, ApiDataResponse>(`events/${id}`, eventData);
                 setEventData(eventResult.data);
+                setUnchangedEventData(eventResult.data);
+                unchangedPlaylist(eventResult.data.scenes)
             } catch (error) {
                 console.error(error);
             }
@@ -112,9 +123,15 @@ const Studio: React.FC = () => {
 
     };
 
+    const handleModeChange = (e) => {
+        const newEventData = {
+            ...eventData,
+            type: e.target.value
+        }
+        setEventData(newEventData);
+    }
+
     if (loading) return <p>Loading...</p>;
-
-
 
     return (
         <Container style={{ marginTop: '20px' }}>
@@ -133,7 +150,21 @@ const Studio: React.FC = () => {
                                     {eventData?.status}
                                 </Typography>
                             </div>
+
+
                             <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <ToggleButtonGroup
+                                    style={{ marginRight: '16px' }}
+
+                                    value={eventData?.type}
+                                    exclusive
+                                    onChange={handleModeChange}
+                                    color="primary"
+                                    size="small"
+                                >
+                                    <ToggleButton value="Live">Live</ToggleButton>
+                                    <ToggleButton value="VOD">VOD</ToggleButton>
+                                </ToggleButtonGroup>
                                 <Button
                                     onClick={handleStopStream}
                                     variant="contained"
@@ -145,6 +176,7 @@ const Studio: React.FC = () => {
 
                                 <Button
                                     onClick={handleGoLive}
+                                    // disabled={JSON.stringify(eventData) === JSON.stringify(unchangedEventData) && JSON.stringify(playlist) === JSON.stringify(unchangedPlaylist) ? false : true}
                                     variant="contained"
                                     color="primary"
                                     style={{ marginRight: '16px' }}

@@ -1,6 +1,5 @@
 import React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Box } from '@mui/material';
 
 type MediaListProps = {
     data: any

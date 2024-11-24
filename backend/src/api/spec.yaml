@@ -1,0 +1,457 @@
+openapi: 3.0.0
+info:
+  title: KodaStream API
+  description: A headless streaming platform API for managing live events, video processing, and analytics.
+  version: 1.0.0
+servers:
+  - url: http://localhost:4000
+    description: Local server
+
+paths:
+  /status:
+    get:
+      summary: Check the status of the service
+      responses:
+        '200':
+          description: Service is up
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Service is up
+
+  /events:
+    post:
+      summary: Create a new live event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - scenes
+              properties:
+                scenes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      metadata:
+                        type: object
+                        additionalProperties: true
+      responses:
+        '201':
+          description: Event created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Event created successfully
+                  data:
+                    type: object
+                    additionalProperties: true
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request: scenes are required
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Access denied
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Internal server error
+
+  /events/{id}:
+    get:
+      summary: Retrieve details of a live event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Event ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Event retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Event retrieved successfully
+                  data:
+                    type: object
+                    additionalProperties: true
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Event not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Internal server error
+
+    put:
+      summary: Update an existing live event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Event ID
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                scenes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      metadata:
+                        type: object
+                        additionalProperties: true
+      responses:
+        '200':
+          description: Event updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Event updated successfully
+                  data:
+                    type: object
+                    additionalProperties: true
+        '400':
+          description: Invalid stream status update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid stream status update
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Event not found
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Access denied
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Internal server error
+
+  /events/{id}/log:
+    post:
+      summary: Log an event related to a live stream
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Event ID
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - sessionId
+                - type
+              properties:
+                sessionId:
+                  type: string
+                type:
+                  type: string
+                name:
+                  type: string
+                url:
+                  type: string
+      responses:
+        '201':
+          description: Log event created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Log event created successfully
+                  data:
+                    type: object
+                    additionalProperties: true
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Invalid request: sessionId and type are required
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Internal server error
+
+  /events/{id}/analytics:
+    get:
+      summary: Get analytics for a live event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Event ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Analytics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Analytics retrieved successfully
+                  data:
+                    type: object
+                    properties:
+                      totalViewers:
+                        type: integer
+                      averageSessionLength:
+                        type: integer
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Internal server error
+
+  /events/{id}/views:
+    get:
+      summary: Get viewers for a live event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Event ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Viewers retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Viewers retrieved successfully
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        viewerId:
+                          type: string
+                        viewerName:
+                          type: string
+        '404':
+          description: No viewers found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: No viewers found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Internal server error
+
+  /media:
+    get:
+      summary: Retrieve media files stored in the system
+      responses:
+        '200':
+          description: Media retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Media retrieved successfully
+                  data:
+                    type: array
+                    items:
+                      type: string
+                      example: file.jpg
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object

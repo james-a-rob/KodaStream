@@ -4,33 +4,156 @@ description: ...
 ---
 
 
-# Getting Started
+# Getting Started with KodaStream
 
+Welcome to the KodaStream tutorial! In this guide, we'll walk you through the steps to get your KodaStream instance up and running. By the end of this tutorial, you’ll have a live streaming platform ready to go.
 
+---
 
-## Purpose
+## Table of Contents
 
+1. [Prerequisites](#prerequisites)
+2. [Setting Up the Environment](#setting-up-the-environment)
+3. [Run Database Migrations](#run-database-migrations)
+4. [Set Up Minio](#set-up-minio)
+5. [Start the Backend Server](#start-the-backend-server)
+6. [Start the Frontend Server](#start-the-frontend-server)
+7. [Access the UI and API](#access-the-ui-and-api)
+8. [Conclusion](#conclusion)
 
-
+---
 
 ## Prerequisites
 
+Before you can begin, make sure your environment is set up with the following software:
 
+1. **Node.js** (LTS version): KodaStream relies on Node.js for the backend server.
+2. **FFmpeg**: This tool is required for video encoding and processing.
+3. **PostgreSQL**: The database used to store metadata for KodaStream.
+4. **Minio**: An object storage service used for media files, stream data, and thumbnails.
 
+---
 
-## Authentication Setup
+### Setting Up the Environment
 
+To get started, you will need to clone the repository and install the necessary dependencies.
 
+1. **Clone the repository:**
 
+   Open your terminal and run the following command:
 
-## Installation and Setup
+   `git clone https://github.com/KodaStream/KodaStream.git`
+   
+   `cd KodaStream`
 
-## Adding Media
+2. **Install dependencies:**
 
-## Streaming Content
+   Inside the `KodaStream` directory, run:
 
+   `npm install`
 
-## Managment UI and API options
+This will install all the necessary dependencies for both the backend and frontend.
+
+---
+
+### Run Database Migrations
+
+KodaStream uses PostgreSQL to store metadata, so you'll need to run migrations to set up the database schema.
+
+1. **Run migrations:**
+
+   After setting up your database (`kodastream-dev`), run the following command:
+
+   `npm run migrations:run`
+
+This will ensure that all the required tables and relationships are created in your database.
+
+---
+
+### Set Up Minio
+
+Minio is used to manage and store your media files, stream data, and thumbnails.
+
+1. **Run Minio:**
+
+   If you don't have Minio installed, you can run it locally using the following command:
+
+   `minio server /tmp/data`
+
+2. **Create Minio Buckets:**
+
+   You need to create three buckets in Minio to store your data:
+
+   - `kodastream-media` (for media files)
+   - `kodastream-stream` (for live stream data)
+   - `kodastream-thumbnails` (for storing thumbnails)
+
+You can create these buckets via the Minio web interface or by using the Minio client.
+
+---
+
+### Start the Backend Server
+
+Now that the database and Minio are set up, it’s time to start the backend server.
+
+1. **Navigate to the backend folder:**
+
+   `cd backend`
+
+2. **Start the backend server:**
+
+   Run the following command to start the backend server in development mode:
+
+   `npm run start:dev`
+
+This will start the backend server, which will be accessible at `http://localhost:4000`.
+
+---
+
+### Start the Frontend Server
+
+Once the backend is running, you'll need to start the frontend server to access the user interface.
+
+1. **Navigate to the frontend folder:**
+
+   `cd frontend`
+
+2. **Start the frontend server:**
+
+   Run the following command:
+
+   `npm run dev`
+
+This will start the frontend UI, and it will be available at `http://localhost:5173`.
+
+---
+
+### Access the UI and API
+
+Now that both servers are running, you can access KodaStream through the following:
+
+- **UI**: Visit `http://localhost:5173` in your browser to access the user interface where you can manage your streams.
+- **REST API**: The backend API is available at `http://localhost:4000`. Use this to interact programmatically with your KodaStream instance.
+- **Content API**: If you need to manage video content directly, the content API can be accessed at `http://localhost:3000`.
+
+---
+
+## Conclusion
+
+Congratulations! You’ve successfully set up KodaStream. You now have a fully functional live streaming platform that you can customize and use for monetization.
+
+In this tutorial, we covered the following steps:
+
+- Setting up the environment (Node.js, FFmpeg, PostgreSQL, and Minio)
+- Running database migrations
+- Starting the backend and frontend servers
+- Accessing the KodaStream UI and API
+
+Now you can start creating and managing live streams, playlists, VODs, and more. Keep an eye on our [roadmap](#roadmap) for upcoming features!
+
+If you have any questions or need further assistance, don’t hesitate to check out our [documentation](https://docs.kodastream.com) or ask in the [community forum](https://forum.kodastream.com).
+
+Happy streaming! 🎥✨
 
 
 

@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import moment from 'moment';
 import bodyParser from 'body-parser';
-import { start } from '../video-processor';
+import { start } from '../video-processor/video-processor';
 import { checkIfAttempingEventRestart, checkIfStatusUpdateisValid } from '../helpers/event-validation';
 import { createLiveEvent, getLiveEvent, updateLiveEvent, getAllLiveEvents, log, getViewers, getAverageSessionLength } from '../services/db';
 import FileStorage from '../services/file-storage';
@@ -76,6 +76,7 @@ app.get('/events/:id', async (req: Request, res: Response) => {
         if (!event) {
             return res.status(404).json(apiResponse(false, 'Event not found'));
         }
+        event.thumbnail = `/thumbnails/${req.params.id}/thumbnail.jpg`;
 
         res.status(200).json(apiResponse(true, 'Event retrieved successfully', event));
     } catch (err) {
@@ -157,5 +158,6 @@ app.get('/media', async (req: Request, res: Response) => {
         res.status(500).json(apiResponse(false, 'Internal server error', null, err.message));
     }
 });
+
 
 export default app;
