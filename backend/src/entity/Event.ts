@@ -2,29 +2,35 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import type { Scene } from "./Scene";
 import type { Log } from "./Log";
 
+import { StreamStatus, StreamType } from "../enums";
+
 @Entity()
 export class Event {
+
     @PrimaryGeneratedColumn()
-    id: number;
+    id: number
 
     @Column('text')
-    status: string; // Replace StreamStatus enum with string
+    status: StreamStatus
 
-    @Column('text', { default: 'Live' }) // Change enum type to a plain text column
-    type: string; // Use string instead of StreamType enum
+
+    @Column('text', { default: 'Live' })
+    type: string
 
     @Column('text')
-    url: string;
+    url: string
+
 
     @Column('text', { nullable: true })
-    thumbnail: string;
+    thumbnail: string
 
     @Column('boolean', { default: false })
-    loop: boolean;
+    loop: boolean
 
     @OneToMany('Scene', 'event', { cascade: true })
     scenes: Scene[];
 
     @OneToMany('Log', 'event', { cascade: true })
     logs: Log[];
+
 }
