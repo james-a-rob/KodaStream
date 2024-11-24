@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+
 
 export default function HomePage() {
   return (
@@ -23,21 +23,21 @@ export default function HomePage() {
       {/* Features Section */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12 max-w-6xl">
         <div className="flex flex-col items-center text-center p-6 border rounded-md shadow-sm">
-          <Image src="https://via.placeholder.com/150" alt="Content Management" className="mb-4 w-24 h-24 object-cover rounded-full" />
+          <img src="https://via.placeholder.com/150" alt="Content Management" className="mb-4 w-24 h-24 object-cover rounded-full" />
           <h3 className="text-xl font-semibold text-gray-800">Customizable Content Management</h3>
           <p className="text-gray-600">
             Easily upload, organize, and manage your media content with powerful tools that put you in control.
           </p>
         </div>
         <div className="flex flex-col items-center text-center p-6 border rounded-md shadow-sm">
-          <Image src="https://via.placeholder.com/150" alt="Live Streaming" className="mb-4 w-24 h-24 object-cover rounded-full" />
+          <img src="https://via.placeholder.com/150" alt="Live Streaming" className="mb-4 w-24 h-24 object-cover rounded-full" />
           <h3 className="text-xl font-semibold text-gray-800">Seamless Live Streaming</h3>
           <p className="text-gray-600">
             Set up high-quality live streams with ease, perfect for events, webinars, or broadcasting content in real-time.
           </p>
         </div>
         <div className="flex flex-col items-center text-center p-6 border rounded-md shadow-sm">
-          <Image src="https://via.placeholder.com/150" alt="Scalable Infrastructure" className="mb-4 w-24 h-24 object-cover rounded-full" />
+          <img src="https://via.placeholder.com/150" alt="Scalable Infrastructure" className="mb-4 w-24 h-24 object-cover rounded-full" />
           <h3 className="text-xl font-semibold text-gray-800">Scalable Infrastructure</h3>
           <p className="text-gray-600">
             Scale your platform effortlessly to accommodate millions of users with robust infrastructure and CDN support.
