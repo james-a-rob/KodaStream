@@ -27,7 +27,7 @@ const Studio: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     const { id } = useParams<{ id: string }>();
-    const previewLink = `/preview/${id}`;
+    const previewLink = `preview/${id}`;
 
 
     useEffect(() => {
