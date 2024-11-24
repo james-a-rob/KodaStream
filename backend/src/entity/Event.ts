@@ -17,9 +17,9 @@ export class Event {
     @Column({
         type: 'enum',
         enum: StreamType,
-        default: StreamType.Live // Default to Live
+        default: StreamType.Live
     })
-    type: StreamType; // use the enum type
+    type: StreamType;
 
     @Column('text')
     url: string
