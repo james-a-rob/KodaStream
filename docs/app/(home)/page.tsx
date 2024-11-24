@@ -49,25 +49,26 @@ export default function HomePage() {
       <section className="mb-12 max-w-3xl">
         <h2 className="mb-6 text-3xl font-semibold text-gray-900">How It Works</h2>
         <p className="mb-6 text-lg text-gray-600">
-          Our headless API is designed to be flexible, allowing you to customize everything from the back end to the front end. Heres how you can get started:
+          KodaStream is designed to be fully customizable and easy to deploy. With our headless API, you can clone the repo and get started without the need for accounts or complex configurations. Here’s how you can begin:
         </p>
+
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1 text-center p-6 border rounded-md shadow-sm">
-            <h3 className="text-xl font-semibold text-gray-800">1. Set Up Your Account</h3>
+            <h3 className="text-xl font-semibold text-gray-800">1. Clone the Repo</h3>
             <p className="text-gray-600">
-              Start by creating an account and getting your API keys. Our easy authentication system makes it a breeze.
+              Start by cloning the KodaStream repository from GitHub. No sign-up or API keys required—just clone and get started with the code!
             </p>
           </div>
           <div className="flex-1 text-center p-6 border rounded-md shadow-sm">
-            <h3 className="text-xl font-semibold text-gray-800">2. Customize Your Platform</h3>
+            <h3 className="text-xl font-semibold text-gray-800">2. Build Your Custom UI</h3>
             <p className="text-gray-600">
-              Build your platform by uploading videos, creating playlists, managing user subscriptions, and more.
+              KodaStream is a headless platform that lets you build your own UI and customize media, events, content, and streams via the API.
             </p>
           </div>
           <div className="flex-1 text-center p-6 border rounded-md shadow-sm">
             <h3 className="text-xl font-semibold text-gray-800">3. Go Live!</h3>
             <p className="text-gray-600">
-              Publish your content, engage with your audience, and stream your media to users all over the world.
+              Once you’ve set up your content and UI, go live and start streaming! Engage your audience, monitor analytics, and scale your streams effortlessly.
             </p>
           </div>
         </div>
