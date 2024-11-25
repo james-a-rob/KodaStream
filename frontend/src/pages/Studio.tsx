@@ -108,15 +108,16 @@ const Studio: React.FC = () => {
         setPlaylist([])
     }
 
-    const handleMetadataChange = (newRow: Record) => {
+    const handleMetadataChange = (newMetadata: Record, id) => {
+        let parsedNewMetadata;
         try {
-            JSON.parse(newRow.metadata);
+            parsedNewMetadata = JSON.parse(newMetadata);
         } catch (e) {
             alert("Invalid JSON")
             return;
         }
         const updatedPlaylist = playlist.map(item =>
-            item.id === newRow.id ? { ...item, ...newRow } : item
+            item.id === id ? { ...item, metadata: parsedNewMetadata } : item
         );
         setPlaylist(updatedPlaylist)
 
@@ -303,7 +304,7 @@ const Studio: React.FC = () => {
                                 </IconButton>
                             </div>
                             <Typography variant="body2">
-                                <PlayList data={playlist} deleteItemFromPlaylists={deleteItemFromPlaylists} onRowUpdate={handleMetadataChange} />
+                                <PlayList data={playlist} deleteItemFromPlaylists={deleteItemFromPlaylists} onMetadataUpdate={handleMetadataChange} />
                             </Typography>
                         </CardContent>
                     </Card>

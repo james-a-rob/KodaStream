@@ -9,10 +9,10 @@ type MediaListProps = {
     data: any[];
 };
 
-const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists, onRowUpdate }) => {
+const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists, onMetadataUpdate }) => {
     const [rows, setRows] = useState(data);
     const [editorModalOpen, setEditorModalOpen] = useState(false);
-    const [currentlyEditingMetadata, setCurrentlyEditingMetadata] = useState(false);
+    const [currentlyEditingMetadata, setCurrentlyEditingMetadata] = useState();
 
     const [draggingRowId, setDraggingRowId] = useState<number | null>(null);
 
@@ -47,7 +47,7 @@ const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists, onR
             renderCell: (params) => (
                 <Typography
                     onClick={() => {
-                        setCurrentlyEditingMetadata(params.row.metadata)
+                        setCurrentlyEditingMetadata([params.row.metadata, params.row.id])
                         setEditorModalOpen(true)
                     }}
                     component="a"
@@ -110,12 +110,15 @@ const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists, onR
 
     return (
         <Box sx={{ height: 500, width: '100%' }}>
-            <MetadataEditorModal
+            {editorModalOpen && <MetadataEditorModal
                 open={editorModalOpen}
-                onClose={() => { }}
+                onClose={() => {
+                    setEditorModalOpen(false)
+                }}
                 metadata={currentlyEditingMetadata}
+                onMetadataUpdate={onMetadataUpdate}
                 description="This modal accepts dynamic input data and actions."
-            ></MetadataEditorModal>
+            ></MetadataEditorModal>}
             <DataGrid
                 rows={rows}
                 processRowUpdate={(newRow) => onRowUpdate(newRow)}
