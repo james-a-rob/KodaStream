@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import DeleteIcon from '@mui/icons-material/Delete';
+import MetadataEditorModal from './MetaDataEditorModal';
 
 type MediaListProps = {
     data: any[];
@@ -10,6 +11,9 @@ type MediaListProps = {
 
 const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists, onRowUpdate }) => {
     const [rows, setRows] = useState(data);
+    const [editorModalOpen, setEditorModalOpen] = useState(false);
+    const [currentlyEditingMetadata, setCurrentlyEditingMetadata] = useState(false);
+
     const [draggingRowId, setDraggingRowId] = useState<number | null>(null);
 
     useEffect(() => {
@@ -39,18 +43,26 @@ const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists, onR
         { field: 'id', headerName: 'ID', width: 100, sortable: false },
         { field: 'location', headerName: 'Location', sortable: false, width: 200 },
         {
-            field: 'metadata', headerName: 'Metadata', sortable: false, editable: true, width: 400,
+            field: 'metadata', headerName: 'Metadata', sortable: false, editable: false, width: 400,
             renderCell: (params) => (
-                <div
-                    variant="outlined"
-                    multiline
-                    fullWidth
-                    size="small"
-                    maxRows={40}
-                    value={params.row.metadata}
+                <Typography
+                    onClick={() => {
+                        setCurrentlyEditingMetadata(params.row.metadata)
+                        setEditorModalOpen(true)
+                    }}
+                    component="a"
+                    sx={{
+                        cursor: 'pointer',
+                        color: 'primary.main',
+                        textDecoration: 'none',
+                        '&:hover': {
+                            textDecoration: 'underline',
+                        },
+                    }}
 
 
-                >{params.row.metadata}</div>
+
+                >edit</Typography>
             ),
 
         },
@@ -98,6 +110,12 @@ const PlayList: React.FC<MediaListProps> = ({ data, deleteItemFromPlaylists, onR
 
     return (
         <Box sx={{ height: 500, width: '100%' }}>
+            <MetadataEditorModal
+                open={editorModalOpen}
+                onClose={() => { }}
+                metadata={currentlyEditingMetadata}
+                description="This modal accepts dynamic input data and actions."
+            ></MetadataEditorModal>
             <DataGrid
                 rows={rows}
                 processRowUpdate={(newRow) => onRowUpdate(newRow)}

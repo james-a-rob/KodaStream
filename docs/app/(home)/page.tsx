@@ -7,7 +7,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="mb-12 max-w-3xl">
         <h1 className="mb-6 text-4xl font-bold text-gray-900">
-          Build Your Own Streaming Platform with Ease
+          Build Your Own Streaming Platform
         </h1>
         <p className="mb-6 text-lg text-gray-600">
           Create a fully customized streaming experience tailored to your needs. Our headless API gives you the flexibility to build your own platform — whether its for on-demand video, live streaming, or more.
