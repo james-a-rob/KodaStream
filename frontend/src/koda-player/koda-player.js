@@ -60,7 +60,7 @@ export default class KodaPlayer {
     setupWithHlsLib() {
         const hls = new Hls({
 
-            debug: true,
+            debug: false,
             xhrSetup: function (xhr, url) {
                 xhr.setRequestHeader('Access-Control-Allow-Headers', '*')
             }

@@ -8,7 +8,12 @@ A headless streaming platform built for monetization.
 
 </div>
 
+### KodaStream content managment UI
 <img src="screenshot-ui.png" width="100%">
+
+### Example frontend built on KodaStream API
+
+<img src="hackerflix.png" width="100%">
 
 ## 🔥 Features
 
