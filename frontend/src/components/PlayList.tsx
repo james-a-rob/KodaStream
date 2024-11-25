@@ -3,7 +3,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Box, IconButton, Typography } from '@mui/material';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import DeleteIcon from '@mui/icons-material/Delete';
-import MetadataEditorModal from './MetaDataEditorModal';
+import MetadataEditorModal from './MetadataEditorModal';
 
 type MediaListProps = {
     data: any[];
