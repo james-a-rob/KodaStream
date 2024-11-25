@@ -7,7 +7,7 @@ const Media: React.FC = () => {
 
     return (
         <Container style={{ marginTop: '20px' }}>
-            <Typography variant="h6">Media</Typography>
+            <Typography variant="h3">Media</Typography>
 
             <MediaList data={{}} />
         </Container>

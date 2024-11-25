@@ -21,32 +21,34 @@ const theme = createTheme({
         },
     },
     typography: {
-        fontFamily: `'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif`,
-        fontSize: 14,
+        fontFamily: 'Roboto, Arial, sans-serif', // default body font
         h1: {
+            fontFamily: 'Poppins, Arial, sans-serif',
+            fontWeight: 700, // Bold for headers
             fontSize: '2rem',
-            fontWeight: 700,
-            color: '#333333',
         },
         h2: {
+            fontFamily: 'Poppins, Arial, sans-serif',
+            fontWeight: 700,
             fontSize: '1.75rem',
-            fontWeight: 600,
         },
         h3: {
-            fontSize: '1.5rem',
+            fontFamily: 'Poppins, Arial, sans-serif',
             fontWeight: 500,
+            fontSize: '1.5rem',
+        },
+        h4: {
+            fontFamily: 'Poppins, Arial, sans-serif',
+            fontWeight: 100,
+            fontSize: '1.25rem',
         },
         body1: {
+            fontFamily: 'Roboto, Arial, sans-serif',
             fontSize: '1rem',
-            color: '#333333',
         },
         body2: {
+            fontFamily: 'Roboto, Arial, sans-serif',
             fontSize: '0.875rem',
-            color: '#666666',
-        },
-        button: {
-            textTransform: 'none',
-            fontWeight: 600,
         },
     },
     components: {

@@ -77,7 +77,7 @@ const StudioList: React.FC = () => {
             {/* Grid container to align "Streams" to the left and "Create Stream" button to the right */}
             <Grid container direction="row" alignItems="center" style={{ marginBottom: '20px' }}>
                 <Grid item>
-                    <Typography variant="h6">
+                    <Typography variant="h3">
                         Streams
                     </Typography>
                 </Grid>

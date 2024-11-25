@@ -135,7 +135,7 @@ const Studio: React.FC = () => {
 
     return (
         <Container style={{ marginTop: '20px' }}>
-            <Typography variant="h6">Studio</Typography>
+            <Typography variant="h3">Studio</Typography>
 
             <Grid container spacing={2} sx={{ padding: 2 }}>
                 {/* Full-width Card */}
@@ -143,7 +143,7 @@ const Studio: React.FC = () => {
                     <Card variant="outlined">
                         <CardContent style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
-                                <Typography variant="h5" component="div">
+                                <Typography variant="h4" component="div">
                                     Live Stream {eventData?.id}
                                 </Typography>
                                 <Typography variant="body2" color="textSecondary">
@@ -206,7 +206,7 @@ const Studio: React.FC = () => {
                             }}
                         >
                             {/* Title aligned to the left at the top */}
-                            <Typography variant="h5" component="div" gutterBottom>
+                            <Typography variant="h4" component="div" gutterBottom>
                                 Total Viewers
                             </Typography>
 
@@ -240,7 +240,7 @@ const Studio: React.FC = () => {
                             }}
                         >
                             {/* Title aligned to the left at the top */}
-                            <Typography variant="h5" component="div" gutterBottom>
+                            <Typography variant="h4" component="div" gutterBottom>
                                 Avg Session Length
                             </Typography>
 
@@ -275,7 +275,7 @@ const Studio: React.FC = () => {
                 <Grid item xs={12} md={4}>
                     <Card>
                         <CardContent>
-                            <Typography variant="h6" component="div">
+                            <Typography variant="h4" component="div">
                                 Media
                             </Typography>
                             <MediaList data={mediaData} addItemToPlaylist={addItemToPlaylist} />
@@ -288,7 +288,7 @@ const Studio: React.FC = () => {
                     <Card>
                         <CardContent>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <Typography variant="h6" component="div">
+                                <Typography variant="h4" component="div">
                                     Playlist
                                 </Typography>
                                 <IconButton
