@@ -8,14 +8,12 @@ A headless streaming platform built for monetization.
 
 </div>
 
+### Streaming Studio
+<img src="screenshot-ui.png" alt="KodaStream UI" width="100%">
 
-<div align="center">
+### Example frontend
 
- <div style="display: flex; justify-content: center; gap: 20px;">
-      <img src="screenshot-ui.png" alt="KodaStream UI" width="45%" style="max-width: 400px; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 4px;">
-      <img src="hackerflix.png" alt="Example Frontend" width="45%" style="max-width: 400px; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 4px;">
-  </div>
-</div>
+<img src="hackerflix.png" alt="Example Frontend" width="100%" >
 
 
 ## 🔥 Features
