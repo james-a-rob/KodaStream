@@ -17,11 +17,11 @@ A headless streaming platform built for monetization.
 - **Simulated live**: Stream pre-recorded content as if it were live.
 - **Playlist curation**: Create and manage playlists for continuous streaming.
 - **VOD (Video on Demand)**: Allow users to watch content on-demand.
+- **Timed overlays**: Overlay images, text and CTAs at specific intervals.
+- **Stream analytics**: View detailed analytics for your streams.
 - **Content scheduling**: Schedule streams to start at specific times.
 - **Loop live streams forever**: Keep your stream running without interruptions.
-- **Timed overlays**: Display overlay graphics at specific intervals.
 - **User-friendly management UI**: Easy-to-use interface for managing content.
-- **Stream analytics**: View detailed analytics for your streams.
 - **HLS broadcasting**: Broadcast over the HLS protocol, ensuring compatibility with most devices.
 - **Scalable**: Scales horizontally and vertically to support growing audiences.
 - **CDN compatibility**: Works seamlessly with popular content delivery networks (CDNs).
@@ -33,6 +33,15 @@ A headless streaming platform built for monetization.
 Learn how to build your own Netflix style clone with [this guide](https://koda.stream/build-hackerflix).
 
 <img src="hackerflix.png" alt="Example Frontend" width="100%" >
+
+## 🤘 In Action
+
+### Watch and Shop
+
+[Sneakinpeace.com](https://www.sneakinpeace.com/) uses KodaStream to power a 24/7 live shopping experience. Viewers can watch together, learn more about sneakers, and even purchase items without leaving the stream.
+
+<a href="https://sneakinpeace.com"><img src="sneak.gif" width="100%"></a>
+
 
 ## Roadmap
 
@@ -119,11 +128,3 @@ The frontend UI will be available at `http://localhost:5173`.
 - The **Content API** is available at `http://localhost:3000`.
 
 You can now interact with the platform via the UI or directly through the API.
-
-## 🤘 In Action
-
-### Watch and Shop
-
-[Sneakinpeace.com](https://www.sneakinpeace.com/) uses KodaStream to power a 24/7 live shopping experience. Viewers can watch together, learn more about sneakers, and even purchase items without leaving the stream.
-
-<a href="https://sneakinpeace.com"><img src="sneak.gif" width="100%"></a>
