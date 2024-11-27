@@ -8,12 +8,7 @@ A headless streaming platform built for monetization.
 
 </div>
 
-### Streaming Studio
 <img src="screenshot-ui.png" alt="KodaStream UI" width="100%">
-
-### Example frontend
-
-<img src="hackerflix.png" alt="Example Frontend" width="100%" >
 
 
 ## 🔥 Features
@@ -32,6 +27,11 @@ A headless streaming platform built for monetization.
 - **CDN compatibility**: Works seamlessly with popular content delivery networks (CDNs).
 - **REST API**: Full-featured REST API for programmatic access.
 - **Chromeless video player**: Customizable video player for brand-specific experiences.
+
+
+## Example frontend
+
+<img src="hackerflix.png" alt="Example Frontend" width="100%" >
 
 ## Roadmap
 
