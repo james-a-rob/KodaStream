@@ -30,7 +30,7 @@ A headless streaming platform built for monetization.
 
 
 ## Example frontend
-Learn how to build your own Netflix style clone with [this guide](https://koda.stream/build-hackerflix).
+See how to build your own Netflix style clone. View code [here](https://github.com/james-a-rob/KodaStream/tree/main/samples/hackerflix).
 
 <img src="hackerflix.png" alt="Example Frontend" width="100%" >
 
