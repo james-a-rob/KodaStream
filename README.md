@@ -21,6 +21,7 @@ A headless streaming platform built for monetization.
 - **Stream analytics**: View detailed analytics for your streams.
 - **Content scheduling**: Schedule streams to start at specific times.
 - **Loop live streams forever**: Keep your stream running without interruptions.
+- **Thumbnails**: Add thumbnails before to live and on demand content.
 - **User-friendly management UI**: Easy-to-use interface for managing content.
 - **HLS broadcasting**: Broadcast over the HLS protocol, ensuring compatibility with most devices.
 - **Scalable**: Scales horizontally and vertically to support growing audiences.
@@ -28,11 +29,6 @@ A headless streaming platform built for monetization.
 - **REST API**: Full-featured REST API for programmatic access.
 - **Chromeless video player**: Customizable video player for brand-specific experiences.
 
-
-## Example frontend
-Learn how to build your own Netflix style clone with [this guide](https://koda.stream/build-hackerflix).
-
-<img src="hackerflix.png" alt="Example Frontend" width="100%" >
 
 ## 🤘 In Action
 
@@ -45,15 +41,15 @@ Learn how to build your own Netflix style clone with [this guide](https://koda.s
 
 ## Roadmap
 
-- **Live chat and reactions**: Engage with your audience in real time.
-- **Countdown to go live**: Add a countdown before your stream starts.
-- **Scheduled start times**: Pre-schedule stream starts at specified times.
-- **Additional monetization features**: Including memberships.
-- **Prestream image thumbnails**: Add thumbnails before streams go live.
-- **Easy embed**: No-code embed streams on any site.
-- **Social media share features**: Beautiful shareable posts for social media.
-- **Restream to multiple platforms**: Simultaneously broadcast to different platforms.
-- **Instream QR codes**: Display QR codes during the stream for promotions or links.
+- **Monetization Features**: We’re adding additional monetization features, such as memberships, to help you earn from your content.
+- **Countdown to Go Live**: Set a countdown to get your audience excited about the start of your stream.
+- **Scheduled Start Times**: Pre-schedule streams to start at exact times for better audience engagement.
+- **Easy Embed**: No-code embed for streams on any site.
+- **Social Share Features**: Create beautiful and shareable social posts for your streams.
+- **Restream to Multiple Platforms**: Broadcast your content to multiple platforms simultaneously.
+- **Instream QR Codes**: Add QR codes into your streams for promotions, links, and more.
+- **Live Chat and Reactions**: Engage with your audience in real-time with live chat and reaction features.
+
 
 ## Prerequisites
 

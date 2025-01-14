@@ -3,38 +3,55 @@ title: Build a Netflix Clone
 description: Tutorial to build a Netflix style website built using KodaStream
 ---
 
-# GIF of final UI. playing live stream
 
 
 # What we are goign to build. 
+ - We are going to build the star tof a hacker news themed netlfix streaming platform.
+ - We will use the best content from YC and the hacker news community 
+ - By the end you will have setup kodastream studio, added in video content and write a frontend simialr to netflix for playback. 
+ - We will have a mix of prerecorded content running in a continuoius live stream and video on demand content
+ - As a bonus we will aslo us KodaStream timed metadata feature to add additional context overlay to videos. Much like amazon Primes X-ray feature.
+
+
+ # GIF of final UI. playing live stream
+
 
 # what is KodaStream
-REST API and acompaning UI for creating streams of Live or on demand video conetent
+ - REST API and acompaning UI for creating streams of Live or on demand video conetent
 scalable content server to delivery video stream. 
+- BUild any UI using the content sever and chromless player
+- Built in features for monization such as gated streams and product overlays. 
 
 # Setup
 Baiucally see getting started page
+Should have UI up and running and access to the content server which we will hit from our UI to stream content
 
 # Grabbing the content and adding to minio
+- First lets get the content. ThE YC yountube channel has great content
+- Now add to the minio kodastream-media bucket create whilst following the getting started guide
 
-# Creating stream
-UI
-Small example using REST API
+# Creating a stream of YC content
+- Lets create the of content. it will be at the top of our frontend and. The heroe video. 
+- Open up the koda studio on locahost:5217
+- Navigate to studio and create a new stream
+- The YC content added to minio is avaiable in the media list. Clicking on items
+- Add in any content you want.
+- Set stream type to either VOD for stanard playback or live if you want viewer to all being wathcing along together much like traditional TV. 
+- Hit go live and preview the stream view the preview button next to the go live button.
+- you should see video playback
+- Your now ready to write the frontend to play this video
 
-# GIF of adding content to playlist and going live
+# GIF of adding content to playlist and going live and preview
 
 # UI
-Vercel v0 to gnerate clone
-chat gpt for logo
-Code to call the content API
-Code to play video
+ - You can see a working UI in the samples directory. I cheated a bit and used vercel v0  and told it to clone netflix.
+ - Lets look at how that UI is contented to the kodastream API.
+ - 
 
-# KodaPlayer
-- adding
-- style 
+
 
 ## Time overlay
-- link back to creator to give credit.
+- link back to YC creator to give credit and at a little in video info about what is playing.
 - Toastr styles using tailwind
 
 Coming soon
