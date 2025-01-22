@@ -2,9 +2,7 @@
 
 ## KodaStream
 
-### 📺 Open-source streaming platform ✨
-
-A headless streaming platform built for monetization.
+### 📺 A headless shoppable video platform ✨
 
 </div>
 
@@ -13,21 +11,20 @@ A headless streaming platform built for monetization.
 
 ## 🔥 Features
 
-- **Live streaming**: Broadcast content in real-time.
+- **Timed overlays**: Overlay images, text and CTAs.
 - **Simulated live**: Stream pre-recorded content as if it were live.
-- **Playlist curation**: Create and manage playlists for continuous streaming.
 - **VOD (Video on Demand)**: Allow users to watch content on-demand.
-- **Timed overlays**: Overlay images, text and CTAs at specific intervals.
-- **Stream analytics**: View detailed analytics for your streams.
-- **Content scheduling**: Schedule streams to start at specific times.
-- **Loop live streams forever**: Keep your stream running without interruptions.
-- **Thumbnails**: Add thumbnails before to live and on demand content.
 - **User-friendly management UI**: Easy-to-use interface for managing content.
 - **HLS broadcasting**: Broadcast over the HLS protocol, ensuring compatibility with most devices.
-- **Scalable**: Scales horizontally and vertically to support growing audiences.
-- **CDN compatibility**: Works seamlessly with popular content delivery networks (CDNs).
 - **REST API**: Full-featured REST API for programmatic access.
 - **Chromeless video player**: Customizable video player for brand-specific experiences.
+- **Stream analytics**: View detailed analytics for your streams.
+- **Content scheduling**: Schedule streams to start at specific times.
+- **Playlist curation**: Create and manage playlists for continuous streaming.
+- **Loop live streams forever**: Keep your stream running without interruptions.
+- **Thumbnails**: Add thumbnails before to live and on demand content.
+- **Scalable**: Scales horizontally and vertically to support growing audiences.
+- **CDN compatibility**: Works seamlessly with popular content delivery networks (CDNs).
 
 
 ## 🤘 In Action

@@ -1,45 +1,43 @@
-GNU AFFERO GENERAL PUBLIC LICENSE
-Version 3, 19 November 2007
+# KodaStream - Proprietary License
 
-Copyright (C) <year> <your name or organization>
-Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
+**Copyright (c) 2025 James Robertson**  
+**All rights reserved.**
 
-  This license is designed to ensure that users who interact with the software over a network also have access to the source code.
+Permission is hereby granted, solely to authorized users, to use this software solely for personal, internal, or non-commercial purposes, under the terms set forth in this license. Any reproduction, redistribution, modification, public display, or commercial use of this software without explicit prior written consent from the copyright holder is strictly prohibited.
 
-  The GNU Affero General Public License is a free software license, which guarantees end users the freedom to run, study, share, and modify the software. By using this software, you accept the conditions of this license.
+---
 
-  In addition to the terms of the GNU General Public License, the AGPL includes one additional requirement: If you modify and deploy this software over a network, you must also make the source code of the modified version available to users of that network service.
+## Terms and Conditions
 
-Preamble
+1. **Grant of License**  
+   - The copyright holder grants a non-exclusive, non-transferable, and revocable license to use the software for authorized purposes only.  
+   - Use of the software for commercial purposes is strictly prohibited unless explicitly permitted by the copyright holder.
 
-The GNU Affero General Public License is a free software license published by the Free Software Foundation. It is a modified version of the GNU General Public License (GPL), designed to close the "application service provider" loophole, which allows modified versions of the software to be used over a network without sharing the source code with the users of that service.
+2. **Prohibited Actions**  
+   - You may not copy, modify, merge, publish, distribute, sublicense, or sell copies of the software.  
+   - You may not reverse-engineer, decompile, or disassemble the software.
 
-The AGPL was created to ensure that users who interact with software over a network (e.g., via a web application) also have access to the software's source code. It is particularly suited for applications deployed as web services.
+3. **Ownership**  
+   - The software, including all copies, is owned by the copyright holder and is protected by intellectual property laws. This license does not transfer any ownership rights.
 
-Terms and Conditions
+4. **Termination**  
+   - This license will terminate automatically if you fail to comply with the terms and conditions. Upon termination, you must destroy all copies of the software in your possession.
 
-1. You may use, modify, and distribute the software, provided that you meet the following conditions:
-   
-   a. **Source Code**: You must make the source code available to anyone who receives a copy of the software, either by including the source code with the distribution or by providing a written offer to make it available.
+5. **No Warranty**  
+   - The software is provided "as is," without any warranty, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement.
 
-   b. **Modified Versions**: If you modify the software and distribute or use it over a network, you must make the modified source code available to users of the modified version.
+6. **Governing Law**  
+   - This license is governed by and construed in accordance with the laws of the United Kingdom. Any legal actions arising out of or related to this license shall be brought exclusively in the United Kingdom.
 
-2. You must provide a prominent notice stating that you have modified the software and indicating the date of the modification.
+---
 
-3. You may not impose any further restrictions on the rights granted by the license.
+## Contact
 
-4. When you convey the software, you must include a copy of this license.
+If you have any questions about this license or would like to request permissions beyond the scope of this license, please contact:  
 
-5. **No Warranty**: The software is provided "as-is," without any warranty, express or implied. You assume all risks related to using the software.
+**James Robertson**  
+**Email:** [james@sneakinpeace.com](mailto:james@sneakinpeace.com)
 
-6. If you use the software in a networked environment, you must ensure that the source code for any modifications is available to the users of the software, and you must make this source code available under the terms of this license.
+---
 
-  END OF TERMS AND CONDITIONS
-
-How to Apply This License
-
-To apply the AGPL-3.0 to your project, include this entire license text in the LICENSE file and include a reference to it in your project's documentation, typically in the `README.md` file.
-
-If you use this software as a library or as part of another project, you should also include a prominent notice stating that your project is licensed under AGPL-3.0, along with a copy of this license.
-
-2024 KodaStream
+By using this software, you agree to the terms of this license.
