@@ -92,7 +92,7 @@ Run Minio to create storage buckets:
 
 `minio server /tmp/data`
 
-Ensure Minio is configured with the correct access keys, and that the required buckets (`kodastream-media`, `kodastream-stream`, `kodastream-thumbnails`) exist.
+Ensure Minio is configured with the correct access keys, and that the required buckets (`kodastream-media`, `kodastream-streams`, `kodastream-thumbnails`) exist.
 
 ### 5. **Start Backend Server**
 

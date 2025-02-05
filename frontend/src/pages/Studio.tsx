@@ -167,6 +167,7 @@ const Studio: React.FC = () => {
                                     <ToggleButton value="VOD">VOD</ToggleButton>
                                 </ToggleButtonGroup>
                                 <Button
+                                    disabled={eventData?.status === "stopped"}
                                     onClick={handleStopStream}
                                     variant="contained"
                                     color="secondary"
@@ -176,6 +177,7 @@ const Studio: React.FC = () => {
                                 </Button>
 
                                 <Button
+                                    disabled={eventData?.status === "started"}
                                     onClick={handleGoLive}
                                     // disabled={JSON.stringify(eventData) === JSON.stringify(unchangedEventData) && JSON.stringify(playlist) === JSON.stringify(unchangedPlaylist) ? false : true}
                                     variant="contained"
